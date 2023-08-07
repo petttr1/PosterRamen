@@ -9,5 +9,10 @@
   },
   "devDependencies": {
     "nuxt": "^3.0.0"
+  },
+  "dependencies": {
+    "@types/three": "^0.155.0",
+    "sass": "^1.64.2",
+    "three": "^0.155.0"
   }
 }
