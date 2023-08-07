@@ -1,4 +1,4 @@
-import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass.js";
 import {Camera, Scene} from "three";
 
 function createRenderPass(scene: Scene, camera: Camera) {

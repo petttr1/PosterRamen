@@ -6,12 +6,12 @@
 
 <script>
 import * as THREE from 'three'
-import {Clock, ACESFilmicToneMapping, Object3D} from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import {Clock} from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {createCamera, createLights, createScene} from "~/World/components";
 import {createRenderer} from "~/World/systems";
-import {createRenderPass} from "~/World/systems/pass/render";
 import {createComposer} from "~/World/systems/composer";
+import {makeObjects} from "~/World/components/objects/objects";
 
 export default {
   components: {},
@@ -65,8 +65,8 @@ export default {
       self.composer = createComposer(self.renderer, self.scene, self.camera);
 
       if (self.enableOrbitControls) {
-        self.camera.position.set(0, 1.5, 0)
-        self.camera.rotation.set(0, 0, 0)
+        // self.camera.position.set(0, 1.5, 0)
+        // self.camera.rotation.set(0, 0, 0)
       } else {
         self.camera.position.set(0, 0, 0)
         self.cameraHolder = new THREE.Group()
@@ -84,8 +84,8 @@ export default {
         )
         self.controls.enableDamping = true
         self.controls.dampingFactor = 0.1
-        self.camera.position.set(0, 1.5, 0)
-        self.camera.rotation.set(0, 0, 0)
+        // self.camera.position.set(0, 1.5, 0)
+        // self.camera.rotation.set(0, 0, 0)
       }
 
       // create world
@@ -107,11 +107,7 @@ export default {
       self.world.position.set(0, 0, 0)
       await self.setupLightShadow()
 
-      // dev grid
-      const size = 1000
-      const divisions = 1000
-      const gridHelper = new THREE.GridHelper(size, divisions)
-      self.world.add(gridHelper)
+      self.world.add(...makeObjects());
 
       // start render
       await self.renderer.setAnimationLoop(self.render.bind(self))

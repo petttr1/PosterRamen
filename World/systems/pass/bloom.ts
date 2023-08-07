@@ -1,4 +1,4 @@
-import {UnrealBloomPass} from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import {UnrealBloomPass} from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import {Vector2} from "three";
 function createBloomPass() {
     const bloomPass = new UnrealBloomPass(new Vector2(1000, 1000), 1.5, 0.4, 0.85);

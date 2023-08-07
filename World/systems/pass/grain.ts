@@ -1,4 +1,4 @@
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 
 const vertexShader = `
 varying vec2 vUv;

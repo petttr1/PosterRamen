@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/three": "^0.155.0",
+    "randomcolor": "^0.6.2",
     "sass": "^1.64.2",
     "three": "^0.155.0"
   }

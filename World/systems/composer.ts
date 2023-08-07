@@ -5,7 +5,7 @@ import {
     WebGLRenderTarget
 } from 'three';
 import {HEIGHT, WIDTH} from "~/constants";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {createRenderPass} from "~/World/systems/pass/render";
 import {createGrainPass} from "~/World/systems/pass/grain";
 import {createLiquidPass} from "~/World/systems/pass/liquid";
