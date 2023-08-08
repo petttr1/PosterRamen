@@ -4,7 +4,6 @@ import {
     MeshPhysicalMaterial,
 } from 'three';
 import {Geometry} from "three/examples/jsm/deprecated/Geometry";
-
 import randomColor from "randomcolor";
 
 function createMaterial(obj: Geometry) {
@@ -31,7 +30,7 @@ function createMaterial(obj: Geometry) {
         transmission,
         thickness,
         wireframe: !transmission && Math.random() > 0.5,
-        onBeforeCompile: (shader: any) => {}
+        onBeforeCompile: (_shader: any) => {}
     }
     if (Math.random() > 0.5) {
         materialParams.onBeforeCompile = shader => {
@@ -122,13 +121,11 @@ function createMaterial(obj: Geometry) {
                 .replace(
                     `#include <worldpos_vertex>`,
                     `#include <worldpos_vertex>
-                            float damp = 0.1;
-                            float x = position.x + damp * position.x * cnoise(position);
-                            float y = position.y + damp * position.y * cnoise(position);
-                            float z = position.z + damp * position.z * cnoise(position);
-                            vec3 pointCoords = vec3(x,y,z);
-                            gl_Position = projectionMatrix * modelViewMatrix * vec4( pointCoords, 1.0 );`
-                );
+                            float displacement = 16.0* cnoise( 0.02 * position );
+                            vNormal = normal;
+                            vec3 newPosition = position + normal * displacement;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+                    `);
             shader.fragmentShader = `
                 uniform vec3 bbMin;
                 uniform vec3 bbMax;

@@ -1,9 +1,14 @@
 <template>
-  <div ref="canvasHolder" class="canvasHolder">
-    <div ref="canvas" class="canvas"></div>
+  <div @keydown.enter="download" class="render" id="render">
+    <div ref="canvasHolder" class="canvasHolder">
+      <div ref="canvas" class="canvas"></div>
+    </div>
+    <div class="text-wrapper" :style="{width: renderWidth}">
+        <h1>Poster Ramen</h1>
+        <h2>Make Posters with 1 Click</h2>
+    </div>
   </div>
 </template>
-
 <script>
 import * as THREE from 'three'
 import {Clock} from 'three'
@@ -11,7 +16,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {createCamera, createLights, createScene} from "~/World/components";
 import {createRenderer} from "~/World/systems";
 import {createComposer} from "~/World/systems/composer";
-import {makeObjects} from "~/World/components/objects/objects";
+import {createRandomWorld} from "~/World/worlds/randomWorld";
+import {createAcrWorld} from "~/World/worlds/acrWorld";
+import {HEIGHT, WIDTH} from "~/constants";
+import html2canvas from "html2canvas";
 
 export default {
   components: {},
@@ -20,10 +28,7 @@ export default {
     return {
       camera: null,
       cameraHolder: null,
-      // scene: null,
-      // world: null,
       renderer: null,
-      // composer: null,
       container: null,
       controls: null,
       sunLight: null,
@@ -32,11 +37,19 @@ export default {
       gltf_loader: null,
       clock: null,
       enableOrbitControls: true, // dev
-      // renderPass: null,
-      effectPasses: [],
     }
   },
-  computed: {},
+  created() {
+
+  },
+  computed: {
+    renderWidth() {
+      return `${WIDTH}px`;
+    },
+    renderHeight() {
+      return `${HEIGHT}px`;
+    }
+  },
   watch: {},
   mounted() {
     const self = this
@@ -45,6 +58,12 @@ export default {
         self.init()
       })
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.shiftKey) {
+        this.download()
+      }
+    });
   },
   methods: {
     init() {
@@ -94,20 +113,15 @@ export default {
       // add resize listener
       window.addEventListener('resize', self.resize, false)
     },
-    setupLightShadow() {
-      const self = this
-      const lights = createLights();
-      lights.forEach(light => self.world.add(light));
-    },
     async createWorld() {
       const self = this
       // create world
       self.world = new THREE.Group()
       self.scene.add(self.world)
       self.world.position.set(0, 0, 0)
-      await self.setupLightShadow()
 
-      self.world.add(...makeObjects());
+      createRandomWorld(self.world);
+      // createAcrWorld(self.world);
 
       // start render
       await self.renderer.setAnimationLoop(self.render.bind(self))
@@ -138,27 +152,66 @@ export default {
     resize() {
       const self = this
       // update camera
-      self.camera.aspect =
-          self.container.clientWidth / self.container.clientHeight
+      // self.camera.aspect =
+      //     self.container.clientWidth / self.container.clientHeight
       self.camera.updateProjectionMatrix()
-      self.renderer.setSize(
-          self.container.clientWidth,
-          self.container.clientHeight
-      )
+      // self.renderer.setSize(
+      //     self.container.clientWidth,
+      //     self.container.clientHeight
+      // )
     },
+    async download() {
+      let region = document.querySelector("body"); // whole screen
+      const render  = await html2canvas(region, {
+        scale: "5"
+      });
+      const tmpLink = document.createElement('a');
+      tmpLink.download = 'rendered.png';
+      tmpLink.href = render.toDataURL("image/png");
+      tmpLink.type = "image/png";
+      document.body.appendChild(tmpLink);
+      tmpLink.click();
+      document.body.removeChild(tmpLink);
+    }
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.canvasHolder,
-.canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+<style lang="scss">
+canvas {
+  display: block;
+  margin: 0 auto;
   pointer-events: all;
-  z-index: 1;
+}
+</style>
+<style lang="scss" scoped>
+.text-wrapper {
+  position: relative;
+  height: 196px;
+  cursor: default;
+  user-select: none;
+  bottom: 260px;
+  color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Inter;
+  font-weight: 400;
+
+  h1 {
+    position: absolute;
+    z-index: 99999;
+    top: 32px;
+    left: 64px;
+    font-size: 6rem;
+    margin: 0;
+  }
+
+  h2 {
+    position: absolute;
+    z-index: 99999;
+    bottom: 0px;
+    left: 64px;
+    font-size: 3rem;
+    margin: 0;
+  }
 }
 </style>

@@ -17,13 +17,13 @@ function createComposer(renderer: WebGLRenderer, scene: Scene, camera: Camera) {
         minFilter: LinearFilter,
         magFilter: LinearFilter,
         format: RGBAFormat,
-        stencilBuffer: false
+        stencilBuffer: false,
     };
     const renderTarget = new WebGLRenderTarget( WIDTH, HEIGHT, parameters );
     const composer = new EffectComposer(renderer, renderTarget);
     composer.setSize(WIDTH, HEIGHT);
     composer.addPass(createRenderPass(scene, camera));
-    composer.addPass(createLiquidPass());
+    // composer.addPass(createLiquidPass());
     composer.addPass(createBloomPass());
     composer.addPass(createMaskingPass());
     composer.addPass(createGrainPass());

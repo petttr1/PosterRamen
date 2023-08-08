@@ -8,10 +8,12 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/google-fonts": "^3.0.2",
     "nuxt": "^3.0.0"
   },
   "dependencies": {
     "@types/three": "^0.155.0",
+    "html2canvas": "^1.4.1",
     "randomcolor": "^0.6.2",
     "sass": "^1.64.2",
     "three": "^0.155.0"

@@ -50,7 +50,7 @@ uniform float amount;
 
     float value = cos(uv.x+uv.y-t*.6);
 
-    color.rgb += 1. * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8));
+    color.rgb = 1. - (1. - 0.1 * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8))) * (1. - color.rgb) ;
     gl_FragColor = vec4( color  );
   }
 `

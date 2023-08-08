@@ -34,8 +34,8 @@ void main() {
     // if white
     // color.rgb /= padding;
     // if black
-    color.rgb *= padding;
-    gl_FragColor = vec4( color );
+    // color.rgb *= padding;
+    gl_FragColor = vec4( step( 0.5, padding ) * color.rgb, 1 );
 }
 `
 

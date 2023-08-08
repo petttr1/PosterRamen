@@ -9,7 +9,6 @@ const sampleCoords = (min: number, max: number, r: number) => {
     return clamp(Math.random() * (max - min) + min, min + r/-2, max - r/2);
 }
 
-
 function makeObject(pos: Vector3, r: number) {
     const geometry = new SphereGeometry( r, 128, 128);
     const material = createMaterial(geometry);
@@ -20,7 +19,7 @@ function makeObjects() {
     let objects = [];
     const amt = Math.floor(Math.random() * 6 + 2);
     for (let i = 0; i < amt; i++) {
-        const radius = 50 + Math.random() * 400;
+        const radius = 50 + Math.random() * 300;
         const x = sampleCoords(WIDTH / - 2, WIDTH / 2, radius);
         const y = sampleCoords(HEIGHT / - 2, HEIGHT / 2 , radius);
         const z = - Math.random() * 1000;

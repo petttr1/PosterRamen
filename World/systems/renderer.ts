@@ -6,14 +6,13 @@ function createRenderer() {
         alpha: true,
         antialias: true,
         powerPreference: 'high-performance',
+        preserveDrawingBuffer: true
     })
     renderer.setClearColor( 0x000000, 0 );
     renderer.setSize(
         WIDTH,
         HEIGHT
     )
-    renderer.setPixelRatio(window.devicePixelRatio * 1);
-
     renderer.shadowMap.enabled = true // important!
     renderer.shadowMap.type = PCFSoftShadowMap
     renderer.toneMapping = ACESFilmicToneMapping
