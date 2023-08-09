@@ -17,7 +17,7 @@ function createRenderer() {
     renderer.shadowMap.type = PCFSoftShadowMap
     renderer.toneMapping = ACESFilmicToneMapping
     renderer.toneMappingExposure = 1
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(window.devicePixelRatio * 5)
     return renderer;
 }
 
