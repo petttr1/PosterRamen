@@ -1,11 +1,11 @@
 <template>
-  <div @keydown.enter="download" class="render" id="render">
+  <div class="render" id="render" :style="{width: renderWidth, height: renderHeight}">
     <div ref="canvasHolder" class="canvasHolder">
       <div ref="canvas" class="canvas"></div>
     </div>
     <div class="text-wrapper" :style="{width: renderWidth}">
         <h1>Poster Ramen</h1>
-        <h2>Make Posters with 1 Click</h2>
+        <h2>Make Posters Instantly</h2>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@ import {createRandomWorld} from "~/World/worlds/randomWorld";
 import {createAcrWorld} from "~/World/worlds/acrWorld";
 import {HEIGHT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 export default {
   components: {},
@@ -161,17 +162,27 @@ export default {
       // )
     },
     async download() {
-      let region = document.querySelector("body"); // whole screen
+      // let region = document.querySelector("body"); // whole screen
+      const region = document.getElementById('render');
       const render  = await html2canvas(region, {
-        scale: "5"
+        scale: "5",
+        backgroundColor: null,
       });
-      const tmpLink = document.createElement('a');
-      tmpLink.download = 'rendered.png';
-      tmpLink.href = render.toDataURL("image/png");
-      tmpLink.type = "image/png";
-      document.body.appendChild(tmpLink);
-      tmpLink.click();
-      document.body.removeChild(tmpLink);
+
+      let pdf = new jsPDF({
+        unit: "px",
+        format: [WIDTH, HEIGHT]
+      });
+      pdf =  pdf.addImage(render.toDataURL("image/jpeg"),"jpeg",0,0,WIDTH, HEIGHT)
+      pdf.save("rendered.pdf");
+      //
+      // const tmpLink = document.createElement('a');
+      // tmpLink.download = 'rendered.png';
+      // tmpLink.href = render.toDataURL("image/png");
+      // tmpLink.type = "image/png";
+      // document.body.appendChild(tmpLink);
+      // tmpLink.click();
+      // document.body.removeChild(tmpLink);
     }
   },
 }
@@ -184,6 +195,9 @@ canvas {
 }
 </style>
 <style lang="scss" scoped>
+.render {
+  margin: 0 auto;
+}
 .text-wrapper {
   position: relative;
   height: 196px;
