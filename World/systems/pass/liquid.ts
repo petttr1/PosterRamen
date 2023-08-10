@@ -1,4 +1,4 @@
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -8,7 +8,7 @@ void main() {
       * modelViewMatrix
       * vec4( position, 1.0 );
 }
-`
+`;
 
 const fragmentShader = `
 uniform float amount;
@@ -24,8 +24,8 @@ uniform float amount;
     float random( vec2 p )
       {
         vec2 K1 = vec2(
-          23.14069263277926, // e^pi (Gelfond's constant)
-          2.665144142690225 // 2^sqrt(2) (Gelfondâ€“Schneider constant)
+          23.14069263277926,
+          2.665144142690225
         );
         return fract( cos( dot(p,K1) ) * 12345.6789 );
       }
@@ -49,25 +49,25 @@ uniform float amount;
     uv.y/=length(.75*uv);
 
     float value = cos(uv.x+uv.y-t*.6);
-
-    color.rgb = 1. - (1. - 0.1 * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8))) * (1. - color.rgb) ;
+    // color.rgb = vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8));
+    color.rgb = 1. - (1. - 0.1 * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8))) * (1. - color.rgb);
     gl_FragColor = vec4( color  );
   }
-`
+`;
 
 function createLiquidPass() {
-    let counter = Math.random();
-    const liquidEffect = {
-        uniforms: {
-            "tDiffuse": { value: null },
-            "amount": { value: counter }
-        },
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader
-    }
-    const liquidPass = new ShaderPass(liquidEffect);
-    liquidPass.renderToScreen = true;
-    return liquidPass;
+  const counter = Math.random();
+  const liquidEffect = {
+    uniforms: {
+      tDiffuse: { value: null },
+      amount: { value: counter },
+    },
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+  };
+  const liquidPass = new ShaderPass(liquidEffect);
+  liquidPass.renderToScreen = true;
+  return liquidPass;
 }
 
 export { createLiquidPass };

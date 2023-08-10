@@ -4,12 +4,11 @@ body {
   position: relative;
   scale: 1;
 
-  @media(max-width: 1000px) {
+  @media (max-width: 1000px) {
     scale: 0.8;
   }
 
-  @media(max-width: 768px) {
-    scale:0.5;
+  @media (max-width: 768px) {
+    scale: 0.5;
   }
-
 }

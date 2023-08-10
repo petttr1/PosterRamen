@@ -8,11 +8,19 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "nuxt": "^3.0.0"
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "eslint": "^8.46.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "nuxt": "^3.0.0",
+    "prettier": "3.0.1",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@types/three": "^0.155.0",
+    "canvg": "^4.0.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "randomcolor": "^0.6.2",

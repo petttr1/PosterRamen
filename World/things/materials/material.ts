@@ -1,44 +1,40 @@
-import {
-    Color,
-    DoubleSide,
-    MeshPhysicalMaterial,
-} from 'three';
-import {Geometry} from "three/examples/jsm/deprecated/Geometry";
+import { Color, DoubleSide, MeshPhysicalMaterial } from "three";
+import { Geometry } from "three/examples/jsm/deprecated/Geometry";
 import randomColor from "randomcolor";
 
 function createMaterial(obj: Geometry) {
-    obj.computeBoundingBox();
-    let color1, color2;
-    color1 = randomColor();
-    color2 = randomColor();
-    while (color1 === color2) color2 = randomColor();
-    const uniforms = {
-        bbMin: { value: obj.boundingBox!.min },
-        bbMax: { value: obj.boundingBox!.max },
-        color1: { value: new Color(color1) },
-        color2: { value: new Color(color2) },
-    }
-    const transmission = Math.round(Math.random());
-    const color = randomColor();
-    const emissive = randomColor();
-    const thickness = Math.random();
-    const materialParams = {
-        color,
-        emissive,
-        metalness: Math.random(),
-        roughness: Math.random(),
-        transmission,
-        thickness,
-        wireframe: !transmission && Math.random() > 0.5,
-        onBeforeCompile: (_shader: any) => {}
-    }
-    if (Math.random() > 0.5) {
-        materialParams.onBeforeCompile = shader => {
-            shader.uniforms.bbMin = uniforms.bbMin;
-            shader.uniforms.bbMax = uniforms.bbMax;
-            shader.uniforms.color1 = uniforms.color1;
-            shader.uniforms.color2 = uniforms.color2;
-            shader.vertexShader = `
+  obj.computeBoundingBox();
+  let color1, color2;
+  color1 = randomColor();
+  color2 = randomColor();
+  while (color1 === color2) color2 = randomColor();
+  const uniforms = {
+    bbMin: { value: obj.boundingBox!.min },
+    bbMax: { value: obj.boundingBox!.max },
+    color1: { value: new Color(color1) },
+    color2: { value: new Color(color2) },
+  };
+  const transmission = Math.round(Math.random());
+  const color = randomColor();
+  const emissive = randomColor();
+  const thickness = Math.random();
+  const materialParams = {
+    color,
+    emissive,
+    metalness: Math.random(),
+    roughness: Math.random(),
+    transmission,
+    thickness,
+    wireframe: !transmission && Math.random() > 0.5,
+    onBeforeCompile: (_shader: any) => {},
+  };
+  if (Math.random() > 0.5) {
+    materialParams.onBeforeCompile = (shader) => {
+      shader.uniforms.bbMin = uniforms.bbMin;
+      shader.uniforms.bbMax = uniforms.bbMax;
+      shader.uniforms.color1 = uniforms.color1;
+      shader.uniforms.color2 = uniforms.color2;
+      shader.vertexShader = `
                     varying vec3 vPos;
                     vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
                     vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
@@ -112,21 +108,23 @@ function createMaterial(obj: Geometry) {
                       return 2.2 * n_xyz;
                     }
                 ${shader.vertexShader}
-                `.replace(
-                `#include <begin_vertex>`,
-                `#include <begin_vertex>
+                `
+        .replace(
+          `#include <begin_vertex>`,
+          `#include <begin_vertex>
                      vPos = transformed;
-                     `
-            )
-                .replace(
-                    `#include <worldpos_vertex>`,
-                    `#include <worldpos_vertex>
+                     `,
+        )
+        .replace(
+          `#include <worldpos_vertex>`,
+          `#include <worldpos_vertex>
                             float displacement = 16.0* cnoise( 0.02 * position );
                             vNormal = normal;
                             vec3 newPosition = position + normal * displacement;
                             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
-                    `);
-            shader.fragmentShader = `
+                    `,
+        );
+      shader.fragmentShader = `
                 uniform vec3 bbMin;
                 uniform vec3 bbMax;
                 uniform vec3 color1;
@@ -134,16 +132,16 @@ function createMaterial(obj: Geometry) {
                 varying vec3 vPos;
                 ${shader.fragmentShader}
                 `.replace(
-                `vec4 diffuseColor = vec4( diffuse, opacity );`,
-                `float f = clamp((vPos.x - bbMin.x) / (bbMax.x - bbMin.x), 0., 1.);
+        `vec4 diffuseColor = vec4( diffuse, opacity );`,
+        `float f = clamp((vPos.x - bbMin.x) / (bbMax.x - bbMin.x), 0., 1.);
                     vec3 col = mix(color1, color2, f);
-                    vec4 diffuseColor = vec4( col, opacity );`
-            );
-        }
-    }
-    let mat = new MeshPhysicalMaterial(materialParams);
-    mat.side = DoubleSide;
-    return mat;
+                    vec4 diffuseColor = vec4( col, opacity );`,
+      );
+    };
+  }
+  let mat = new MeshPhysicalMaterial(materialParams);
+  mat.side = DoubleSide;
+  return mat;
 }
 
 export { createMaterial };

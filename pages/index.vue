@@ -1,6 +1,7 @@
 <template>
-  <scene />
+  <AppContainer />
 </template>
 <script setup lang="ts">
-import Scene from "~/components/scene.vue";
+import AppContainer from "~/components/AppContainer.vue";
 </script>
+<style lang="scss"></style>
