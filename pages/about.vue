@@ -11,7 +11,10 @@
     </p>
     <p>This tool is in its early stages so any feedback is appreciated. You can reach me at: <br>feedback [at] devslovecoffee.com</p>
     <p>
-      Please also consider <a href="https://www.buymeacoffee.com/devslovecoffee">Buying me a coffee</a> to keep this project running.
+      Please also consider <a
+        href="https://www.buymeacoffee.com/devslovecoffee"
+        target="_blank"
+      >Buying me a coffee</a> to keep this project running.
     </p>
   </div>
 </template>

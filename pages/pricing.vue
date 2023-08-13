@@ -4,7 +4,10 @@
       Poster Ramen is free for now, but some paid tier may come with upcoming features.
     </p>
     <p>
-      You can <a href="https://www.buymeacoffee.com/devslovecoffee">Buy me a coffee</a> to support the project.
+      You can <a
+        href="https://www.buymeacoffee.com/devslovecoffee"
+        target="_blank"
+      >Buy me a coffee</a> to support the project.
     </p>
   </div>
 </template>
