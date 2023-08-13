@@ -1,4 +1,4 @@
-import { Color, ColorRepresentation, Group, Scene } from "three";
+import { Group } from "three";
 import { createLights } from "~/World/things";
 import { makeObjects } from "~/World/things/objects/objects";
 

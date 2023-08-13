@@ -1,15 +1,11 @@
 import {
   AmbientLight,
-  AxesHelper,
-  GridHelper,
   Group,
   IcosahedronGeometry,
   Mesh,
   MeshPhongMaterial,
   MeshPhysicalMaterial,
-  MeshStandardMaterial,
   PointLight,
-  SpotLight,
 } from "three";
 
 function createAcrWorld(world: Group) {

@@ -33,7 +33,7 @@ void main() {
 `;
 
 function createGrainPass() {
-  let counter = Math.random();
+  const counter = Math.random();
   const grainEffect = {
     uniforms: {
       tDiffuse: { value: null },

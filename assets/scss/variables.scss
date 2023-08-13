@@ -1,0 +1,19 @@
+$background: #453C67;
+$blue: #46C2CB;
+$yellow: #F2F7A1;
+
+@mixin button($padding-top-bottom:0, $padding-left-right:0) {
+  border: none;
+  background: $blue;
+  color: $yellow;
+  padding: $padding-top-bottom $padding-left-right;
+  cursor: default;
+
+  line-height: 20px;
+  text-decoration: none;
+
+  &:hover {
+    background: $yellow;
+    color: $blue;
+  }
+}

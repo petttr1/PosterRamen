@@ -1,13 +1,11 @@
-import { Color, DoubleSide, MeshPhysicalMaterial } from "three";
+import { Color, DoubleSide, MeshPhysicalMaterial, Shader } from "three";
 import { Geometry } from "three/examples/jsm/deprecated/Geometry";
 import randomColor from "randomcolor";
 
 function createMaterial(obj: Geometry) {
   obj.computeBoundingBox();
-  let color1, color2;
-  color1 = randomColor();
-  color2 = randomColor();
-  while (color1 === color2) color2 = randomColor();
+  const color1 = randomColor();
+  const color2 = randomColor();
   const uniforms = {
     bbMin: { value: obj.boundingBox!.min },
     bbMax: { value: obj.boundingBox!.max },
@@ -26,7 +24,7 @@ function createMaterial(obj: Geometry) {
     transmission,
     thickness,
     wireframe: !transmission && Math.random() > 0.5,
-    onBeforeCompile: (_shader: any) => {},
+    onBeforeCompile: (_shader: Shader) => {},
   };
   if (Math.random() > 0.5) {
     materialParams.onBeforeCompile = (shader) => {
@@ -139,7 +137,7 @@ function createMaterial(obj: Geometry) {
       );
     };
   }
-  let mat = new MeshPhysicalMaterial(materialParams);
+  const mat = new MeshPhysicalMaterial(materialParams);
   mat.side = DoubleSide;
   return mat;
 }

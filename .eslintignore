@@ -1,1 +1,4 @@
 .nuxt
+dist
+.output
+.vercel

@@ -1,29 +1,45 @@
 <template>
-  <label for="highQualityRenderer">Preview Before Export</label>
-  <input
-    type="checkbox"
-    id="highQualityRenderer"
-    v-model="checked"
-    @input="onChecked"
-  />
-  <button class="refreshButton" @click="refreshScene">Refresh</button>
-  <button class="downloadButton" @click="downloadSnapshot">Download</button>
+  <div class="controls">
+    <button
+      class="refreshButton"
+      @click="refreshScene"
+    >
+      New Scene
+    </button>
+    <button
+      class="downloadButton"
+      @click="downloadSnapshot"
+    >
+      Download as PDF
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-const nuxtApp = useNuxtApp();
-const checked = ref(false);
-
-const emit = defineEmits(["highQualityRender"]);
-const onChecked = () => {
-  emit("highQualityRender");
-};
 const refreshScene = () => {
-  nuxtApp.$refreshScene();
+  const { $bus } = useNuxtApp();
+  $bus.$emit('refreshScene');
 }
 
 const downloadSnapshot = () => {
-  nuxtApp.$download();
+  const { $bus } = useNuxtApp();
+  $bus.$emit('download');
 }
 </script>
+
+<style lang="scss" scoped>
+.controls {
+  display: block;
+  padding: 8px 8px 0;
+  border-left: 2px solid $blue;
+  height: 100%;
+
+  button {
+    @include button;
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding: 9px;
+    margin-bottom: 8px;
+  }
+}
+</style>

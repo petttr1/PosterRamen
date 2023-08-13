@@ -15,7 +15,7 @@ function makeObject(pos: Vector3, r: number) {
   return new Mesh(geometry, material);
 }
 function makeObjects() {
-  let objects = [];
+  const objects = [];
   const amt = Math.floor(Math.random() * 6 + 2);
   for (let i = 0; i < amt; i++) {
     const radius = 50 + Math.random() * 300;

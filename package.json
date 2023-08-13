@@ -10,9 +10,9 @@
   "devDependencies": {
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@nuxtjs/supabase": "^1.0.2",
     "@typescript-eslint/parser": "^6.3.0",
-    "eslint": "^8.46.0",
+    "eslint": "^8.47.0",
     "eslint-plugin-vue": "^9.17.0",
     "nuxt": "^3.0.0",
     "prettier": "3.0.1",
@@ -23,6 +23,7 @@
     "canvg": "^4.0.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "mitt": "^3.0.1",
     "randomcolor": "^0.6.2",
     "sass": "^1.64.2",
     "three": "^0.155.0"

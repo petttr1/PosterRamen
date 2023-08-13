@@ -1,7 +1,8 @@
 <template>
-  <AppContainer />
+  <Hero />
+  <CallToAction />
 </template>
+
 <script setup lang="ts">
-import AppContainer from "~/components/AppContainer.vue";
+import Hero from "~/components/Hero.vue";
 </script>
-<style lang="scss"></style>
