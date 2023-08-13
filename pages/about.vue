@@ -5,7 +5,7 @@
         href="https://www.twitter.com/devslovecoffee"
         target="_blank"
       >@devslovecoffee</a>. Check out my <a
-        href="https://www.devslovecoffee.com"
+        href="https://devslovecoffee.com"
         target="_blank"
       >blog</a> to learn more about what I do.
     </p>
