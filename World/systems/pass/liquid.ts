@@ -11,7 +11,7 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform float amount;
+    uniform float amount;
     uniform sampler2D tDiffuse;
     varying vec2 vUv;
 

@@ -19,13 +19,16 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.4.11",
     "@types/three": "^0.155.0",
     "canvg": "^4.0.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "mitt": "^3.0.1",
+    "pinia": "^2.1.6",
     "randomcolor": "^0.6.2",
     "sass": "^1.64.2",
-    "three": "^0.155.0"
+    "three": "^0.155.0",
+    "uuid": "^9.0.0"
   }
 }

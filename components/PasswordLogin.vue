@@ -17,13 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watchEffect} from "vue";
+import {ref} from "vue";
 import {AuthError} from "@supabase/supabase-js";
 
 const email = ref<string>('')
 const password = ref<string>('')
 
-const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
 const signIn = async () => {
@@ -37,13 +36,6 @@ const signIn = async () => {
     alert(error.error_description || error.message)
   }
 }
-
-watchEffect(() => {
-  if (user.value) {
-    navigateTo('/confirm')
-  }
-})
-
 </script>
 
 <style lang="scss" scoped>
@@ -56,7 +48,7 @@ watchEffect(() => {
     border: 2px solid rgba($yellow, 0.5);
     width: 100%;
     line-height: 24px;
-    font-size: 18px;
+    font-size: 1.2rem;
     padding: 4px 8px;
     outline: none;
     color: $yellow;

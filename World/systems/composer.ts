@@ -14,6 +14,7 @@ import { createLiquidPass } from "~/World/systems/pass/liquid";
 import { createMaskingPass } from "~/World/systems/pass/masking";
 import { createBloomPass } from "~/World/systems/pass/bloom";
 import { createExportRenderer } from "~/World/systems/renderer";
+import { createCloudPass } from "~/World/systems/pass/cloud";
 
 function createComposer(renderer: WebGLRenderer, scene: Scene, camera: Camera) {
   const parameters = {

@@ -24,6 +24,7 @@ export default defineNuxtConfig({
     ["@nuxtjs/google-fonts", fonts],
     "@nuxtjs/eslint-module",
     "@nuxtjs/supabase",
+    "@pinia/nuxt",
   ],
   plugins: [],
   runtimeConfig: {

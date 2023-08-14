@@ -15,16 +15,11 @@
         About
       </nuxt-link>
       <nuxt-link
-        to="/pricing"
-      >
-        Pricing
-      </nuxt-link>
-      <button
         v-if="user"
-        @click="handleLogOut"
+        to="/logout"
       >
         Log out
-      </button>
+      </nuxt-link>
       <nuxt-link
         v-else
         to="/login"
@@ -35,21 +30,15 @@
   </div>
 </template>
 <script setup lang="ts">
-
-const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-
-const handleLogOut = async () => {
-  const { error } = await supabase.auth.signOut()
-  return navigateTo('/')
-}
-
 const goHome = () => {
   return navigateTo('/')
 }
 </script>
 <style scoped lang="scss">
 .header {
+  position: fixed;
+  top: 0;
   height: 40px;
   width: 100%;
   background: $background;
@@ -57,7 +46,7 @@ const goHome = () => {
   justify-content: space-between;
   align-items: center;
 
-  a {
+  a, button {
    @include button(9px 9px);
   }
 
@@ -67,8 +56,9 @@ const goHome = () => {
       padding: 0 16px;
       font-weight: 400;
       line-height: 40px;
-      font-size: 32px;
+      font-size: 2rem;
       text-decoration: none;
+
       &:hover {
         color: $yellow;
         background: none;
@@ -80,8 +70,9 @@ const goHome = () => {
     padding: 8px 16px;
 
     button, a {
+      line-height: 20px;
       font-weight: 500;
-      font-size: 18px;
+      font-size: 1.2rem;
       padding: 9px;
       text-decoration: none;
       cursor: default;

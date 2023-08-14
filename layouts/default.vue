@@ -10,7 +10,6 @@
 
 <style lang="scss" scoped>
 .app {
-  height: calc(100vh - 40px);
-  overflow: hidden;
+  height: 100vh;
 }
 </style>

@@ -55,7 +55,7 @@ watchEffect(() => {
     border: 2px solid rgba($yellow, 0.5);
     width: 100%;
     line-height: 24px;
-    font-size: 18px;
+    font-size: 1.2rem;
     padding: 4px 8px;
     outline: none;
     color: $yellow;

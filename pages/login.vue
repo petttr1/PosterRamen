@@ -33,7 +33,7 @@ import PasswordSignup from "~/components/PasswordSignup.vue";
     text-align: center;
     width: 100%;
     margin-top: 8px;
-    font-size: 20px;
+    font-size: 1.4rem;
   }
 }
 </style>

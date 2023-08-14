@@ -41,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import * as THREE from "three";
-import { Clock, Group, OrthographicCamera, Scene, WebGLRenderer} from "three";
+import { WebGLRenderer} from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createCamera, createScene} from "~/World/things";
 import {createRenderer} from "~/World/systems";
@@ -51,18 +51,27 @@ import {HEIGHT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
 import {jsPDF} from "jspdf";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
+import {v4} from 'uuid';
 
-const camera = ref<OrthographicCamera | null>(null);
-const cameraHolder = ref<Group | null>(null);
+import { useSceneStore } from '~/store/scene'
+
+const sceneStore = useSceneStore()
+
+const sceneId = ref<string | null>(null);
+const scene = computed(() => sceneStore.scene(sceneId.value!));
+
+watchEffect(() => {
+  if (sceneId.value !== sceneStore.activeScene) {
+    sceneStore.setActiveScene(sceneId.value!);
+  }
+})
+
 const renderer = ref<WebGLRenderer | null>(null);
 const container = ref<HTMLElement | null>(null);
 const controls = ref<OrbitControls | null>(null);
-const clock = ref<Clock | null>(null);
 const enableOrbitControls = ref<boolean>(true);
 
-let scene: Scene;
 let composer: EffectComposer;
-let world: Group;
 
 const props = defineProps({
   titleOverride: { type: String || null, required: false, default: null },
@@ -72,8 +81,8 @@ const props = defineProps({
   height: {type: Number, default: HEIGHT}
 })
 
-const title = ref<string>('Title');
-const subtitle = ref<string>('Subtitle');
+const title = ref<string>('Poster Ramen');
+const subtitle = ref<string>('Make Posters Instantly');
 
 const exporting =ref<boolean>(false);
 
@@ -93,8 +102,8 @@ const renderHeight = computed(() => {
 
 onMounted(async () => {
   if (typeof window !== "undefined") {
-    nextTick(() => {
-      init();
+    nextTick(async () => {
+      await init();
       if (props.titleOverride) {
         title.value = props.titleOverride;
       }
@@ -112,87 +121,84 @@ onMounted(async () => {
       })
     });
   }
-
-
 })
 
 onBeforeUnmount(() => {
+  sceneStore.setActiveScene(null);
   const {$bus} = useNuxtApp()
   $bus.$off('refreshScene');
   $bus.$off('download');
 })
 
-const init = () => {
-  scene = createScene(0x000000);
-
-  // setup renderer
-  clock.value = new Clock();
-  renderer.value = createRenderer();
-
-  container.value!.appendChild(renderer.value.domElement);
-
-  // setup camera
-  camera.value = createCamera();
-
-  composer = createComposer(renderer.value, scene, camera.value);
-
-  // orbit controls cam
-  if (enableOrbitControls.value) {
-    controls.value = new OrbitControls(
-        camera.value,
-        renderer.value.domElement,
-    );
-    controls.value.enableDamping = true;
-    controls.value.dampingFactor = 0.1;
-  }
-
-  // create world
+const init = async () => {
+  const newScene = createScene(0x000000);
+  const newCamera = createCamera();
+  sceneId.value = v4();
+  const seed = Math.random();
+  newScene.clear();
+  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
   createWorld();
-}
-const createWorld = async () => {
-  // create world
-  world = new THREE.Group();
-  scene.add(world);
-  world.position.set(0, 0, 0);
-
-  createRandomWorld(world);
-
-  // start render
+  // setup renderer
+  renderer.value = createRenderer();
+  container.value!.appendChild(renderer.value.domElement);
+  const localScene = toRaw(scene.value.scene!);
+  composer = createComposer(renderer.value, localScene, scene.value.camera!);
+  activateRenderer("lowQ");
   await renderer.value!.setAnimationLoop(render.bind(this));
+}
+const createWorld = () => {
+  const newWorld = new THREE.Group();
+  newWorld.position.set(0,0,0);
+  const localScene = toRaw(scene.value.scene!);
+  localScene.add(newWorld);
+  sceneStore.storeScene({id: sceneId.value!, world: newWorld, scene: localScene});
+  createRandomWorld(scene.value.world!);
 }
 const render = (_timestamp: number, _frame: any) => {
   // update orbit controls if enabled
   if (enableOrbitControls.value) {
     controls.value!.update();
   }
-
-  // update camera
-  camera.value!.updateProjectionMatrix();
-
   // render scene
   composer.render();
 
   // render loop
   renderer.value!.setAnimationLoop(render.bind(this));
 }
-const refreshScene = () => {
-  scene.clear();
+const refreshScene = async () => {
+  const newScene = createScene(0x000000);
+  const newCamera = createCamera();
+  sceneId.value = v4();
+  const seed = Math.random();
+  newScene.clear();
+  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
   createWorld();
+  activateRenderer("lowQ");
 }
 const activateRenderer = (type: 'lowQ'|'highQ') => {
   renderer.value!.setAnimationLoop(() => {
   });
   renderer.value!.clear();
   container.value!.removeChild(composer.renderer.domElement);
+  const localScene = toRaw(scene.value.scene!);
   if (type === 'lowQ') {
-    composer = createComposer(renderer.value!, scene, camera.value!);
+    if (enableOrbitControls.value) {
+      controls.value = new OrbitControls(
+          scene.value.camera!,
+          renderer.value!.domElement,
+      );
+      controls.value.enableDamping = true;
+      controls.value.dampingFactor = 0.1;
+    }
+    composer = createComposer(renderer.value!, localScene, scene.value.camera!);
     container.value!.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
+
     return;
   }
 
   if (type === 'highQ') {
-    composer = createExportComposer(scene, camera.value!);
+    composer = createExportComposer(localScene, scene.value.camera!);
     container.value!.appendChild(composer.renderer.domElement);
     composer.render();
     return;
@@ -208,6 +214,8 @@ const download = async () => {
       backgroundColor: null,
     });
 
+    const exportString = render.toDataURL("image/jpeg");
+
     let pdf = new jsPDF({
       unit: "px",
       format: [WIDTH, HEIGHT],
@@ -220,6 +228,10 @@ const download = async () => {
         WIDTH,
         HEIGHT,
     );
+    sceneStore.storeScene({id: sceneId.value!, exportString});
+    // return navigateTo({
+    //   path: '/download',
+    // });
     await pdf.save("rendered.pdf");
     activateRenderer('lowQ');
     exporting.value = false;

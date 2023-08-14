@@ -19,18 +19,26 @@
 
   &__title {
     margin: 0 auto 32px;
-    font-size: 56px;
+    font-size: 4rem;
     color: $yellow;
     text-align: center;
   }
 
   &__subtitle {
     margin: 0 auto;
-    font-size: 32px;
+    font-size: 1.5rem;
     color: $yellow;
     font-weight: 300;
     max-width: 600px;
     text-align: center;
+
+    @media(max-width: 768px) {
+      padding: 0 32px;
+    }
+
+    @media(max-width: 480px) {
+      padding: 0 64px;
+    }
   }
 }
 </style>

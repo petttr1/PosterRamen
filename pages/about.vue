@@ -4,17 +4,21 @@
       Made by <a
         href="https://www.twitter.com/devslovecoffee"
         target="_blank"
-      >@devslovecoffee</a>. Check out my <a
+      >@devslovecoffee</a>.
+    </p><p>
+      Check out my <a
         href="https://devslovecoffee.com"
         target="_blank"
       >blog</a> to learn more about what I do.
     </p>
-    <p>This tool is in its early stages so any feedback is appreciated. You can reach me at: <br>feedback [at] devslovecoffee.com</p>
+    <p>Feedback is appreciated. You can reach me at: </p>
+    <p>feedback [at] devslovecoffee.com</p>
+    <br>
     <p>
-      Please also consider <a
+      <a
         href="https://www.buymeacoffee.com/devslovecoffee"
         target="_blank"
-      >Buying me a coffee</a> to keep this project running.
+      >Buy me a coffee</a> to keep this project running.
     </p>
   </div>
 </template>
@@ -29,7 +33,8 @@
   p {
     color: $yellow;
     margin-bottom: 16px;
-    font-size: 24px;
+    font-size: 1.5rem;
+    font-weight: 300;
 
     a {
       color: $blue;
