@@ -35,4 +35,4 @@ function makeObjects() {
   return objects;
 }
 
-export { makeObjects };
+export { makeObjects, makeObject };

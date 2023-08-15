@@ -6,4 +6,8 @@ function createScene(color: ColorRepresentation) {
   return scene;
 }
 
-export { createScene };
+function createLandingScene() {
+  return new Scene();
+}
+
+export { createScene, createLandingScene };

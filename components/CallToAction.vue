@@ -18,7 +18,7 @@ const placeholder = ref<string>('');
 
 <style lang="scss" scoped>
 .cta {
-  margin: 64px auto 0;
+  margin: 32px auto 64px;
   max-width: 720px;
   h3 {
     font-size: 1.5rem;

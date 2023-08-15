@@ -23,7 +23,7 @@
         to="/login"
         class="download__back__login"
       >
-        Log in to edit this one
+        Log in to see and re-export your work. (coming soon)
       </nuxt-link>
     </div>
   </div>
@@ -95,6 +95,7 @@ const exportAsPdf = async () => {
     max-width: 500px;
     margin: 32px auto 0;
     color: $yellow;
+    text-align: center;
 
     p {
       margin: 0 auto;

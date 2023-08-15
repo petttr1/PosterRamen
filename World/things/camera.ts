@@ -14,4 +14,22 @@ function createCamera() {
   return camera;
 }
 
-export { createCamera };
+function createCameraParams(
+  left: number,
+  right: number,
+  top: number,
+  bottom: number,
+) {
+  const camera = new OrthographicCamera(
+    left,
+    right,
+    top,
+    bottom,
+    0,
+    Number.MAX_VALUE,
+  );
+  camera.position.set(0, 0, 10);
+  return camera;
+}
+
+export { createCamera, createCameraParams };

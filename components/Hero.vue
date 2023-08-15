@@ -14,8 +14,7 @@
 </script>
 <style scoped lang="scss">
 .hero {
-  margin: 256px auto 0;
-  max-width: 720px;
+  margin: 0 auto;
 
   &__title {
     margin: 0 auto 32px;
@@ -29,7 +28,7 @@
     font-size: 1.5rem;
     color: $yellow;
     font-weight: 300;
-    max-width: 600px;
+    max-width: 560px;
     text-align: center;
 
     @media(max-width: 768px) {

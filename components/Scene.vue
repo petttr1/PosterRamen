@@ -181,7 +181,7 @@ const activateRenderer = (type: 'lowQ'|'highQ') => {
 
   const localScene = toRaw(scene.value.scene!);
   if (type === 'lowQ') {
-    composer = createComposer(localScene, scene.value.camera!, scene.value!.seed);
+    composer = createComposer(localScene, scene.value.camera!);
     if (enableOrbitControls.value) {
       controls.value = new OrbitControls(
           scene.value.camera!,
@@ -196,7 +196,7 @@ const activateRenderer = (type: 'lowQ'|'highQ') => {
   }
 
   if (type === 'highQ') {
-    composer = createExportComposer(localScene, scene.value.camera!, scene.value!.seed);
+    composer = createExportComposer(localScene, scene.value.camera!);
     container.value!.appendChild(composer.renderer.domElement);
     composer.render();
     return;
