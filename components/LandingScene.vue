@@ -57,14 +57,10 @@ const createWorld = () => {
   scene.add(newWorld);
   createLandingWorld(newWorld);
 }
-const render = (_timestamp: number, _frame: any) => {
-  // render scene
-  composer.render();
-}
 const activateRenderer = () => {
   composer = createLandingComposer(scene, camera, window.innerWidth, window.innerHeight);
   container.value!.appendChild(composer.renderer.domElement);
-  composer.renderer.setAnimationLoop(render.bind(this));
+  composer.render();
 }
 </script>
 <style lang="scss">
