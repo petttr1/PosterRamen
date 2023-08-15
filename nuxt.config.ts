@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     "@nuxtjs/eslint-module",
     "@nuxtjs/supabase",
     "@pinia/nuxt",
+    "@nuxtjs/plausible",
   ],
   plugins: [],
   runtimeConfig: {
@@ -43,5 +44,8 @@ export default defineNuxtConfig({
       callback: "/confirm",
       exclude: ["/", "/about", "/pricing", "/app", "/app/download"],
     },
+  },
+  plausible: {
+    domain: "posterramen.com",
   },
 });

@@ -19,6 +19,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@nuxtjs/plausible": "^0.2.1",
     "@pinia/nuxt": "^0.4.11",
     "@types/three": "^0.155.0",
     "canvg": "^4.0.1",
