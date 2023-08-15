@@ -43,37 +43,15 @@
 </template>
 <script setup lang="ts">
 import * as THREE from "three";
-import { WebGLRenderer} from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createCamera, createScene} from "~/World/things";
-import {createRenderer} from "~/World/systems";
 import {createComposer, createExportComposer} from "~/World/systems/composer";
 import {createRandomWorld} from "~/World/worlds/randomWorld";
 import {HEIGHT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
-import {jsPDF} from "jspdf";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
-
-import {StoredScene, useSceneStore} from '~/store/scene'
-
-const sceneStore = useSceneStore()
-
-const sceneId = ref<string | null>(null);
-const scene = computed(() => sceneStore.scene(sceneId.value!));
-
-watchEffect(() => {
-  if (sceneId.value !== sceneStore.activeScene) {
-    sceneStore.setActiveScene(sceneId.value!);
-  }
-})
-
-const renderer = ref<WebGLRenderer | null>(null);
-const container = ref<HTMLElement | null>(null);
-const controls = ref<OrbitControls | null>(null);
-const enableOrbitControls = ref<boolean>(true);
-
-let composer: EffectComposer;
+import {useSceneStore} from '~/store/scene'
 
 const props = defineProps({
   titleOverride: { type: String || null, required: false, default: null },
@@ -81,20 +59,35 @@ const props = defineProps({
   showBorder: {type: Boolean, default: false},
   width: {type: Number, default: WIDTH},
   height: {type: Number, default: HEIGHT}
-})
+});
 
+const sceneStore = useSceneStore();
+
+const sceneId = ref<string | null>(null);
+const container = ref<HTMLElement | null>(null);
+const controls = ref<OrbitControls | null>(null);
+const enableOrbitControls = ref<boolean>(true);
 const title = ref<string>('Poster Ramen');
 const subtitle = ref<string>('Make Posters Instantly');
-
 const exporting =ref<boolean>(false);
 
+let composer: EffectComposer;
+
+watchEffect(() => {
+  if (sceneId.value !== sceneStore.activeScene) {
+    sceneStore.setActiveScene(sceneId.value!);
+  }
+});
+
+const { $random } = useNuxtApp();
+
+const scene = computed(() => sceneStore.scene(sceneId.value!));
 const constantWidth = computed(() =>{
   return `${WIDTH}px`;
 });
 const constantHeight = computed(() => {
   return `${HEIGHT}px`;
 });
-
 const renderWidth = computed(() =>{
   return `${props.width}px`;
 });
@@ -141,25 +134,19 @@ const init = async () => {
   const newScene = createScene(0x000000);
   const newCamera = createCamera();
   sceneId.value = v4();
-  const seed = Math.random();
-  newScene.clear();
+  const seed = Math.random()*2**32|0;
+  $random.$setSeed(seed);
   sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
   createWorld();
-  // setup renderer
-  renderer.value = createRenderer();
-  container.value!.appendChild(renderer.value.domElement);
-  const localScene = toRaw(scene.value.scene!);
-  composer = createComposer(renderer.value, localScene, scene.value.camera!);
   activateRenderer("lowQ");
-  await renderer.value!.setAnimationLoop(render.bind(this));
 }
 const createWorld = () => {
   const newWorld = new THREE.Group();
   newWorld.position.set(0,0,0);
   const localScene = toRaw(scene.value.scene!);
   localScene.add(newWorld);
+  createRandomWorld(newWorld);
   sceneStore.storeScene({id: sceneId.value!, world: newWorld, scene: localScene});
-  createRandomWorld(scene.value.world!);
 }
 const render = (_timestamp: number, _frame: any) => {
   // update orbit controls if enabled
@@ -169,41 +156,47 @@ const render = (_timestamp: number, _frame: any) => {
   // render scene
   composer.render();
   // render loop
-  renderer.value!.setAnimationLoop(render.bind(this));
+  composer.renderer.setAnimationLoop(render.bind(this));
 }
 const refreshScene = async () => {
   const newScene = createScene(0x000000);
   const newCamera = createCamera();
+  const seed = Math.random()*2**32|0;
+  $random.$setSeed(seed);
   sceneId.value = v4();
-  const seed = Math.random();
   newScene.clear();
   sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
   createWorld();
   activateRenderer("lowQ");
 }
 const activateRenderer = (type: 'lowQ'|'highQ') => {
-  renderer.value!.setAnimationLoop(() => {
-  });
-  renderer.value!.clear();
-  container.value!.removeChild(composer.renderer.domElement);
+  if (composer) {
+    composer.renderer.setAnimationLoop(() => {
+    });
+    composer.renderer.clear();
+    container.value!.removeChild(composer.renderer.domElement);
+    composer.renderer.dispose()
+    composer.renderer.forceContextLoss()
+  }
+
   const localScene = toRaw(scene.value.scene!);
   if (type === 'lowQ') {
+    composer = createComposer(localScene, scene.value.camera!, scene.value!.seed);
     if (enableOrbitControls.value) {
       controls.value = new OrbitControls(
           scene.value.camera!,
-          renderer.value!.domElement,
+          composer.renderer.domElement,
       );
       controls.value.enableDamping = true;
       controls.value.dampingFactor = 0.1;
     }
-    composer = createComposer(renderer.value!, localScene, scene.value.camera!);
     container.value!.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
 
   if (type === 'highQ') {
-    composer = createExportComposer(localScene, scene.value.camera!);
+    composer = createExportComposer(localScene, scene.value.camera!, scene.value!.seed);
     container.value!.appendChild(composer.renderer.domElement);
     composer.render();
     return;

@@ -33,7 +33,8 @@ void main() {
 `;
 
 function createGrainPass() {
-  const counter = Math.random();
+  const { $random } = useNuxtApp();
+  const counter = $random.$getRandom();
   const grainEffect = {
     uniforms: {
       tDiffuse: { value: null },

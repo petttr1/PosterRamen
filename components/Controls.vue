@@ -16,13 +16,12 @@
 </template>
 
 <script setup lang="ts">
+const { $bus } = useNuxtApp();
 const refreshScene = () => {
-  const { $bus } = useNuxtApp();
   $bus.$emit('refreshScene');
 }
 
 const downloadSnapshot = () => {
-  const { $bus } = useNuxtApp();
   $bus.$emit('download');
 }
 </script>

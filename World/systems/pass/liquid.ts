@@ -56,7 +56,8 @@ const fragmentShader = `
 `;
 
 function createLiquidPass() {
-  const counter = Math.random();
+  const { $random } = useNuxtApp();
+  const counter = $random.$getRandom();
   const liquidEffect = {
     uniforms: {
       tDiffuse: { value: null },

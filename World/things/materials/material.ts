@@ -3,30 +3,31 @@ import { Geometry } from "three/examples/jsm/deprecated/Geometry";
 import randomColor from "randomcolor";
 
 function createMaterial(obj: Geometry) {
+  const { $random } = useNuxtApp();
   obj.computeBoundingBox();
-  const color1 = randomColor();
-  const color2 = randomColor();
+  const color1 = randomColor({ seed: `${$random.$getRandom()}` });
+  const color2 = randomColor({ seed: `${$random.$getRandom()}` });
   const uniforms = {
     bbMin: { value: obj.boundingBox!.min },
     bbMax: { value: obj.boundingBox!.max },
     color1: { value: new Color(color1) },
     color2: { value: new Color(color2) },
   };
-  const transmission = Math.round(Math.random());
-  const color = randomColor();
-  const emissive = randomColor();
-  const thickness = Math.random();
+  const transmission = Math.round($random.$getRandom());
+  const color = randomColor({ seed: `${$random.$getRandom()}` });
+  const emissive = randomColor({ seed: `${$random.$getRandom()}` });
+  const thickness = $random.$getRandom();
   const materialParams = {
     color,
     emissive,
-    metalness: Math.random(),
-    roughness: Math.random(),
+    metalness: $random.$getRandom(),
+    roughness: $random.$getRandom(),
     transmission,
     thickness,
-    wireframe: !transmission && Math.random() > 0.5,
+    wireframe: !transmission && $random.$getRandom() > 0.5,
     onBeforeCompile: (_shader: Shader) => {},
   };
-  if (Math.random() > 0.5) {
+  if ($random.$getRandom() > 0.5) {
     materialParams.onBeforeCompile = (shader) => {
       shader.uniforms.bbMin = uniforms.bbMin;
       shader.uniforms.bbMax = uniforms.bbMax;
@@ -39,12 +40,12 @@ function createMaterial(obj: Geometry) {
                     vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 
                     float cnoise(vec3 P){
-                      vec3 Pi0 = floor(P); // Integer part for indexing
-                      vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+                      vec3 Pi0 = floor(P);
+                      vec3 Pi1 = Pi0 + vec3(1.0);
                       Pi0 = mod(Pi0, 289.0);
                       Pi1 = mod(Pi1, 289.0);
-                      vec3 Pf0 = fract(P); // Fractional part for interpolation
-                      vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+                      vec3 Pf0 = fract(P);
+                      vec3 Pf1 = Pf0 - vec3(1.0);
                       vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
                       vec4 iy = vec4(Pi0.yy, Pi1.yy);
                       vec4 iz0 = Pi0.zzzz;

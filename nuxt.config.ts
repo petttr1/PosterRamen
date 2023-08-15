@@ -2,11 +2,12 @@ const fonts = {
   families: {
     Inter: [400, 700],
     Manrope: [200, 300, 400, 500],
-    "Bricolage Grotesque": [300, 400, 500],
+    "Bricolage Grotesque": [200, 300, 400, 500, 600],
+    "Space Grotesk": [300, 400, 500],
   },
 };
 export default defineNuxtConfig({
-  ssr: false,
+  // ssr: false,
   nitro: {
     preset: "vercel-edge",
   },
