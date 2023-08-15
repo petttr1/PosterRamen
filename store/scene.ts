@@ -8,6 +8,8 @@ export interface StoredScene {
   scene: Scene | null;
   world: Group | null;
   exportString?: string;
+  title: string;
+  subtitle: string;
 }
 export const useSceneStore = defineStore({
   id: "scene-store",

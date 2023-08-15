@@ -22,7 +22,7 @@ watchEffect( () => {
         }
       })
     }
-    return navigateTo('/')
+    return navigateTo('/app')
   }
 })
 </script>

@@ -23,12 +23,14 @@
         v-model="title"
         placeholder="Your Title"
         class="text-wrapper__title"
+        @input="onTitleInput"
       >
       <input
         v-if="!exporting"
         v-model="subtitle"
         placeholder="Your Additional Text"
         class="text-wrapper__subtitle"
+        @input="onSubtitleInput"
       >
       <h1 v-if="exporting">
         {{ title }}
@@ -53,7 +55,7 @@ import {jsPDF} from "jspdf";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
 
-import { useSceneStore } from '~/store/scene'
+import {StoredScene, useSceneStore} from '~/store/scene'
 
 const sceneStore = useSceneStore()
 
@@ -122,7 +124,6 @@ onMounted(async () => {
     });
   }
 })
-
 onBeforeUnmount(() => {
   sceneStore.setActiveScene(null);
   const {$bus} = useNuxtApp()
@@ -130,6 +131,12 @@ onBeforeUnmount(() => {
   $bus.$off('download');
 })
 
+const onTitleInput = () => {
+  sceneStore.storeScene({id: sceneId.value!, title: title.value});
+}
+const onSubtitleInput = () => {
+  sceneStore.storeScene({id: sceneId.value!, subtitle: subtitle.value});
+}
 const init = async () => {
   const newScene = createScene(0x000000);
   const newCamera = createCamera();
@@ -161,7 +168,6 @@ const render = (_timestamp: number, _frame: any) => {
   }
   // render scene
   composer.render();
-
   // render loop
   renderer.value!.setAnimationLoop(render.bind(this));
 }
@@ -193,7 +199,6 @@ const activateRenderer = (type: 'lowQ'|'highQ') => {
     composer = createComposer(renderer.value!, localScene, scene.value.camera!);
     container.value!.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
-
     return;
   }
 
@@ -213,30 +218,15 @@ const download = async () => {
       scale: 5,
       backgroundColor: null,
     });
-
     const exportString = render.toDataURL("image/jpeg");
-
-    let pdf = new jsPDF({
-      unit: "px",
-      format: [WIDTH, HEIGHT],
-    });
-    pdf = await pdf.addImage(
-        render.toDataURL("image/jpeg"),
-        "jpeg",
-        0,
-        0,
-        WIDTH,
-        HEIGHT,
-    );
     sceneStore.storeScene({id: sceneId.value!, exportString});
-    // return navigateTo({
-    //   path: '/download',
-    // });
-    await pdf.save("rendered.pdf");
-    activateRenderer('lowQ');
-    exporting.value = false;
+    return navigateTo({
+      path: '/app/download',
+      query: {
+        id: sceneId.value
+      }
+    });
   })
-
 }
 </script>
 <style lang="scss">

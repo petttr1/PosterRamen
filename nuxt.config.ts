@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: "/login",
       callback: "/confirm",
-      exclude: ["/", "/about", "/pricing", "/app"],
+      exclude: ["/", "/about", "/pricing", "/app", "/app/download"],
     },
   },
 });
