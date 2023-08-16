@@ -2,7 +2,7 @@ $background: #453C67;
 $blue: #46C2CB;
 $yellow: #F2F7A1;
 
-@mixin button($padding-top-bottom:0, $padding-left-right:0) {
+@mixin button($padding-top-bottom:0, $padding-left-right:0, $border-radius:0) {
   border: none;
   background: $blue;
   color: $yellow;
@@ -11,6 +11,7 @@ $yellow: #F2F7A1;
 
   line-height: 20px;
   text-decoration: none;
+  border-radius: $border-radius;
 
   &:hover {
     background: $yellow;

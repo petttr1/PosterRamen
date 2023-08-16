@@ -50,7 +50,7 @@ const goHome = () => {
   align-items: center;
 
   a, button {
-   @include button(9px 9px);
+   @include button(9px, 9px);
   }
 
   &__navigation {

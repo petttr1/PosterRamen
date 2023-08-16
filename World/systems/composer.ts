@@ -3,58 +3,54 @@ import {
   LinearFilter,
   RGBAFormat,
   Scene,
+  WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
 import { HEIGHT, WIDTH } from "~/constants";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { createRenderPass } from "~/World/systems/pass/render";
 import { createGrainPass } from "~/World/systems/pass/grain";
-import { createLiquidPass } from "~/World/systems/pass/liquid";
-import { createMaskingPass } from "~/World/systems/pass/masking";
-import { createBloomPass } from "~/World/systems/pass/bloom";
 import {
   createExportRenderer,
   createLandingRenderer,
   createRenderer,
 } from "~/World/systems/renderer";
-import { createCloudPass } from "~/World/systems/pass/cloud";
+import { getPasses } from "~/World/systems/pass";
+import { Pass } from "three/examples/jsm/postprocessing/Pass";
 
-function createComposer(scene: Scene, camera: Camera) {
+function createBaseComposer(
+  renderer: WebGLRenderer,
+  scene: Scene,
+  camera: Camera,
+  passes: Pass[],
+) {
   const parameters = {
     minFilter: LinearFilter,
     magFilter: LinearFilter,
     format: RGBAFormat,
     stencilBuffer: false,
   };
-  const renderer = createRenderer();
   const renderTarget = new WebGLRenderTarget(WIDTH, HEIGHT, parameters);
   const composer = new EffectComposer(renderer, renderTarget);
   composer.setSize(WIDTH, HEIGHT);
-  composer.addPass(createRenderPass(scene, camera));
-  composer.addPass(createBloomPass());
-  composer.addPass(createLiquidPass());
-  composer.addPass(createMaskingPass());
-  composer.addPass(createGrainPass());
+  passes.forEach((pass) => composer.addPass(pass));
   return composer;
 }
 
-function createExportComposer(scene: Scene, camera: Camera) {
-  const parameters = {
-    minFilter: LinearFilter,
-    magFilter: LinearFilter,
-    format: RGBAFormat,
-    stencilBuffer: false,
-  };
-  const renderer = createExportRenderer();
-  const renderTarget = new WebGLRenderTarget(WIDTH, HEIGHT, parameters);
-  const composer = new EffectComposer(renderer, renderTarget);
-  composer.setSize(WIDTH, HEIGHT);
-  composer.addPass(createRenderPass(scene, camera));
-  composer.addPass(createBloomPass());
-  composer.addPass(createLiquidPass());
-  composer.addPass(createMaskingPass());
-  composer.addPass(createGrainPass());
-  return composer;
+function createComposer(
+  scene: Scene,
+  camera: Camera,
+  passes: Pass[] = getPasses(scene, camera),
+) {
+  return createBaseComposer(createRenderer(), scene, camera, passes);
+}
+
+function createExportComposer(
+  scene: Scene,
+  camera: Camera,
+  passes: Pass[] = getPasses(scene, camera),
+) {
+  return createBaseComposer(createExportRenderer(), scene, camera, passes);
 }
 
 function createLandingComposer(

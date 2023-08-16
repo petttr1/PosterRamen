@@ -3,7 +3,6 @@
     id="render"
     class="render"
     :style="{ width: renderWidth, height: renderHeight }"
-    :class="{showEdge: props.showBorder}"
   >
     <div
       ref="canvasHolder"
@@ -20,6 +19,7 @@
     >
       <input
         v-if="!exporting"
+        ref="titleRef"
         v-model="title"
         placeholder="Your Title"
         class="text-wrapper__title"
@@ -52,11 +52,13 @@ import html2canvas from "html2canvas";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
+import {createExportRenderer, createRenderer} from "~/World/systems/renderer";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
+import {Pass} from "three/examples/jsm/postprocessing/Pass";
 
 const props = defineProps({
   titleOverride: { type: String || null, required: false, default: null },
   subtitleOverride: { type: String || null, required: false, default: null },
-  showBorder: {type: Boolean, default: false},
   width: {type: Number, default: WIDTH},
   height: {type: Number, default: HEIGHT}
 });
@@ -70,6 +72,7 @@ const enableOrbitControls = ref<boolean>(true);
 const title = ref<string>('Poster Ramen');
 const subtitle = ref<string>('Make Posters Instantly');
 const exporting =ref<boolean>(false);
+const titleRef = ref<HTMLInputElement | null>(null);
 
 let composer: EffectComposer;
 
@@ -107,6 +110,8 @@ onMounted(async () => {
       }
 
       const {$bus} = useNuxtApp()
+
+      titleRef.value!.focus();
       $bus.$on('refreshScene', () => {
         refreshScene();
       })
@@ -136,7 +141,7 @@ const init = async () => {
   sceneId.value = v4();
   const seed = Math.random()*2**32|0;
   $random.$setSeed(seed);
-  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
+  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera, title: title.value, subtitle: subtitle.value});
   createWorld();
   activateRenderer("lowQ");
 }
@@ -153,6 +158,13 @@ const render = (_timestamp: number, _frame: any) => {
   if (enableOrbitControls.value) {
     controls.value!.update();
   }
+  const passes = composer.passes;
+  passes.forEach((pass: Pass) => {
+    if (pass.uniforms && pass.uniforms.x && pass.uniforms.y) {
+      pass.uniforms.x = {value: scene.value.camera!.position.x * 0.01};
+      pass.uniforms.y = {value: scene.value.camera!.position.y * 0.01};
+    }
+  })
   // render scene
   composer.render();
   // render loop
@@ -167,21 +179,24 @@ const refreshScene = async () => {
   newScene.clear();
   sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
   createWorld();
-  activateRenderer("lowQ");
+  activateRenderer("lowQ", true);
 }
-const activateRenderer = (type: 'lowQ'|'highQ') => {
+const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
   if (composer) {
-    composer.renderer.setAnimationLoop(() => {
-    });
+    composer.renderer.setAnimationLoop(null);
     composer.renderer.clear();
     container.value!.removeChild(composer.renderer.domElement);
-    composer.renderer.dispose()
-    composer.renderer.forceContextLoss()
+    composer.renderer.dispose();
+    composer.renderer.forceContextLoss();
   }
-
   const localScene = toRaw(scene.value.scene!);
-  if (type === 'lowQ') {
+
+  if (!composer || refresh) {
     composer = createComposer(localScene, scene.value.camera!);
+  }
+  const passes = composer.passes;
+  if (type === 'lowQ') {
+    composer = createComposer(localScene, scene.value.camera!, passes);
     if (enableOrbitControls.value) {
       controls.value = new OrbitControls(
           scene.value.camera!,
@@ -189,14 +204,14 @@ const activateRenderer = (type: 'lowQ'|'highQ') => {
       );
       controls.value.enableDamping = true;
       controls.value.dampingFactor = 0.1;
+      controls.value.enableRotate = false;
     }
     container.value!.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
-
   if (type === 'highQ') {
-    composer = createExportComposer(localScene, scene.value.camera!);
+    composer = createExportComposer(localScene, scene.value.camera!, passes);
     container.value!.appendChild(composer.renderer.domElement);
     composer.render();
     return;
@@ -233,12 +248,6 @@ canvas {
 .render {
   margin: 0;
   transform-origin: 0 0;
-
-  &.show-edge {
-    -webkit-box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
-    -moz-box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
-    box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
-  }
 }
 
 .text-wrapper {

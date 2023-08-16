@@ -33,14 +33,12 @@ import {computed, onMounted} from "vue";
 import { useSceneStore } from '~/store/scene'
 import {jsPDF} from "jspdf";
 import {HEIGHT, WIDTH} from "~/constants";
-import {storeToRefs} from "pinia";
 
 const sceneStore = useSceneStore()
-const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
 const sceneId = ref<string>('');
-const scene = sceneStore.scene(sceneId.value!);
+const scene = computed(() => sceneStore.scene(sceneId.value!));
 const exportString = computed(() => sceneStore.scene(sceneId.value!).exportString)
 
 const route = useRoute()
@@ -67,7 +65,7 @@ const exportAsPdf = async () => {
       WIDTH,
       HEIGHT,
   );
-  pdf.save(`${scene.title}-${scene.seed}.pdf`);
+  pdf.save(`${scene.value.title}-${scene.value.seed}.pdf`);
 }
 </script>
 
@@ -116,7 +114,7 @@ const exportAsPdf = async () => {
     gap: 16px;
     max-width: 500px;
     &__button {
-      @include button(16px, 8px);
+      @include button(8px, 16px, 8px);
       font-size: 2rem;
       max-width: 286px;
     }

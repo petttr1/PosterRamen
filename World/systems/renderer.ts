@@ -1,7 +1,7 @@
 import { ACESFilmicToneMapping, PCFSoftShadowMap, WebGLRenderer } from "three";
 import { HEIGHT, WIDTH } from "~/constants";
 
-function createRenderer() {
+function createBaseRenderer() {
   const renderer = new WebGLRenderer({
     alpha: true,
     antialias: true,
@@ -14,23 +14,15 @@ function createRenderer() {
   renderer.shadowMap.type = PCFSoftShadowMap;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1;
-  renderer.setPixelRatio(window.devicePixelRatio);
   return renderer;
 }
 
+function createRenderer() {
+  return createBaseRenderer();
+}
+
 function createExportRenderer() {
-  const renderer = new WebGLRenderer({
-    alpha: true,
-    antialias: true,
-    powerPreference: "high-performance",
-    preserveDrawingBuffer: true,
-  });
-  renderer.setClearColor(0x000000, 0);
-  renderer.setSize(WIDTH, HEIGHT);
-  renderer.shadowMap.enabled = true; // important!
-  renderer.shadowMap.type = PCFSoftShadowMap;
-  renderer.toneMapping = ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1;
+  const renderer = createBaseRenderer();
   renderer.setPixelRatio(window.devicePixelRatio * 5);
   return renderer;
 }
@@ -48,7 +40,7 @@ function createLandingRenderer(width: number, height: number) {
   renderer.shadowMap.type = PCFSoftShadowMap;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1;
-  renderer.setPixelRatio(window.devicePixelRatio * 2);
+  renderer.setPixelRatio(window.devicePixelRatio);
   return renderer;
 }
 

@@ -38,8 +38,8 @@ const fragmentShader = `
     float t = x + y + offset;
     vec2 uv = vUv;
 
-    uv-=.5 * offset;
-    uv*=5. * offset;
+    uv-=x * 0.1;
+    uv*=y * 0.5;
 
     uv*=rot(uv.y/5.-t*.15);
     uv-=sin(sqrt(uv.x*uv.x+uv.y*uv.y)-t*2.)*3.;
@@ -58,7 +58,7 @@ const fragmentShader = `
   }
 `;
 
-function createLiquidPass(camera: Camera) {
+function createLiquidLargePass(camera: Camera) {
   const { $random } = useNuxtApp();
   const liquidEffect = {
     uniforms: {
@@ -75,4 +75,4 @@ function createLiquidPass(camera: Camera) {
   return liquidPass;
 }
 
-export { createLiquidPass };
+export { createLiquidLargePass };
