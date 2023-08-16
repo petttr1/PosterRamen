@@ -12,6 +12,7 @@ import Hero from "~/components/Hero.vue";
 
 <style scoped lang="scss">
 .landing-wrapper {
+  height: 100%;
   background: rgba($background, 0.6);
   width: 100%;
   padding: 24px;
