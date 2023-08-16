@@ -7,7 +7,7 @@ const fonts = {
   },
 };
 export default defineNuxtConfig({
-  // ssr: false,
+  ssr: false,
   nitro: {
     preset: "vercel-edge",
   },
