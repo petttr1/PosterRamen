@@ -39,9 +39,10 @@ const goHome = () => {
 .header {
   position: fixed;
   top: 0;
+  z-index: 1;
   height: 40px;
   width: 100%;
-  background: $background;
+  //background: $background;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -17,17 +17,18 @@
   margin: 0 auto;
 
   &__title {
-    margin: 0 auto 32px;
+    margin: 256px auto 32px;
     font-size: 4rem;
     color: $yellow;
     text-align: center;
+    font-weight: 600;
   }
 
   &__subtitle {
     margin: 0 auto;
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: $yellow;
-    font-weight: 300;
+    font-weight: 400;
     max-width: 560px;
     text-align: center;
 
