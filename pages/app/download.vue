@@ -113,10 +113,10 @@ const exportAsPdf = async () => {
     align-items: center;
     gap: 16px;
     max-width: 500px;
+    padding-bottom: 64px;
     &__button {
-      @include button(8px, 16px, 8px);
+      @include button(16px, 32px, 8px);
       font-size: 2rem;
-      max-width: 286px;
     }
 
     &__login {
