@@ -22,6 +22,14 @@
     color: $yellow;
     text-align: center;
     font-weight: 600;
+
+    @media(max-width: 768px) {
+      margin: 128px auto 32px;
+    }
+
+    @media(max-width: 480px) {
+      margin: 64px auto 32px;
+    }
   }
 
   &__subtitle {

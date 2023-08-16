@@ -14,7 +14,6 @@ import Hero from "~/components/Hero.vue";
 .landing-wrapper {
   background: rgba($background, 0.6);
   width: 100%;
-  height: 100%;
   padding: 24px;
   backdrop-filter: blur(13px);
   -webkit-backdrop-filter: blur(13px);

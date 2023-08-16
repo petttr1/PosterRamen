@@ -18,8 +18,9 @@ const placeholder = ref<string>('');
 
 <style lang="scss" scoped>
 .cta {
-  margin: 64px auto;
-  max-width: 720px;
+  margin: 64px auto 0;
+  padding-bottom: 256px;
+
   h3 {
     font-size: 1.5rem;
     color: $yellow;
@@ -29,11 +30,14 @@ const placeholder = ref<string>('');
   }
 
   &__wrapper {
-    max-width: 216px;
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     a {
       @include button(16px, 32px);
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 500;
       border-radius: 12px;
     }

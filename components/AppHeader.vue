@@ -42,7 +42,9 @@ const goHome = () => {
   z-index: 1;
   height: 40px;
   width: 100%;
-  //background: $background;
+  background: rgba($background, 0.8);
+  backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
   display: flex;
   justify-content: space-between;
   align-items: center;
