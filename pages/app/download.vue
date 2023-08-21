@@ -20,11 +20,18 @@
       </nuxt-link>
 
       <nuxt-link
-        to="/login"
-        class="download__back__login"
+        :to="`/app?id=${sceneId}`"
+        class="download__back__button"
       >
-        Log in to see and re-export your work. (coming soon)
+        Edit
       </nuxt-link>
+
+      <!--      <nuxt-link-->
+      <!--        to="/login"-->
+      <!--        class="download__back__login"-->
+      <!--      >-->
+      <!--        Log in to see and re-export your work. (coming soon)-->
+      <!--      </nuxt-link>-->
     </div>
   </div>
 </template>

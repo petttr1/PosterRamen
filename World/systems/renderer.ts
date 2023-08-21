@@ -18,12 +18,16 @@ function createBaseRenderer() {
 }
 
 function createRenderer() {
-  return createBaseRenderer();
+  const renderer = createBaseRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+  return renderer;
 }
 
 function createExportRenderer() {
   const renderer = createBaseRenderer();
-  renderer.setPixelRatio(window.devicePixelRatio * 5);
+  renderer.setPixelRatio(
+    window.devicePixelRatio ? window.devicePixelRatio * 2 : 2,
+  );
   return renderer;
 }
 

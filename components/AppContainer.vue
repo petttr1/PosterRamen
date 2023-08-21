@@ -49,7 +49,7 @@ const applyScaling = () => {
 <style lang="scss">
 .app-container {
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 16px);
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;

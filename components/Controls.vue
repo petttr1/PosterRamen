@@ -4,7 +4,7 @@
       class="refreshButton"
       @click="refreshScene"
     >
-      New Scene
+      Randomize
     </button>
     <button
       class="downloadButton"
@@ -12,9 +12,23 @@
     >
       Download as PDF
     </button>
-    <p>Hold right mouse button to move the camera.</p>
-    <p>Mouse wheel zooms the camera.</p>
+    <button
+      class="appearanceButton"
+      @click="swapAppearance"
+    >
+      Change mode
+    </button>
+    <p>Dragging the image will augment it.</p>
     <p>Click the text to edit.</p>
+    <!--    <div class="controls__advanced">-->
+    <!--      Advanced Controls-->
+    <!--    </div>-->
+    <!--    <button-->
+    <!--        class="swapButton"-->
+    <!--        @click="swapRenderer"-->
+    <!--    >-->
+    <!--      Swap renderer-->
+    <!--    </button>-->
   </div>
 </template>
 
@@ -26,6 +40,14 @@ const refreshScene = () => {
 
 const downloadSnapshot = () => {
   $bus.$emit('download');
+}
+
+const swapRenderer = () => {
+  $bus.$emit('swap');
+}
+
+const swapAppearance = () => {
+  $bus.$emit('toggle-appearance')
 }
 </script>
 

@@ -4,12 +4,13 @@ import { Group, OrthographicCamera, Scene } from "three";
 export interface StoredScene {
   id: string;
   seed: number;
-  camera: OrthographicCamera | null;
-  scene: Scene | null;
-  world: Group | null;
-  exportString?: string;
+  cameraX: number;
+  cameraY: number;
   title: string;
   subtitle: string;
+  font: string;
+  exportString?: string;
+  appearance?: string;
 }
 export const useSceneStore = defineStore({
   id: "scene-store",

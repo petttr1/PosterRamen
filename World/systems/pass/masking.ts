@@ -21,21 +21,14 @@ varying vec2 vUv;
 void main() {
     vec4 color = texture2D( tDiffuse, vUv );
     vec2 uv = vUv;
-
     // bottom-left
     vec2 bl = step(vec2(left, bottom),uv);
-
     float padding = bl.x * bl.y;
-
     // top-right
     vec2 tr = step(vec2(right, top),1.0-uv);
     padding *= tr.x * tr.y;
-
-    // if white
-    // color.rgb /= padding;
-    // if black
-    // color.rgb *= padding;
-    gl_FragColor = vec4( step( 0.5, padding ) * color.rgb, 1 );
+    // gl_FragColor = vec4( step( 0.5, padding ) * color.rgb, 1. );
+    gl_FragColor = vec4( color.rgb, step( 0.5, padding ) );
 }
 `;
 

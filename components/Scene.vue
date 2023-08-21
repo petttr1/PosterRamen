@@ -2,6 +2,7 @@
   <div
     id="render"
     class="render"
+    :class="{dark: storedScene.appearance === 'dark'}"
     :style="{ width: renderWidth, height: renderHeight }"
   >
     <div
@@ -17,6 +18,18 @@
       class="text-wrapper"
       :style="{ width: constantWidth }"
     >
+      <div
+        v-if="exporting"
+        class="text-wrapper__title"
+      >
+        {{ title }}
+      </div>
+      <div
+        v-if="exporting"
+        class="text-wrapper__subtitle"
+      >
+        {{ subtitle }}
+      </div>
       <input
         v-if="!exporting"
         ref="titleRef"
@@ -28,16 +41,11 @@
       <input
         v-if="!exporting"
         v-model="subtitle"
+        :disabled="exporting"
         placeholder="Your Additional Text"
         class="text-wrapper__subtitle"
         @input="onSubtitleInput"
       >
-      <h1 v-if="exporting">
-        {{ title }}
-      </h1>
-      <h2 v-if="exporting">
-        {{ subtitle }}
-      </h2>
     </div>
   </div>
 </template>
@@ -52,13 +60,11 @@ import html2canvas from "html2canvas";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
-import {createExportRenderer, createRenderer} from "~/World/systems/renderer";
-import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass.js";
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
+import {Camera, Group, Scene} from "three";
+import {sampleFont} from "~/helpers/fonts";
 
 const props = defineProps({
-  titleOverride: { type: String || null, required: false, default: null },
-  subtitleOverride: { type: String || null, required: false, default: null },
   width: {type: Number, default: WIDTH},
   height: {type: Number, default: HEIGHT}
 });
@@ -66,6 +72,7 @@ const props = defineProps({
 const sceneStore = useSceneStore();
 
 const sceneId = ref<string | null>(null);
+
 const container = ref<HTMLElement | null>(null);
 const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
@@ -74,7 +81,12 @@ const subtitle = ref<string>('Make Posters Instantly');
 const exporting =ref<boolean>(false);
 const titleRef = ref<HTMLInputElement | null>(null);
 
+const seed = ref<number | null>(null);
+
 let composer: EffectComposer;
+let scene: Scene;
+let camera: Camera;
+let world: Group;
 
 watchEffect(() => {
   if (sceneId.value !== sceneStore.activeScene) {
@@ -84,12 +96,11 @@ watchEffect(() => {
 
 const { $random } = useNuxtApp();
 
-const scene = computed(() => sceneStore.scene(sceneId.value!));
+const storedScene = computed(() => sceneStore.scene(sceneId.value!));
+const selectedFont = computed(() => storedScene.value.font);
+
 const constantWidth = computed(() =>{
-  return `${WIDTH}px`;
-});
-const constantHeight = computed(() => {
-  return `${HEIGHT}px`;
+  return `${WIDTH - 128}px`;
 });
 const renderWidth = computed(() =>{
   return `${props.width}px`;
@@ -101,24 +112,38 @@ const renderHeight = computed(() => {
 onMounted(async () => {
   if (typeof window !== "undefined") {
     nextTick(async () => {
-      await init();
-      if (props.titleOverride) {
-        title.value = props.titleOverride;
-      }
-      if (props.subtitleOverride) {
-        subtitle.value = props.subtitleOverride;
-      }
-
       const {$bus} = useNuxtApp()
-
       titleRef.value!.focus();
-      $bus.$on('refreshScene', () => {
-        refreshScene();
-      })
 
+      $bus.$on('refreshScene', () => {
+        newScene();
+      });
       $bus.$on('download', () => {
         download();
+      });
+      $bus.$on('swap', () => {
+        if (exporting.value) {
+          exporting.value = false;
+          activateRenderer("lowQ");
+          return;
+        }
+        exporting.value = true;
+        activateRenderer("highQ");
+      });
+
+      $bus.$on('toggle-appearance', () => {
+        sceneStore.storeScene({id: sceneId.value!, appearance: storedScene.value.appearance === 'dark' ? 'light' : 'dark'});
       })
+
+      scene = createScene(0x000000);
+      camera = createCamera();
+
+      const route = useRoute()
+      if (route.query.id) {
+        await loadScene(route.query.id);
+        return;
+      }
+      await newScene();
     });
   }
 })
@@ -135,23 +160,34 @@ const onTitleInput = () => {
 const onSubtitleInput = () => {
   sceneStore.storeScene({id: sceneId.value!, subtitle: subtitle.value});
 }
-const init = async () => {
-  const newScene = createScene(0x000000);
-  const newCamera = createCamera();
+const newSeed = () => {
+  return Math.random()*2**32|0;
+}
+const loadScene = async (id: string) => {
+  sceneId.value = id;
+  seed.value = sceneStore.scene(id).seed;
+  $random.$setSeed(seed.value);
+  await refreshScene();
+}
+const newScene = async () => {
   sceneId.value = v4();
-  const seed = Math.random()*2**32|0;
+  const seed = newSeed();
   $random.$setSeed(seed);
-  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera, title: title.value, subtitle: subtitle.value});
+  const font = sampleFont();
+  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, appearance:'light'});
+  await refreshScene();
+}
+const refreshScene = async () => {
+  scene.clear();
+  camera.position.set(0,0,0);
   createWorld();
-  activateRenderer("lowQ");
+  activateRenderer("lowQ", true);
 }
 const createWorld = () => {
-  const newWorld = new THREE.Group();
-  newWorld.position.set(0,0,0);
-  const localScene = toRaw(scene.value.scene!);
-  localScene.add(newWorld);
-  createRandomWorld(newWorld);
-  sceneStore.storeScene({id: sceneId.value!, world: newWorld, scene: localScene});
+  world = new THREE.Group();
+  world.position.set(0,0,0);
+  scene.add(world);
+  createRandomWorld(world);
 }
 const render = (_timestamp: number, _frame: any) => {
   // update orbit controls if enabled
@@ -161,8 +197,8 @@ const render = (_timestamp: number, _frame: any) => {
   const passes = composer.passes;
   passes.forEach((pass: Pass) => {
     if (pass.uniforms && pass.uniforms.x && pass.uniforms.y) {
-      pass.uniforms.x = {value: scene.value.camera!.position.x * 0.01};
-      pass.uniforms.y = {value: scene.value.camera!.position.y * 0.01};
+      pass.uniforms.x = {value: camera.position.x * 0.01};
+      pass.uniforms.y = {value: camera.position.y * 0.01};
     }
   })
   // render scene
@@ -170,17 +206,7 @@ const render = (_timestamp: number, _frame: any) => {
   // render loop
   composer.renderer.setAnimationLoop(render.bind(this));
 }
-const refreshScene = async () => {
-  const newScene = createScene(0x000000);
-  const newCamera = createCamera();
-  const seed = Math.random()*2**32|0;
-  $random.$setSeed(seed);
-  sceneId.value = v4();
-  newScene.clear();
-  sceneStore.storeScene({id: sceneId.value!, seed, scene: newScene, camera: newCamera});
-  createWorld();
-  activateRenderer("lowQ", true);
-}
+
 const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
   if (composer) {
     composer.renderer.setAnimationLoop(null);
@@ -189,29 +215,33 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
     composer.renderer.dispose();
     composer.renderer.forceContextLoss();
   }
-  const localScene = toRaw(scene.value.scene!);
-
   if (!composer || refresh) {
-    composer = createComposer(localScene, scene.value.camera!);
+    composer = createComposer(scene, camera);
   }
   const passes = composer.passes;
   if (type === 'lowQ') {
-    composer = createComposer(localScene, scene.value.camera!, passes);
+    composer = createComposer(scene, camera, passes);
     if (enableOrbitControls.value) {
       controls.value = new OrbitControls(
-          scene.value.camera!,
+          camera,
           composer.renderer.domElement,
       );
       controls.value.enableDamping = true;
       controls.value.dampingFactor = 0.1;
       controls.value.enableRotate = false;
+      controls.value.enableZoom = false;
+      controls.value.mouseButtons = {
+        LEFT: THREE.MOUSE.RIGHT,
+        MIDDLE: THREE.MOUSE.MIDDLE,
+        RIGHT: THREE.MOUSE.LEFT
+      }
     }
     container.value!.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
   if (type === 'highQ') {
-    composer = createExportComposer(localScene, scene.value.camera!, passes);
+    composer = createExportComposer(scene, camera, passes);
     container.value!.appendChild(composer.renderer.domElement);
     composer.render();
     return;
@@ -223,7 +253,7 @@ const download = async () => {
     activateRenderer('highQ');
     const region = document.getElementById("render");
     const render = await html2canvas(region!, {
-      scale: 5,
+      scale: 10,
       backgroundColor: null,
     });
     const exportString = render.toDataURL("image/jpeg");
@@ -245,51 +275,57 @@ canvas {
 }
 </style>
 <style lang="scss" scoped>
+img {
+  display: block;
+}
 .render {
   margin: 0;
   transform-origin: 0 0;
+  position: relative;
+  background: white;
+
+  &.dark {
+    background: black;
+  }
 }
 
 .text-wrapper {
-  position: relative;
-  height: 196px;
+  position: absolute;
   cursor: default;
   user-select: none;
-  bottom: 260px;
-  color: white;
+  bottom: 48px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: Inter;
+  font-family: v-bind(selectedFont);
   font-weight: 400;
-  //pointer-events: none;
+  padding: 16px 0 0;
+  margin-left: -6px;
 
-  input {
+  input, div {
     outline: none;
-    caret-color: white;
-    color: white;
-    width: calc(100% - 128px);
+    caret-color: black;
+    color: black;
+    width: 100%;
+    overflow-x: hidden;
+
+    .dark & {
+      caret-color: white;
+      color: white;
+    }
   }
 
-  &__title, h1 {
-    position: absolute;
-    z-index: 99999;
-    top: 32px;
-    left: 60px;
-    font-size: 6rem;
-    margin: 0;
-    width: calc(100% - 128px);
-  }
-
-  &__subtitle, h2 {
-    font-family: Inter;
+  &__title {
     font-weight: 400;
-    position: absolute;
-    z-index: 99999;
-    bottom: 0px;
-    left: 64px;
-    font-size: 2.5rem;
-    margin: 0;
-    width: calc(100% - 128px);
+    font-size: 6rem;
+    line-height: 7rem;
+    white-space: nowrap;
+  }
+
+  &__subtitle {
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 4rem;
+    margin-left: 2px;
   }
 
 }
