@@ -9,6 +9,7 @@ import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
 import { createBackgroundPass } from "~/World/systems/pass/background";
 import { createGradientPass } from "~/World/systems/pass/gradient";
 import { createSteppedPass } from "~/World/systems/pass/stepped";
+import { createSilkPass } from "~/World/systems/pass/silk";
 
 const basePasses = (scene: Scene, camera: Camera) => {
   return [
@@ -18,6 +19,7 @@ const basePasses = (scene: Scene, camera: Camera) => {
     createLiquidLargePass(camera),
     createGradientPass(camera),
     createSteppedPass(camera),
+    createSilkPass(camera),
   ];
 };
 

@@ -21,40 +21,35 @@ uniform float height;
 uniform float offset;
 uniform sampler2D tDiffuse;
 varying vec2 vUv;
-
 ${translateColorspace}
+#define rot(x) mat2(cos(x), -sin(x), sin(x), cos(x))
 
-float stepped(in float s, in float scale, in int steps) {
-    return floor( s / ((1.0*scale) / float(steps))) * 1.0 / float(steps-1);
+float heightS(vec2 p){
+    return sin(p.x)+sin(p.x+p.y)+cos(p.y)/1.5+sin(offset+p.x)+5.;
 }
-void main() {
-    float o = offset / 10.;
-    float r = o > 0.8 ? sin(offset) : o;
-    float g = o > 0.5 ? cos(offset) : sin(offset);
-    float b = o > 0.2 ? o : cos(offset);
-    vec4 Color1 = normalize(vec4(r, g, b, 1.0));
-    vec4 Color2 = vec4(1.0, 1.0, 1.0, 1.0);
-    int NumSteps = int(20. * o);
-    float aspect = width / height; 
-    
+
+float map(vec3 p){
+    return p.y-heightS(p.xz);  
+}
+void main(){
     vec2 uv = vUv;
-    vec2 center = vec2(0.5, 0.555);
+    vec3 ray = normalize(vec3(uv,1.));
+    ray.yz *= rot((sin(y)/3.+1.5));
+    ray.xz *= rot((sin(x)/2.+1.)/5.);
     
-    uv.x *= aspect;
-    center.x *= aspect;
-    float dist = distance( uv, center);
+    float t = 0.;
+    for(int i = 0; i < 29 ; ++i)
+        t += map(vec3(x,0.,x/2.)+ray*t)*.5;
     
-    float size = offset / 10. + offset * abs(sin(y / 10.));
-    float s = stepped(dist, size, NumSteps );
-    
-    vec4 color = mix(Color1, Color2, clamp(s, 0.0, 1.0));
-    vec3 hsv = rgb2hsv(color.rgb);
-    hsv.x *= sin((x + offset) / 10.);
-    gl_FragColor = vec4(hsv2rgb(hsv), 0.0);
+    float fog = 1./(1.+t*t*.005);
+    vec3 fc = vec3(fog*fog, fog/2., fog);
+    vec3 hsl = rgb2hsv(fc);
+    hsl.x *= sin(offset);
+    gl_FragColor = vec4(hsv2rgb(hsl), 1.);
 }
 `;
 
-function createSteppedPass(camera: Camera) {
+function createSilkPass(camera: Camera) {
   const { $random } = useNuxtApp();
   const effect = {
     uniforms: {
@@ -73,4 +68,4 @@ function createSteppedPass(camera: Camera) {
   return pass;
 }
 
-export { createSteppedPass };
+export { createSilkPass };
