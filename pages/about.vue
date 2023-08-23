@@ -1,6 +1,11 @@
 <template>
   <div class="about">
     <p>
+      Looking for inspiration? See the <nuxt-link to="/use-cases">
+        Use Cases.
+      </nuxt-link>
+    </p>
+    <p>
       Made by <a
         href="https://www.twitter.com/devslovecoffee"
         target="_blank"

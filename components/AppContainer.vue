@@ -62,7 +62,7 @@ const applyScaling = () => {
   }
 
   &__controls {
-    max-width: 250px;
+    max-width: 350px;
   }
 }
 </style>

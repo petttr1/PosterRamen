@@ -10,18 +10,25 @@
     </div>
     <div class="header__user-controls">
       <nuxt-link
+        v-if="!isApp"
         to="/about"
       >
         About
       </nuxt-link>
       <nuxt-link
-        v-if="user"
+        v-if="isApp"
+        to="/app/profile"
+      >
+        Profile
+      </nuxt-link>
+      <nuxt-link
+        v-if="user && isApp"
         to="/logout"
       >
         Log out
       </nuxt-link>
       <nuxt-link
-        v-else
+        v-else-if="isApp"
         to="/login"
       >
         Log in
@@ -34,6 +41,9 @@ const user = useSupabaseUser()
 const goHome = () => {
   return navigateTo('/')
 }
+
+const route = useRoute();
+const isApp = computed(() => route.name === 'app');
 </script>
 <style scoped lang="scss">
 .header {

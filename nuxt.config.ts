@@ -68,6 +68,7 @@ export default defineNuxtConfig({
         "/app/download",
         "/sitemap.xml",
         "/robots.txt",
+        "/use-cases",
       ],
     },
   },

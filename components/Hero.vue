@@ -17,7 +17,7 @@
   margin: 0 auto;
 
   &__title {
-    margin: 256px auto 32px;
+    margin: 128px auto 32px;
     font-size: 4rem;
     color: $yellow;
     text-align: center;
