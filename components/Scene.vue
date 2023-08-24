@@ -2,7 +2,7 @@
   <div
     id="render"
     class="render"
-    :class="{dark: storedScene.appearance === 'dark'}"
+    :class="{dark: storedScene.appearance === 'dark', exporting}"
     :style="{ width: renderWidth, height: renderHeight }"
   >
     <div
@@ -286,6 +286,10 @@ img {
 
   &.dark {
     background: black;
+  }
+
+  &.dark.exporting {
+    background: rgba(0, 0, 0, 0);
   }
 }
 

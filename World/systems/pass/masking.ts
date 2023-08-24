@@ -27,7 +27,6 @@ void main() {
     // top-right
     vec2 tr = step(vec2(right, top),1.0-uv);
     padding *= tr.x * tr.y;
-    // gl_FragColor = vec4( step( 0.5, padding ) * color.rgb, 1. );
     gl_FragColor = vec4( color.rgb, step( 0.5, padding ) );
 }
 `;
