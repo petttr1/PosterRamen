@@ -62,6 +62,7 @@ import {useSceneStore} from '~/store/scene'
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
 import {Camera, Group, Scene} from "three";
 import {sampleFont} from "~/helpers/fonts";
+import {getPasses} from "~/World/systems/pass";
 
 const props = defineProps({
   width: {type: Number, default: WIDTH},
@@ -92,8 +93,6 @@ watchEffect(() => {
     sceneStore.setActiveScene(sceneId.value!);
   }
 });
-
-const { $random } = useNuxtApp();
 
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 const selectedFont = computed(() => storedScene.value.font);
@@ -134,7 +133,7 @@ onMounted(async () => {
         sceneStore.storeScene({id: sceneId.value!, appearance: storedScene.value.appearance === 'dark' ? 'light' : 'dark'});
       })
 
-      scene = createScene(0x000000);
+      scene = createScene();
       camera = createCamera();
 
       const route = useRoute()
@@ -163,12 +162,14 @@ const newSeed = () => {
   return Math.random()*2**32|0;
 }
 const loadScene = async (id: string) => {
+  const { $random } = useNuxtApp();
   sceneId.value = id;
   seed.value = sceneStore.scene(id).seed;
   $random.$setSeed(seed.value);
   await refreshScene();
 }
 const newScene = async () => {
+  const { $random } = useNuxtApp();
   sceneId.value = v4();
   const seed = newSeed();
   $random.$setSeed(seed);
@@ -207,10 +208,10 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
     composer.renderer.dispose();
     composer.renderer.forceContextLoss();
   }
-  if (!composer || refresh) {
-    composer = createComposer(scene, camera);
+  let passes = composer?.passes;
+  if (!passes || refresh) {
+    passes = getPasses(scene, camera);
   }
-  const passes = composer.passes;
   if (type === 'lowQ') {
     composer = createComposer(scene, camera, passes);
     if (enableOrbitControls.value) {
