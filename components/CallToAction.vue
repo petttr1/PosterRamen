@@ -6,6 +6,7 @@
         Let's Cook
       </nuxt-link>
     </div>
+    <h2>Currently doesn't support mobile devices.</h2>
   </div>
 </template>
 <script setup lang="ts">
@@ -48,6 +49,14 @@ const placeholder = ref<string>('');
     font-size: 0.8rem;
     margin-top: 8px;
     text-align: center;
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 300;
+    color: $yellow;
+    text-align: center;
+    margin-top: 16px;
   }
 }
 </style>

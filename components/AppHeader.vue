@@ -16,23 +16,29 @@
         About
       </nuxt-link>
       <nuxt-link
-        v-if="isApp"
-        to="/app/profile"
+        v-if="!isApp"
+        to="/app"
       >
-        Profile
+        App
       </nuxt-link>
-      <nuxt-link
-        v-if="user && isApp"
-        to="/logout"
-      >
-        Log out
-      </nuxt-link>
-      <nuxt-link
-        v-else-if="isApp"
-        to="/login"
-      >
-        Log in
-      </nuxt-link>
+      <!--      <nuxt-link-->
+      <!--        v-if="isApp"-->
+      <!--        to="/app/profile"-->
+      <!--      >-->
+      <!--        Profile-->
+      <!--      </nuxt-link>-->
+      <!--      <nuxt-link-->
+      <!--        v-if="user && isApp"-->
+      <!--        to="/logout"-->
+      <!--      >-->
+      <!--        Log out-->
+      <!--      </nuxt-link>-->
+      <!--      <nuxt-link-->
+      <!--        v-else-if="isApp"-->
+      <!--        to="/login"-->
+      <!--      >-->
+      <!--        Log in-->
+      <!--      </nuxt-link>-->
     </div>
   </div>
 </template>
@@ -43,7 +49,7 @@ const goHome = () => {
 }
 
 const route = useRoute();
-const isApp = computed(() => route.name === 'app');
+const isApp = computed(() => route.path.split('/').includes('app'));
 </script>
 <style scoped lang="scss">
 .header {

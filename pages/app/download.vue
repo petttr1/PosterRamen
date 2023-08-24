@@ -19,13 +19,12 @@
         Make New Poster
       </nuxt-link>
 
-      <nuxt-link
-        :to="`/app?id=${sceneId}`"
-        class="download__back__button"
-      >
-        Edit
-      </nuxt-link>
-
+      <!--      <nuxt-link-->
+      <!--        :to="`/app?id=${sceneId}`"-->
+      <!--        class="download__back__button"-->
+      <!--      >-->
+      <!--        Edit-->
+      <!--      </nuxt-link>-->
       <!--      <nuxt-link-->
       <!--        to="/login"-->
       <!--        class="download__back__login"-->

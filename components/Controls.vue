@@ -15,17 +15,17 @@
     <p>Dragging the image will augment it.</p>
     <p>Click the text to edit.</p>
     <span>Actions</span>
-    <button
-      class="saveButton"
-      @click="saveScene"
-    >
-      Save For Later Edit
-    </button>
+    <!--    <button-->
+    <!--      class="saveButton"-->
+    <!--      @click="saveScene"-->
+    <!--    >-->
+    <!--      Save For Later Edit-->
+    <!--    </button>-->
     <button
       class="downloadButton"
       @click="downloadSnapshot"
     >
-      Download
+      Export as PDF
     </button>
     <!--    <div class="controls__advanced">-->
     <!--      Advanced Controls-->
