@@ -69,8 +69,8 @@ function createLandingComposer(
   const renderTarget = new WebGLRenderTarget(width, height, parameters);
   const composer = new EffectComposer(renderer, renderTarget);
   composer.setSize(width, height);
-  composer.addPass(createRenderPass(scene, camera));
-  composer.addPass(createGrainPass());
+  const passes = getPasses(scene, camera);
+  passes.forEach((pass) => composer.addPass(pass));
   return composer;
 }
 

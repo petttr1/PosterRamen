@@ -54,7 +54,6 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createCamera, createScene} from "~/World/things";
 import {createComposer, createExportComposer} from "~/World/systems/composer";
-import {createRandomWorld} from "~/World/worlds/randomWorld";
 import {HEIGHT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
@@ -180,14 +179,7 @@ const newScene = async () => {
 const refreshScene = async () => {
   scene.clear();
   camera.position.set(0,0,0);
-  createWorld();
   activateRenderer("lowQ", true);
-}
-const createWorld = () => {
-  world = new THREE.Group();
-  world.position.set(0,0,0);
-  scene.add(world);
-  createRandomWorld(world);
 }
 const render = (_timestamp: number, _frame: any) => {
   // update orbit controls if enabled

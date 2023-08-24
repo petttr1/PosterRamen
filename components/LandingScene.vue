@@ -48,14 +48,7 @@ const init = async () => {
   camera = createCameraParams(left, right, top, bottom);
   seed = Math.random()*2**32|0;
   $random.$setSeed(seed);
-  createWorld();
   activateRenderer();
-}
-const createWorld = () => {
-  const newWorld = new Group();
-  newWorld.position.set(0,0,0);
-  scene.add(newWorld);
-  createLandingWorld(newWorld);
 }
 const activateRenderer = () => {
   composer = createLandingComposer(scene, camera, window.innerWidth, window.innerHeight);
@@ -76,7 +69,7 @@ canvas {
   top: 0;
   z-index: -1;
   margin: 0;
-  scale: 2;
+  transform: scale(2);
   transform-origin: 50% 50%;
 
   &.show-edge {
