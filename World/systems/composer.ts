@@ -17,6 +17,7 @@ import {
 } from "~/World/systems/renderer";
 import { getPasses } from "~/World/systems/pass";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
+import { createLandingPass } from "~/World/systems/pass/dotsLanding";
 
 function createBaseComposer(
   renderer: WebGLRenderer,

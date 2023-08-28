@@ -1,5 +1,7 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { HEIGHT, WIDTH } from "~/constants";
+import { useSceneStore } from "~/store/scene";
+import { Vector3 } from "three";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -18,6 +20,12 @@ uniform float bottom;
 uniform float left;
 uniform sampler2D tDiffuse;
 varying vec2 vUv;
+
+struct ColorData {
+      vec3 background;
+};
+uniform ColorData colors;
+
 void main() {
     vec4 color = texture2D( tDiffuse, vUv );
     vec2 uv = vUv;
@@ -27,11 +35,13 @@ void main() {
     // top-right
     vec2 tr = step(vec2(right, top),1.0-uv);
     padding *= tr.x * tr.y;
-    gl_FragColor = vec4( color.rgb, step( 0.5, padding ) );
+    color.rgb = step( 0.5, 1.-padding ) <= 0. ? color.rgb : colors.background;
+    gl_FragColor = vec4( color.rgb, 1. );
 }
 `;
 
 function createMaskingPass() {
+  const sceneStore = useSceneStore();
   const maskingEffect = {
     uniforms: {
       tDiffuse: { value: null },
@@ -39,6 +49,13 @@ function createMaskingPass() {
       right: { value: 64 / WIDTH },
       bottom: { value: 228 / HEIGHT },
       left: { value: 64 / WIDTH },
+      colors: {
+        value: {
+          background:
+            sceneStore.scene(sceneStore.activeScene!).background ??
+            new Vector3(1, 1, 1),
+        },
+      },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
