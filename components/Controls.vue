@@ -6,14 +6,10 @@
     >
       Randomize
     </button>
-    <button
-      class="appearanceButton"
-      @click="swapAppearance"
-    >
-      Toggle Dark Mode
-    </button>
-    <p>Dragging the image will augment it.</p>
-    <p>Click the text to edit.</p>
+    <span>Text Color</span>
+    <TextColorPicker />
+    <span>Frame Color</span>
+    <ColorPicker />
     <span>Actions</span>
     <!--    <button-->
     <!--      class="saveButton"-->
@@ -36,6 +32,8 @@
     <!--    >-->
     <!--      Swap renderer-->
     <!--    </button>-->
+    <p>Dragging the image will augment it.</p>
+    <p>Click the text to edit.</p>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Group, OrthographicCamera, Scene } from "three";
+import { Group, OrthographicCamera, Scene, Vector3 } from "three";
 
 export interface StoredScene {
   id: string;
@@ -9,8 +9,9 @@ export interface StoredScene {
   title: string;
   subtitle: string;
   font: string;
+  fontColor: string;
+  background: Vector3;
   exportString?: string;
-  appearance?: string;
 }
 export const useSceneStore = defineStore({
   id: "scene-store",

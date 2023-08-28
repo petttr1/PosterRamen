@@ -2,7 +2,7 @@
   <div
     id="render"
     class="render"
-    :class="{dark: storedScene.appearance === 'dark', exporting}"
+    :class="{ exporting}"
     :style="{ width: renderWidth, height: renderHeight }"
   >
     <div
@@ -21,12 +21,14 @@
       <div
         v-if="exporting"
         class="text-wrapper__title"
+        :style="{color: storedScene.fontColor}"
       >
         {{ title }}
       </div>
       <div
         v-if="exporting"
         class="text-wrapper__subtitle"
+        :style="{color: storedScene.fontColor}"
       >
         {{ subtitle }}
       </div>
@@ -36,6 +38,7 @@
         v-model="title"
         placeholder="Your Title"
         class="text-wrapper__title"
+        :style="{color: storedScene.fontColor, caretColor: storedScene.fontColor}"
         @input="onTitleInput"
       >
       <input
@@ -44,6 +47,7 @@
         :disabled="exporting"
         placeholder="Your Additional Text"
         class="text-wrapper__subtitle"
+        :style="{color: storedScene.fontColor, caretColor: storedScene.fontColor}"
         @input="onSubtitleInput"
       >
     </div>
@@ -60,7 +64,7 @@ import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.j
 import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
-import {Camera, Group, Scene} from "three";
+import {Camera, Group, Scene, Vector3} from "three";
 import {sampleFont} from "~/helpers/fonts";
 import {getPasses} from "~/World/systems/pass";
 
@@ -129,8 +133,8 @@ onMounted(async () => {
         activateRenderer("highQ");
       });
 
-      $bus.$on('toggle-appearance', () => {
-        sceneStore.storeScene({id: sceneId.value!, appearance: storedScene.value.appearance === 'dark' ? 'light' : 'dark'});
+      $bus.$on('set-font-color', (fontColor: string) => {
+        sceneStore.storeScene({id: sceneId.value!, fontColor});
       })
 
       scene = createScene();
@@ -174,7 +178,7 @@ const newScene = async () => {
   const seed = newSeed();
   $random.$setSeed(seed);
   const font = sampleFont();
-  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, appearance:'light'});
+  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, fontColor:'rgb(0., 0., 0.)'});
   await refreshScene();
 }
 const refreshScene = async () => {
@@ -189,11 +193,22 @@ const render = (_timestamp: number, _frame: any) => {
   }
   const passes = composer.passes;
   passes.forEach((pass: Pass) => {
-    if (pass.uniforms && pass.uniforms.x && pass.uniforms.y) {
-      pass.uniforms.x = {value: camera.position.x * 0.01};
-      pass.uniforms.y = {value: camera.position.y * 0.01};
+    if (pass.uniforms) {
+      // update camera position uniform
+      if (pass.uniforms.x && pass.uniforms.y) {
+        pass.uniforms.x = {value: camera.position.x * 0.01};
+        pass.uniforms.y = {value: camera.position.y * 0.01};
+      }
+      // update background uniform
+      if (pass.uniforms.colors) {
+        pass.uniforms.colors = {
+          value: {
+            background: storedScene.value.background ?? new Vector3(1, 1, 1)
+          }
+        };
+      }
     }
-  })
+  });
   // render scene
   composer.render();
   // render loop
@@ -276,14 +291,6 @@ img {
   transform-origin: 0 0;
   position: relative;
   background: white;
-
-  &.dark {
-    background: black;
-  }
-
-  &.dark.exporting {
-    background: rgba(0, 0, 0, 0);
-  }
 }
 
 .text-wrapper {
