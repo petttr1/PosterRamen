@@ -11,6 +11,7 @@ export interface StoredScene {
   font: string;
   fontColor: string;
   background: Vector3;
+  color: Vector3;
   exportString?: string;
 }
 export const useSceneStore = defineStore({

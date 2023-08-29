@@ -1,6 +1,5 @@
 import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { HEIGHT, WIDTH } from "~/constants";
 import { translateColorspace } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
@@ -16,10 +15,7 @@ void main() {
 const fragmentShader = `
 uniform float x;
 uniform float y;
-uniform float width;
-uniform float height;
 uniform float offset;
-uniform sampler2D tDiffuse;
 varying vec2 vUv;
 ${translateColorspace}
 #define rot(x) mat2(cos(x), -sin(x), sin(x), cos(x))
@@ -55,9 +51,6 @@ function createSilkPass(camera: Camera) {
     uniforms: {
       x: { value: camera.position.x },
       y: { value: camera.position.y },
-      width: { value: WIDTH },
-      height: { value: HEIGHT },
-      tDiffuse: { value: null },
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

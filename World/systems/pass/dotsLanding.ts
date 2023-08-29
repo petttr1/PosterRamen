@@ -17,8 +17,7 @@ vec3 black = vec3(0.0, 0.0, 0.0);
 float pixelWidth = 0.368;
 float thickness = 0.980;
 vec2 st;
-uniform vec2 u_resolution;
-uniform float u_time;
+uniform float offset;
 
 float random(in vec2 st) {
     return fract(sin(dot(st.xy,
@@ -35,7 +34,7 @@ vec3 drawCircle(vec2 center, float radius, vec3 color) {
 }
 
 vec2 pattern(in vec2 _st, in float _index){
-    _index = fract(((_index-1.660)*(u_time / 10.)));
+    _index = fract(((_index-1.660)*(10. / 10.)));
     if (_index > 0.860) {
         _st = vec2(0.5-_st.x, 0.5-_st.y);
     }
@@ -46,9 +45,8 @@ vec2 pattern(in vec2 _st, in float _index){
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    st.x *= u_resolution.x/u_resolution.y;
-    st *= 100.680;
+    vec2 st = gl_FragCoord.xy;
+    st *= offset;
     vec2 ipos = floor(st);
     vec2 fpos = fract(st);
     vec2 tile = pattern(fpos, random( ipos ));
@@ -58,8 +56,11 @@ void main() {
 `;
 
 function createLandingPass() {
+  const { $random } = useNuxtApp();
   const effect = {
-    uniforms: {},
+    uniforms: {
+      offset: { value: $random.$getRandom() / 15 },
+    },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
   };

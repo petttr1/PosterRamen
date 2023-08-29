@@ -6,10 +6,10 @@ import { Camera, Scene } from "three";
 import { createRenderPass } from "~/World/systems/pass/render";
 import { createZebraPass } from "~/World/systems/pass/zebra";
 import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
-import { createBackgroundPass } from "~/World/systems/pass/background";
 import { createGradientPass } from "~/World/systems/pass/gradient";
 import { createSteppedPass } from "~/World/systems/pass/stepped";
 import { createSilkPass } from "~/World/systems/pass/silk";
+import { createDotsPass } from "~/World/systems/pass/dotsGrid";
 
 const basePasses = (scene: Scene, camera: Camera) => {
   return [
@@ -20,6 +20,7 @@ const basePasses = (scene: Scene, camera: Camera) => {
     createGradientPass(camera),
     createSteppedPass(camera),
     createSilkPass(camera),
+    createDotsPass(camera),
   ];
 };
 
@@ -31,5 +32,6 @@ export const getPasses = (scene: Scene, camera: Camera) => {
   const { $random } = useNuxtApp();
   const base = basePasses(scene, camera);
   const basePass = base[Math.floor($random.$getRandom() * base.length)];
-  return [createBackgroundPass(), basePass, ...postprocessPasses()];
+  console.log("pass", basePass);
+  return [basePass, ...postprocessPasses()];
 };

@@ -45,10 +45,10 @@ function createMaskingPass() {
   const maskingEffect = {
     uniforms: {
       tDiffuse: { value: null },
-      top: { value: 64 / HEIGHT },
-      right: { value: 64 / WIDTH },
+      top: { value: 32 / HEIGHT },
+      right: { value: 32 / WIDTH },
       bottom: { value: 228 / HEIGHT },
-      left: { value: 64 / WIDTH },
+      left: { value: 32 / WIDTH },
       colors: {
         value: {
           background:

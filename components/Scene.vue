@@ -102,7 +102,7 @@ const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 const selectedFont = computed(() => storedScene.value.font);
 
 const constantWidth = computed(() =>{
-  return `${WIDTH - 128}px`;
+  return `${WIDTH - 64}px`;
 });
 const renderWidth = computed(() =>{
   return `${props.width}px`;
@@ -135,6 +135,9 @@ onMounted(async () => {
 
       $bus.$on('set-font-color', (fontColor: string) => {
         sceneStore.storeScene({id: sceneId.value!, fontColor});
+      })
+      $bus.$on('set-color', (color: Vector3) => {
+        sceneStore.storeScene({id: sceneId.value!, color});
       })
 
       scene = createScene();
@@ -203,7 +206,8 @@ const render = (_timestamp: number, _frame: any) => {
       if (pass.uniforms.colors) {
         pass.uniforms.colors = {
           value: {
-            background: storedScene.value.background ?? new Vector3(1, 1, 1)
+            background: storedScene.value.background ?? new Vector3(1, 1, 1),
+            color: storedScene.value.color ?? new Vector3(0, 0, 0)
           }
         };
       }
