@@ -1,6 +1,7 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { useSceneStore } from "~/store/scene";
 import { Color, Vector3 } from "three";
+import { baseShaderUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -13,10 +14,9 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform vec3 background;
+${baseShaderUniforms}
 void main() {
-    vec3 bgColor = background;
-    gl_FragColor = vec4(1.,1.,1.,1.);
+    gl_FragColor = vec4(colors.background,1.);
 }
 `;
 
@@ -24,10 +24,12 @@ function createBackgroundPass() {
   const sceneStore = useSceneStore();
   const effect = {
     uniforms: {
-      background: {
-        value:
-          // sceneStore.scene(sceneStore.activeScene!).background ??
-          new Vector3(1, 1, 1),
+      colors: {
+        value: {
+          background:
+            sceneStore.scene(sceneStore.activeScene!).background ??
+            new Vector3(1, 1, 1),
+        },
       },
     },
     vertexShader: vertexShader,

@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+import {Vector3} from "three";
+
 const active = ref<number>(1);
 
 const colors = ref<any[]>([
@@ -24,6 +26,7 @@ const updateColor = (selectedColor: any) => {
   active.value = selectedColor.id;
   const { $bus } = useNuxtApp();
   $bus.$emit('set-font-color', `rgb(${selectedColor.r},${selectedColor.g},${selectedColor.b})`);
+  $bus.$emit('set-color', new Vector3(selectedColor.r,selectedColor.g,selectedColor.b));
 }
 </script>
 
