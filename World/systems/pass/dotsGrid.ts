@@ -1,7 +1,5 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { useSceneStore } from "~/store/scene";
 import { Camera } from "three";
-import { HEIGHT, WIDTH } from "~/constants";
 import { baseShaderUniforms, baseUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
@@ -20,6 +18,7 @@ const fragmentShader = `
 uniform float x;
 uniform float y;
 uniform float offset;
+varying vec2 vUv;
 ${baseShaderUniforms}
 
 float random (in vec2 _st) {
@@ -40,14 +39,17 @@ vec2 pattern(in vec2 _st, in float _index){
 }
 
 void main() {
-    vec2 st = gl_FragCoord.xy;
+    vec2 st = vUv;
+    float aspect = width / height; 
+    st.x *= aspect;
     st *= offset;
     vec2 ipos = floor(st);
     vec2 fpos = fract(st);
     vec2 tile = pattern(fpos, random( ipos ));
     float color = 0.0;
     color = step(length(tile-vec2(1.,1.)),0.4);
-    gl_FragColor = vec4(color > 0. ? colors.color : colors.background, 1.);
+    vec3 mixed = mix(colors.color, colors.background, clamp(1. - color, 0.0, 1.0));
+    gl_FragColor = vec4(mixed, 1.);
 }
 `;
 
@@ -58,7 +60,7 @@ function createDotsPass(camera: Camera) {
       ...baseUniforms(),
       x: { value: camera.position.x },
       y: { value: camera.position.y },
-      offset: { value: $random.$getRandom() / 10 },
+      offset: { value: 10 + $random.$getRandom() * 50 },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,

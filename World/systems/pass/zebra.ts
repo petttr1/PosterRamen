@@ -1,5 +1,6 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { Camera } from "three";
+import { baseShaderUniforms, baseUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -15,8 +16,9 @@ const fragmentShader = `
 uniform float x;
 uniform float y;
 uniform float offset;
-uniform sampler2D tDiffuse;
 varying vec2 vUv;
+${baseShaderUniforms}
+
 void main() {
     vec2 uv = vUv;
     float t = (x * y) + offset;
@@ -27,9 +29,9 @@ void main() {
     float d = distance(uv,center);
     float k = -sin(d*6.283*10. - t);
     float e = smoothstep(0., fwidth(k)*1.5, k);
-    gl_FragColor = vec4(sqrt(max(e, 0.)));
-    // float sqrte = sqrt(max(e, 0.));
-    // gl_FragColor = vec4(sqrte * 0.8, sqrte * 0.7, sqrte * 0.6, 1.);
+    float finalVal = sqrt(max(e, 0.));
+    vec3 mixed = mix(colors.color, colors.background, clamp(finalVal, 0.0, 1.0));
+    gl_FragColor = vec4(mixed, 1.);
 }
 `;
 
@@ -37,9 +39,9 @@ function createZebraPass(camera: Camera) {
   const { $random } = useNuxtApp();
   const effect = {
     uniforms: {
+      ...baseUniforms(),
       x: { value: camera.position.x },
       y: { value: camera.position.y },
-      tDiffuse: { value: null },
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

@@ -10,6 +10,7 @@ export interface StoredScene {
   subtitle: string;
   font: string;
   fontColor: string;
+  textAlign: "left" | "center" | "right";
   background: Vector3;
   color: Vector3;
   exportString?: string;

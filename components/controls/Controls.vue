@@ -10,49 +10,31 @@
     <TextColorPicker />
     <span>Frame Color</span>
     <ColorPicker />
+    <span>Text align</span>
+    <TextAlignOptions />
     <span>Actions</span>
-    <!--    <button-->
-    <!--      class="saveButton"-->
-    <!--      @click="saveScene"-->
-    <!--    >-->
-    <!--      Save For Later Edit-->
-    <!--    </button>-->
     <button
       class="downloadButton"
       @click="downloadSnapshot"
     >
       Export as PDF
     </button>
-    <!--    <div class="controls__advanced">-->
-    <!--      Advanced Controls-->
-    <!--    </div>-->
-    <!--    <button-->
-    <!--        class="swapButton"-->
-    <!--        @click="swapRenderer"-->
-    <!--    >-->
-    <!--      Swap renderer-->
-    <!--    </button>-->
     <p>Dragging the image will augment it.</p>
     <p>Click the text to edit.</p>
   </div>
 </template>
 
 <script setup lang="ts">
+import TextColorPicker from "~/components/controls/TextColorPicker.vue";
+import ColorPicker from "~/components/controls/ColorPicker.vue";
+import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
+
 const { $bus } = useNuxtApp();
 const refreshScene = () => {
   $bus.$emit('refreshScene');
 }
-
 const downloadSnapshot = () => {
   $bus.$emit('download');
-}
-
-const swapRenderer = () => {
-  $bus.$emit('swap');
-}
-
-const swapAppearance = () => {
-  $bus.$emit('toggle-appearance')
 }
 </script>
 
