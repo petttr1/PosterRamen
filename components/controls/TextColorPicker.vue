@@ -1,5 +1,5 @@
 <template>
-  <div class="colors">
+  <div class="text-colors">
     <button
       v-for="color of colors"
       :key="color.id"
@@ -12,28 +12,32 @@
 </template>
 
 <script setup lang="ts">
-import {useSceneStore} from "~/store/scene";
 import {Vector3} from "three";
+import {useSceneStore} from "~/store/scene";
+
+const active = ref<number>(1);
 
 const colors = ref<any[]>([
-  {id: 0, r:255, g:255, b:255},
   {id: 1, r:0, g:0, b:0},
-  {id: 2, r:251, g:54, b:23},
-  {id: 3, r:4, g:32, b:84},
-  {id: 4, r:45, g:142, b:135},
-  {id: 5, r:254, g:188, b:56},
-  ]);
+  {id: 2, r:0, g:32, b:64},
+  {id: 3, r:252, g:246, b:245},
+  {id: 4, r:223, g:101, b:137},
+]);
 
-const updateColor = (color: any) => {
+const updateColor = (selectedColor: any) => {
+  if (active.value === selectedColor.id) return;
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, background: new Vector3(color.r / 255,color.g / 255,color.b / 255)});
+  active.value = selectedColor.id;
+
+  sceneStore.storeScene({id: scene.id, fontColor: `rgb(${selectedColor.r},${selectedColor.g},${selectedColor.b})`});
+  sceneStore.storeScene({id: scene.id, color: new Vector3(selectedColor.r / 255,selectedColor.g / 255,selectedColor.b / 255)});
 }
 </script>
 
 <style lang="scss" scoped>
-.colors {
+.text-colors {
   display: flex;
   align-items: center;
   justify-content: space-between;

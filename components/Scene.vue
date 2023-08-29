@@ -21,14 +21,20 @@
       <div
         v-if="exporting"
         class="text-wrapper__title"
-        :style="{color: storedScene.fontColor}"
+        :style="{
+          color: storedScene.fontColor,
+          'text-align': storedScene.textAlign
+        }"
       >
         {{ title }}
       </div>
       <div
         v-if="exporting"
         class="text-wrapper__subtitle"
-        :style="{color: storedScene.fontColor}"
+        :style="{
+          color: storedScene.fontColor,
+          'text-align': storedScene.textAlign
+        }"
       >
         {{ subtitle }}
       </div>
@@ -38,7 +44,11 @@
         v-model="title"
         placeholder="Your Title"
         class="text-wrapper__title"
-        :style="{color: storedScene.fontColor, caretColor: storedScene.fontColor}"
+        :style="{
+          color: storedScene.fontColor,
+          caretColor: storedScene.fontColor,
+          'text-align': storedScene.textAlign
+        }"
         @input="onTitleInput"
       >
       <input
@@ -47,7 +57,11 @@
         :disabled="exporting"
         placeholder="Your Additional Text"
         class="text-wrapper__subtitle"
-        :style="{color: storedScene.fontColor, caretColor: storedScene.fontColor}"
+        :style="{
+          color: storedScene.fontColor,
+          caretColor: storedScene.fontColor,
+          'text-align': storedScene.textAlign
+        }"
         @input="onSubtitleInput"
       >
     </div>
@@ -123,22 +137,15 @@ onMounted(async () => {
       $bus.$on('download', () => {
         download();
       });
-      $bus.$on('swap', () => {
-        if (exporting.value) {
-          exporting.value = false;
-          activateRenderer("lowQ");
-          return;
-        }
-        exporting.value = true;
-        activateRenderer("highQ");
-      });
-
-      $bus.$on('set-font-color', (fontColor: string) => {
-        sceneStore.storeScene({id: sceneId.value!, fontColor});
-      })
-      $bus.$on('set-color', (color: Vector3) => {
-        sceneStore.storeScene({id: sceneId.value!, color});
-      })
+      // $bus.$on('swap', () => {
+      //   if (exporting.value) {
+      //     exporting.value = false;
+      //     activateRenderer("lowQ");
+      //     return;
+      //   }
+      //   exporting.value = true;
+      //   activateRenderer("highQ");
+      // });
 
       scene = createScene();
       camera = createCamera();
@@ -181,7 +188,7 @@ const newScene = async () => {
   const seed = newSeed();
   $random.$setSeed(seed);
   const font = sampleFont();
-  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, fontColor:'rgb(0., 0., 0.)'});
+  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, fontColor:'rgb(0., 0., 0.)', textAlign: 'center'});
   await refreshScene();
 }
 const refreshScene = async () => {

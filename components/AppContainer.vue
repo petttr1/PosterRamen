@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import Scene from "~/components/Scene.vue";
 import {onBeforeUnmount, onMounted, ref, VueElement} from "vue";
-import Controls from "~/components/Controls.vue";
+import Controls from "~/components/controls/Controls.vue";
 const showControls = ref(true);
 
 const sceneComponent = ref<VueElement | null>(null);
