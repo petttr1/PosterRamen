@@ -6,6 +6,7 @@
       :style="{
         background: `rgb(${color.r},${color.g},${color.b})`
       }"
+      :class="{active: active === color.id}"
       @click="updateColor(color)"
     />
   </div>
@@ -14,6 +15,8 @@
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
 import {Vector3} from "three";
+
+const active = ref<number>(0);
 
 const colors = ref<any[]>([
   {id: 0, r:255, g:255, b:255},
@@ -25,12 +28,13 @@ const colors = ref<any[]>([
   {id: 6, r:173, g:239, b:209},
   {id: 7, r:137, g:171, b:227},
   {id: 8, r:60, g:16, b:83},
-  ]);
+]);
 
 const updateColor = (color: any) => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
+  active.value = color.id;
   sceneStore.storeScene({id: scene.id, background: new Vector3(color.r / 255,color.g / 255,color.b / 255)});
 }
 </script>
@@ -42,6 +46,9 @@ const updateColor = (color: any) => {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: $white-30;
 
   button {
     width: 24px;
@@ -49,6 +56,10 @@ const updateColor = (color: any) => {
     flex-shrink: 0;
     border-radius: 50%;
     cursor: default;
+
+    &.active {
+      border: 2px solid $highlight;
+    }
   }
 }
 </style>

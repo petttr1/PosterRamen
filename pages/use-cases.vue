@@ -25,18 +25,18 @@
   padding-bottom: 64px;
 
   h2 {
-    color: $yellow;
+    color: $white;
     margin-bottom: 8px;
     font-size: 1.6rem;
   }
   p {
-    color: $yellow;
+    color: $white;
     margin-bottom: 16px;
     font-size: 1.2rem;
     font-weight: 300;
 
     a {
-      color: $blue;
+      color: $highlight;
       text-decoration: none;
     }
   }

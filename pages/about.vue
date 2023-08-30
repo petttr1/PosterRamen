@@ -36,13 +36,13 @@
   margin: 0 auto;
   max-width: 720px;
   p {
-    color: $yellow;
+    color: $white;
     margin-bottom: 16px;
     font-size: 1.5rem;
     font-weight: 300;
 
     a {
-      color: $blue;
+      color: $highlight;
       text-decoration: none;
     }
   }

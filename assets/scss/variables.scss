@@ -1,11 +1,29 @@
-$background: #453C67;
-$blue: #46C2CB;
-$yellow: #F2F7A1;
+$base: #1A130E;
+$base-10: rgba($base, 0.1);
+$base-50: rgba($base, 0.5);
+$base-80: rgba($base, 0.8);
+
+$highlight: #B5446E;
+$highlight-10: rgba($highlight, 0.1);
+$highlight-30: rgba($highlight, 0.3);
+$highlight-50: rgba($highlight, 0.5);
+$highlight-80: rgba($highlight, 0.8);
+
+$white: #F7F7F2;
+$white-10: rgba($white, 0.1);
+$white-30: rgba($white, 0.3);
+$white-50: rgba($white, 0.5);
+$white-80: rgba($white, 0.8);
+
+$secondary: #62A87C;
+$secondary-10: rgba($secondary, 0.1);
+$secondary-50: rgba($secondary, 0.5);
+$secondary-80: rgba($secondary, 0.8);
 
 @mixin button($padding-top-bottom:0, $padding-left-right:0, $border-radius:0) {
   border: none;
-  background: $blue;
-  color: $yellow;
+  background: $highlight;
+  color: $white;
   padding: $padding-top-bottom $padding-left-right;
   cursor: default;
 
@@ -14,7 +32,7 @@ $yellow: #F2F7A1;
   border-radius: $border-radius;
 
   &:hover {
-    background: $yellow;
-    color: $blue;
+    background: $white;
+    color: $highlight;
   }
 }

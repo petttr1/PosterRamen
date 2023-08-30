@@ -20,16 +20,16 @@ import PasswordSignup from "~/components/PasswordSignup.vue";
   transform: translate(-50%, -50%);
 
   h1 {
-    color: $yellow;
+    color: $white;
   }
 
   hr {
-    border-color: $yellow;
+    border-color: $white;
     margin: 16px 0;
   }
 
   span {
-    color: $yellow;
+    color: $white;
     text-align: center;
     width: 100%;
     margin-top: 8px;

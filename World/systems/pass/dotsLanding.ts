@@ -59,7 +59,7 @@ function createLandingPass() {
   const { $random } = useNuxtApp();
   const effect = {
     uniforms: {
-      offset: { value: $random.$getRandom() / 15 },
+      offset: { value: $random.$getRandom() / 20 },
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,

@@ -4,7 +4,7 @@
       Make Posters Instantly
     </h1>
     <h2 class="hero__subtitle">
-      Use <b>Poster Ramen</b> to create posters, cover art, and more within seconds
+      Use <b>Poster Ramen</b> to create posters within <b>seconds</b>
     </h2>
   </div>
 </template>
@@ -17,9 +17,9 @@
   margin: 0 auto;
 
   &__title {
-    margin: 128px auto 32px;
+    margin: 256px auto 32px;
     font-size: 4rem;
-    color: $yellow;
+    color: $white;
     text-align: center;
     font-weight: 600;
     @media(max-width: 768px) {
@@ -34,7 +34,7 @@
   &__subtitle {
     margin: 0 auto;
     font-size: 2rem;
-    color: $yellow;
+    color: $white;
     font-weight: 400;
     max-width: 560px;
     text-align: center;

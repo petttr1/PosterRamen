@@ -15,7 +15,6 @@ const fragmentShader = `
     uniform float x;
     uniform float y;
     uniform float offset;
-    uniform sampler2D tDiffuse;
     varying vec2 vUv;
 
     mat2 rot(float deg)
@@ -34,7 +33,6 @@ const fragmentShader = `
       }
 
   void main() {
-    vec4 color = texture2D( tDiffuse, vUv );
     float t = x + y + offset;
     vec2 uv = vUv;
 
@@ -52,9 +50,7 @@ const fragmentShader = `
     uv.y/=length(.75*uv);
 
     float value = cos(uv.x+uv.y-t*.6);
-    color.rgb = vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8));
-    // color.rgb = 1. - (1. - 0.1 * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8))) * (1. - color.rgb);
-    gl_FragColor = vec4( color );
+    gl_FragColor = vec4( vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8)), 1. );
   }
 `;
 
@@ -64,7 +60,6 @@ function createLiquidLargePass(camera: Camera) {
     uniforms: {
       x: { value: camera.position.x },
       y: { value: camera.position.y },
-      tDiffuse: { value: null },
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

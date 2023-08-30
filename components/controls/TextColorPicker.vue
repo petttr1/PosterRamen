@@ -6,6 +6,7 @@
       :style="{
         background: `rgb(${color.r},${color.g},${color.b})`
       }"
+      :class="{active: active === color.id}"
       @click="updateColor(color)"
     />
   </div>
@@ -43,6 +44,10 @@ const updateColor = (selectedColor: any) => {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: $white-30;
+
 
   button {
     width: 24px;
@@ -50,6 +55,10 @@ const updateColor = (selectedColor: any) => {
     flex-shrink: 0;
     border-radius: 50%;
     cursor: default;
+
+    &.active {
+      border: 2px solid $highlight;
+    }
   }
 }
 </style>
