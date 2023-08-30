@@ -80,7 +80,7 @@ const exportAsPdf = async () => {
   margin-top: 72px;
 
   h1 {
-    color: $yellow;
+    color: $white;
     margin: 32px auto;
     text-align: center;
     font-size: 2.5rem;
@@ -98,7 +98,7 @@ const exportAsPdf = async () => {
   &__text {
     max-width: 500px;
     margin: 32px auto 0;
-    color: $yellow;
+    color: $white;
     text-align: center;
 
     p {
@@ -106,7 +106,7 @@ const exportAsPdf = async () => {
     }
 
     a {
-      color: $blue;
+      color: $highlight;
       cursor: pointer;
     }
   }
@@ -126,7 +126,7 @@ const exportAsPdf = async () => {
     }
 
     &__login {
-      color: $blue;
+      color: $highlight;
       text-decoration: none;
     }
   }

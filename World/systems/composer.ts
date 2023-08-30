@@ -18,6 +18,11 @@ import {
 import { getPasses } from "~/World/systems/pass";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
 import { createLandingPass } from "~/World/systems/pass/dotsLanding";
+import { createGradientPass } from "~/World/systems/pass/gradient";
+import { createZebraPass } from "~/World/systems/pass/zebra";
+import { createLiquidPass } from "~/World/systems/pass/liquid";
+import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
+import { createSilkPass } from "~/World/systems/pass/silk";
 
 function createBaseComposer(
   renderer: WebGLRenderer,
@@ -70,9 +75,10 @@ function createLandingComposer(
   const renderTarget = new WebGLRenderTarget(width, height, parameters);
   const composer = new EffectComposer(renderer, renderTarget);
   composer.setSize(width, height);
-  // composer.addPass(createLandingPass());
-  const passes = getPasses(scene, camera);
-  passes.forEach((pass) => composer.addPass(pass));
+  const dir = Math.random() - 1 > 0 ? 1 : -1;
+  camera.position.x = dir * 4 + dir * Math.random() * 10;
+  camera.position.y = dir * 4 + dir * Math.random() * 10;
+  composer.addPass(createLiquidLargePass(camera));
   return composer;
 }
 

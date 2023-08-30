@@ -16,9 +16,7 @@ import Hero from "~/components/Hero.vue";
 .landing-overlay {
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(13px);
-  -webkit-backdrop-filter: blur(13px);
-  background: rgba($background, 0.6);
+  background: rgba($base, 0.8);
   overflow: hidden;
 }
 .landing-wrapper {

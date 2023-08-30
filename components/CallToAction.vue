@@ -24,10 +24,10 @@ const placeholder = ref<string>('');
 
   h3 {
     font-size: 1.5rem;
-    color: $yellow;
+    color: $white;
     font-weight: 300;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
 
   &__wrapper {
@@ -41,11 +41,18 @@ const placeholder = ref<string>('');
       font-size: 1.5rem;
       font-weight: 500;
       border-radius: 12px;
+      background: $white;
+      color: $highlight;
+
+      &:hover {
+        background: $highlight;
+        color:  $white;
+      }
     }
   }
 
   p {
-    color: $yellow;
+    color: $white;
     font-size: 0.8rem;
     margin-top: 8px;
     text-align: center;
@@ -54,7 +61,7 @@ const placeholder = ref<string>('');
   h2 {
     font-size: 1rem;
     font-weight: 300;
-    color: $yellow;
+    color: $white;
     text-align: center;
     margin-top: 16px;
   }

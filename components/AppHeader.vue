@@ -58,7 +58,7 @@ const isApp = computed(() => route.path.split('/').includes('app'));
   z-index: 1;
   height: 40px;
   width: 100%;
-  background: rgba($background, 0.8);
+  background: rgba($base, 0.8);
   backdrop-filter: blur(13px);
   -webkit-backdrop-filter: blur(13px);
   display: flex;
@@ -79,7 +79,7 @@ const isApp = computed(() => route.path.split('/').includes('app'));
       text-decoration: none;
 
       &:hover {
-        color: $yellow;
+        color: $white;
         background: none;
       }
     }

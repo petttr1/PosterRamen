@@ -40,7 +40,7 @@ const downloadSnapshot = () => {
 
 <style lang="scss" scoped>
 span {
-  color: $yellow;
+  color: $white;
   font-size: 0.8rem;
   margin: 24px 0 8px;
 }
@@ -49,7 +49,7 @@ span {
   flex-direction: column;
   align-items: flex-start;
   padding: 8px 8px 0;
-  border-left: 2px solid $blue;
+  border-left: 2px solid $highlight;
   height: 100%;
   width: 100%;
 
@@ -63,7 +63,7 @@ span {
   }
 
   p {
-    color: $yellow;
+    color: $white;
     text-wrap: nowrap;
 
   }

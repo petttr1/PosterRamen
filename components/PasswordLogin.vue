@@ -45,14 +45,14 @@ const signIn = async () => {
     @include button(4px, 8px);
   }
   input {
-    border: 2px solid rgba($yellow, 0.5);
+    border: 2px solid rgba($white, 0.5);
     width: 100%;
     line-height: 24px;
     font-size: 1.2rem;
     padding: 4px 8px;
     outline: none;
-    color: $yellow;
-    caret-color: $yellow;
+    color: $white;
+    caret-color: $white;
     margin-bottom: 8px;
   }
 }

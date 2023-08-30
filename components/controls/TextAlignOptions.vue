@@ -47,8 +47,8 @@ const updateAlign = (option: "left" | "center" | "right") => {
     text-transform: capitalize;
 
     &.selected {
-      background: $yellow;
-      color: $blue;
+      background: $white;
+      color: $highlight;
     }
 
     &:first-of-type {
