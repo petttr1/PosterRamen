@@ -1,7 +1,11 @@
 import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { HEIGHT, WIDTH } from "~/constants";
-import { translateColorspace } from "~/World/systems/pass/helpers";
+import {
+  baseShaderUniforms,
+  baseUniforms,
+  translateColorspace,
+} from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -16,14 +20,13 @@ void main() {
 const fragmentShader = `
 uniform float x;
 uniform float y;
-uniform float width;
-uniform float height;
 uniform float offset;
 uniform sampler2D tDiffuse;
 varying vec2 vUv;
+${baseShaderUniforms}
 ${translateColorspace}
 void main() {
-    vec2 center = vec2(0.5, 0.555);
+    vec2 center = vec2(0.5, 0.5 - (borders.top / (borders.bottom * 100.)));
     float aspect = width / height;
     vec2 uv = vUv;
     uv.x *= aspect;
@@ -39,10 +42,9 @@ function createGradientPass(camera: Camera) {
   const { $random } = useNuxtApp();
   const effect = {
     uniforms: {
+      ...baseUniforms(),
       x: { value: camera.position.x },
       y: { value: camera.position.y },
-      width: { value: WIDTH },
-      height: { value: HEIGHT },
       tDiffuse: { value: null },
       offset: { value: $random.$getRandom() * 10 },
     },

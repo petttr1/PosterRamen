@@ -1,9 +1,9 @@
 <template>
-  <div class="text-align">
+  <div class="horizontal-flow">
     <button
       v-for="opt of options"
-      :key="opt"
-      :class="{selected: opt === selectedOption}"
+      :key="opt.id"
+      :class="{selected: opt.value === selectedOption}"
       @click="updateAlign(opt)"
     >
       {{ opt }}
@@ -14,17 +14,18 @@
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
 
-const options = ref<string[]>([
-  'left', 'center', 'right'
+const options = ref<any[]>([
+  {id: 0, name: '←', value: 'left'},
+  {id: 1, name: '→', value: 'right'},
 ]);
 const sceneStore = useSceneStore();
 
-const selectedOption = computed(() => sceneStore.scene(sceneStore.activeScene!).textAlign);
-const updateAlign = (option: "left" | "center" | "right") => {
+const selectedOption = computed(() => sceneStore.scene(sceneStore.activeScene!).horizontalFlow);
+const updateAlign = (option: any) => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, textAlign: option});
+  sceneStore.storeScene({id: scene.id, horizontalFlow: option.value});
 }
 </script>
 

@@ -14,57 +14,15 @@
         class="canvas"
       />
     </div>
-    <div
-      class="text-wrapper"
-      :style="{ width: constantWidth }"
-    >
-      <div
-        v-if="exporting"
-        class="text-wrapper__title"
-        :style="{
-          color: storedScene.fontColor,
-          'text-align': storedScene.textAlign
-        }"
-      >
-        {{ title }}
-      </div>
-      <div
-        v-if="exporting"
-        class="text-wrapper__subtitle"
-        :style="{
-          color: storedScene.fontColor,
-          'text-align': storedScene.textAlign
-        }"
-      >
-        {{ subtitle }}
-      </div>
-      <input
-        v-if="!exporting"
-        ref="titleRef"
-        v-model="title"
-        placeholder="Your Title"
-        class="text-wrapper__title"
-        :style="{
-          color: storedScene.fontColor,
-          caretColor: storedScene.fontColor,
-          'text-align': storedScene.textAlign
-        }"
-        @input="onTitleInput"
-      >
-      <input
-        v-if="!exporting"
-        v-model="subtitle"
-        :disabled="exporting"
-        placeholder="Your Additional Text"
-        class="text-wrapper__subtitle"
-        :style="{
-          color: storedScene.fontColor,
-          caretColor: storedScene.fontColor,
-          'text-align': storedScene.textAlign
-        }"
-        @input="onSubtitleInput"
-      >
-    </div>
+    <SceneText
+      :exporting="exporting"
+      :title="title"
+      :subtitle="subtitle"
+      :paragraph="paragraph"
+      @title-input="onTitleInput"
+      @subtitle-input="onSubtitleInput"
+      @paragraph-input="onParagraphInput"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -88,7 +46,6 @@ const props = defineProps({
 });
 
 const sceneStore = useSceneStore();
-
 const sceneId = ref<string | null>(null);
 
 const container = ref<HTMLElement | null>(null);
@@ -96,15 +53,14 @@ const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
 const title = ref<string>('Poster Ramen');
 const subtitle = ref<string>('Make Posters Instantly');
+const paragraph = ref<string>(new Date().toLocaleDateString());
 const exporting =ref<boolean>(false);
-const titleRef = ref<HTMLInputElement | null>(null);
 
 const seed = ref<number | null>(null);
 
 let composer: EffectComposer;
 let scene: Scene;
 let camera: Camera;
-let world: Group;
 
 watchEffect(() => {
   if (sceneId.value !== sceneStore.activeScene) {
@@ -113,11 +69,7 @@ watchEffect(() => {
 });
 
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
-const selectedFont = computed(() => storedScene.value.font);
 
-const constantWidth = computed(() =>{
-  return `${WIDTH - 64}px`;
-});
 const renderWidth = computed(() =>{
   return `${props.width}px`;
 });
@@ -129,7 +81,6 @@ onMounted(async () => {
   if (typeof window !== "undefined") {
     nextTick(async () => {
       const {$bus} = useNuxtApp()
-      titleRef.value!.focus();
 
       $bus.$on('refreshScene', () => {
         newScene();
@@ -137,16 +88,6 @@ onMounted(async () => {
       $bus.$on('download', () => {
         download();
       });
-      // $bus.$on('swap', () => {
-      //   if (exporting.value) {
-      //     exporting.value = false;
-      //     activateRenderer("lowQ");
-      //     return;
-      //   }
-      //   exporting.value = true;
-      //   activateRenderer("highQ");
-      // });
-
       scene = createScene();
       camera = createCamera();
 
@@ -166,11 +107,18 @@ onBeforeUnmount(() => {
   $bus.$off('download');
 })
 
-const onTitleInput = () => {
+const onTitleInput = (value: string) =>{
+  title.value = value;
   sceneStore.storeScene({id: sceneId.value!, title: title.value});
 }
-const onSubtitleInput = () => {
+const onSubtitleInput = (value: string) => {
+  subtitle.value = value;
   sceneStore.storeScene({id: sceneId.value!, subtitle: subtitle.value});
+}
+
+const onParagraphInput = (value: string) => {
+  paragraph.value = value;
+  sceneStore.storeScene({id: sceneId.value!, paragraph: paragraph.value});
 }
 const newSeed = () => {
   return Math.random()*2**32|0;
@@ -188,7 +136,20 @@ const newScene = async () => {
   const seed = newSeed();
   $random.$setSeed(seed);
   const font = sampleFont();
-  sceneStore.storeScene({id: sceneId.value!, seed, cameraX: 0, cameraY: 0, title: title.value, subtitle: subtitle.value, font, fontColor:'rgb(0., 0., 0.)', textAlign: 'center'});
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    seed,
+    cameraX: 0,
+    cameraY: 0,
+    title: title.value,
+    subtitle: subtitle.value,
+    paragraph: paragraph.value,
+    font,
+    fontColor:'rgb(0., 0., 0.)',
+    background: new Vector3(1, 1, 1),
+    textAlign: 'center',
+    showBorders: true,
+  });
   await refreshScene();
 }
 const refreshScene = async () => {
@@ -215,6 +176,18 @@ const render = (_timestamp: number, _frame: any) => {
           value: {
             background: storedScene.value.background ?? new Vector3(1, 1, 1),
             color: storedScene.value.color ?? new Vector3(0, 0, 0)
+          }
+        };
+      }
+      // update frame uniform
+      if (pass.uniforms.borders) {
+        pass.uniforms.borders = {
+          value: {
+            show: storedScene.value.showBorders ?? true,
+            top: 150 / HEIGHT,
+            right: 32 / WIDTH,
+            bottom: 100 / HEIGHT,
+            left: 32 / WIDTH,
           }
         };
       }
@@ -302,47 +275,6 @@ img {
   transform-origin: 0 0;
   position: relative;
   background: white;
-}
-
-.text-wrapper {
-  position: absolute;
-  cursor: default;
-  user-select: none;
-  bottom: 48px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: v-bind(selectedFont);
-  font-weight: 400;
-  padding: 16px 0 0;
-  margin-left: -6px;
-
-  input, div {
-    outline: none;
-    caret-color: black;
-    color: black;
-    width: 100%;
-    overflow-x: hidden;
-
-    .dark & {
-      caret-color: white;
-      color: white;
-    }
-  }
-
-  &__title {
-    font-weight: 400;
-    font-size: 6rem;
-    line-height: 7rem;
-    white-space: nowrap;
-  }
-
-  &__subtitle {
-    font-weight: 400;
-    font-size: 3rem;
-    line-height: 4rem;
-    margin-left: 2px;
-  }
-
 }
 </style>
 

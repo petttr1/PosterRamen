@@ -1,12 +1,13 @@
 <template>
-  <div class="text-align">
+  <div class="borders">
     <button
-      v-for="opt of options"
-      :key="opt"
-      :class="{selected: opt === selectedOption}"
-      @click="updateAlign(opt)"
+      v-for="opt of borderOptions"
+      :key="opt.id"
+      :class="{active: showBorders === opt.id}"
+      :style="{'grid-area': `row${opt.row}`}"
+      @click="updateShowBorders(opt.value)"
     >
-      {{ opt }}
+      {{ opt.name }}
     </button>
   </div>
 </template>
@@ -14,22 +15,27 @@
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
 
-const options = ref<string[]>([
-  'left', 'center', 'right'
-]);
-const sceneStore = useSceneStore();
+const showBorders = computed(() => {
+  const sceneStore = useSceneStore();
+  const scene = sceneStore.scene(sceneStore.activeScene!);
+  return scene.showBorders ? 0 : 1;
+})
 
-const selectedOption = computed(() => sceneStore.scene(sceneStore.activeScene!).textAlign);
-const updateAlign = (option: "left" | "center" | "right") => {
+const borderOptions = ref<any[]>([
+  {id: 0, name: 'show', value: true},
+  {id: 1, name: 'hide', value: false},
+]);
+
+const updateShowBorders = (show: boolean) => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, textAlign: option});
+  sceneStore.storeScene({id: scene.id, showBorders: show });
 }
 </script>
 
 <style lang="scss" scoped>
-.text-align {
+.borders {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -42,7 +48,7 @@ const updateAlign = (option: "left" | "center" | "right") => {
     cursor: default;
     text-transform: capitalize;
 
-    &.selected {
+    &.active {
       background: $white;
       color: $highlight;
     }

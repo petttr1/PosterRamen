@@ -8,11 +8,15 @@ export interface StoredScene {
   cameraY: number;
   title: string;
   subtitle: string;
+  paragraph: string;
   font: string;
   fontColor: string;
   textAlign: "left" | "center" | "right";
+  verticalFlow: "top" | "bottom";
+  horizontalFlow: "left" | "right";
   background: Vector3;
   color: Vector3;
+  showBorders: boolean;
   exportString?: string;
 }
 export const useSceneStore = defineStore({

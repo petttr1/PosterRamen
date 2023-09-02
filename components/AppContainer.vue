@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import Scene from "~/components/Scene.vue";
+import Scene from "~/components/scene/Scene.vue";
 import {onBeforeUnmount, onMounted, ref, VueElement} from "vue";
 import Controls from "~/components/controls/Controls.vue";
 const showControls = ref(true);

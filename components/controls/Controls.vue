@@ -8,10 +8,12 @@
     </button>
     <span>Text Color</span>
     <TextColorPicker />
-    <span>Frame Color</span>
+    <span>Base Color</span>
     <ColorPicker />
     <span>Text align</span>
     <TextAlignOptions />
+    <span>Borders</span>
+    <BorderControls />
     <span>Actions</span>
     <button
       class="downloadButton"
@@ -28,6 +30,7 @@
 import TextColorPicker from "~/components/controls/TextColorPicker.vue";
 import ColorPicker from "~/components/controls/ColorPicker.vue";
 import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
+import BorderControls from "~/components/controls/BorderControls.vue";
 
 const { $bus } = useNuxtApp();
 const refreshScene = () => {
