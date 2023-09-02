@@ -38,7 +38,7 @@
     </div>
     <span
       ref="hiddenTitleRef"
-      class="text-wrapper__title-hidden"
+      class="text-wrapper__title--hidden"
     >{{ title }}</span><input
       v-if="!exporting"
       ref="titleRef"
@@ -56,7 +56,10 @@
       v-if="!exporting"
       class="text-wrapper__title-wrapper"
     >
-      <input
+      <span
+        ref="hiddenSubtitleRef"
+        class="text-wrapper__subtitle--hidden"
+      >{{ subtitle }}</span><input
         ref="subtitleRef"
         :value="subtitle"
         :disabled="exporting"
@@ -69,7 +72,10 @@
         }"
         @input="onSubtitleInput"
       >
-      <input
+      <span
+        ref="hiddenParagraphRef"
+        class="text-wrapper__paragraph--hidden"
+      >{{ paragraph }}</span><input
         ref="paragraphRef"
         :value="paragraph"
         :disabled="exporting"
@@ -92,11 +98,19 @@ import {useSceneStore} from "~/store/scene";
 const titleRef = ref<HTMLInputElement | null>(null);
 const hiddenTitleRef = ref<HTMLSpanElement | null>(null);
 const subtitleRef = ref<HTMLInputElement | null>(null);
+const hiddenSubtitleRef = ref<HTMLSpanElement | null>(null);
 const paragraphRef = ref<HTMLInputElement | null>(null);
+const hiddenParagraphRef = ref<HTMLSpanElement | null>(null);
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const selectedFont = computed(() => scene.value.font);
+const textAlign = computed(() => scene.value.textAlign === 'left'
+    ? 'flex-start'
+    : scene.value.textAlign === 'right'
+        ? 'flex-end'
+        : 'center'
+);
 
 const props = defineProps({
   exporting: {type: Boolean, default: false},
@@ -112,7 +126,6 @@ const constantWidth = computed(() =>{
 });
 
 const onTitleInput = (e: any) => {
-  console.log('title input', e.target.value);
   emit('titleInput', e.target.value);
   nextTick(() => {
     titleRef.value!.style.width = hiddenTitleRef.value!.offsetWidth + "px";
@@ -121,10 +134,16 @@ const onTitleInput = (e: any) => {
 
 const onSubtitleInput = (e: any) => {
   emit('subtitleInput', e.target.value);
+  nextTick(() => {
+    subtitleRef.value!.style.width = hiddenSubtitleRef.value!.offsetWidth + "px";
+  })
 }
 
 const onParagraphInput = (e: any) => {
   emit('paragraphInput', e.target.value);
+  nextTick(() => {
+    paragraphRef.value!.style.width = hiddenParagraphRef.value!.offsetWidth + "px";
+  })
 }
 
 
@@ -147,6 +166,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: v-bind(textAlign);
   pointer-events: none;
 
   &.top {
@@ -174,26 +194,26 @@ onMounted(() => {
     width: 100%;
   }
 
-  &__title-hidden {
-    font-weight: 600;
-    font-size: 6rem;
-    line-height: 7rem;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    height: 0;
-    overflow: hidden;
-    white-space: pre;
-    min-width: 100px;
-  }
-
   &__title {
     font-weight: 600;
     font-size: 6rem;
     line-height: 7rem;
-    white-space: nowrap;
+    white-space: pre;
     overflow-y: hidden;
-    min-width: 100px;
+    min-width: 500px;
+
+    &--hidden {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      overflow: hidden;
+      height: 0;
+      font-weight: 600;
+      font-size: 6rem;
+      line-height: 7rem;
+      white-space: pre;
+      min-width: 500px;
+    }
   }
 
   &__subtitle {
@@ -201,6 +221,20 @@ onMounted(() => {
     font-size: 3rem;
     line-height: 4rem;
     overflow-y: hidden;
+    min-width: 450px;
+
+    &--hidden {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      overflow: hidden;
+      height: 0;
+      font-weight: 400;
+      font-size: 3rem;
+      line-height: 4rem;
+      white-space: pre;
+      min-width: 450px;
+    }
   }
 
   &__paragraph {
@@ -208,6 +242,20 @@ onMounted(() => {
     font-size: 2rem;
     line-height: 3rem;
     overflow-y: hidden;
+    min-width: 250px;
+
+    &--hidden {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      overflow: hidden;
+      height: 0;
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 3rem;
+      white-space: pre;
+      min-width: 250px;
+    }
   }
 }
 </style>
