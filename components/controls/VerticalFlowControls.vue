@@ -6,7 +6,7 @@
       :class="{selected: opt.value === selectedOption}"
       @click="updateAlign(opt)"
     >
-      {{ opt }}
+      {{ opt.name }}
     </button>
   </div>
 </template>
@@ -15,8 +15,8 @@
 import {useSceneStore} from "~/store/scene";
 
 const options = ref<any[]>([
-  {id: 0, name: '↑', value: 'bottom'},
-  {id: 1, name: '↓', value: 'top'},
+  {id: 0, name: '↑', value: 'column-reverse'},
+  {id: 1, name: '↓', value: 'column'},
 ]);
 const sceneStore = useSceneStore();
 
@@ -30,7 +30,7 @@ const updateAlign = (option: any) => {
 </script>
 
 <style lang="scss" scoped>
-.text-align {
+.vertical-flow {
   display: flex;
   align-items: center;
   justify-content: space-between;

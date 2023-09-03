@@ -12,8 +12,8 @@ export interface StoredScene {
   font: string;
   fontColor: string;
   textAlign: "left" | "center" | "right";
-  verticalFlow: "top" | "bottom";
-  horizontalFlow: "left" | "right";
+  verticalFlow: "column" | "column-reverse";
+  horizontalFlow: "row" | "row-reverse";
   background: Vector3;
   color: Vector3;
   showBorders: boolean;

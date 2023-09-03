@@ -16,12 +16,6 @@
     </div>
     <SceneText
       :exporting="exporting"
-      :title="title"
-      :subtitle="subtitle"
-      :paragraph="paragraph"
-      @title-input="onTitleInput"
-      @subtitle-input="onSubtitleInput"
-      @paragraph-input="onParagraphInput"
     />
   </div>
 </template>
@@ -107,19 +101,6 @@ onBeforeUnmount(() => {
   $bus.$off('download');
 })
 
-const onTitleInput = (value: string) =>{
-  title.value = value;
-  sceneStore.storeScene({id: sceneId.value!, title: title.value});
-}
-const onSubtitleInput = (value: string) => {
-  subtitle.value = value;
-  sceneStore.storeScene({id: sceneId.value!, subtitle: subtitle.value});
-}
-
-const onParagraphInput = (value: string) => {
-  paragraph.value = value;
-  sceneStore.storeScene({id: sceneId.value!, paragraph: paragraph.value});
-}
 const newSeed = () => {
   return Math.random()*2**32|0;
 }
@@ -148,6 +129,8 @@ const newScene = async () => {
     fontColor:'rgb(0., 0., 0.)',
     background: new Vector3(1, 1, 1),
     textAlign: 'center',
+    horizontalFlow: 'row',
+    verticalFlow: 'column',
     showBorders: true,
   });
   await refreshScene();
@@ -184,10 +167,10 @@ const render = (_timestamp: number, _frame: any) => {
         pass.uniforms.borders = {
           value: {
             show: storedScene.value.showBorders ?? true,
-            top: 150 / HEIGHT,
-            right: 32 / WIDTH,
-            bottom: 100 / HEIGHT,
-            left: 32 / WIDTH,
+            top: (storedScene.value.verticalFlow === 'column' ?  300 : 200) / HEIGHT,
+            right: 64 / WIDTH,
+            bottom: (storedScene.value.verticalFlow === 'column' ?  200 : 300) / HEIGHT,
+            left: 64 / WIDTH,
           }
         };
       }
@@ -241,12 +224,15 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
 }
 const download = async () => {
   exporting.value = true;
+  const region = document.getElementById("render");
+  // region!.style.transform = 'scale(1, 1)';
   nextTick(async () => {
     activateRenderer('highQ');
-    const region = document.getElementById("render");
+    // TODO: re-scale to 1 before exporting
     const render = await html2canvas(region!, {
       scale: 10,
-      backgroundColor: null,
+      // TODO: actual BG color
+      backgroundColor: 'white',
     });
     const exportString = render.toDataURL("image/jpeg");
     sceneStore.storeScene({id: sceneId.value!, exportString});

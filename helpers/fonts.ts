@@ -4,6 +4,8 @@ const fonts = [
   "Press Start 2P",
   "Righteous",
   "Space Grotesk",
+  "Shrikhand",
+  "Bellota Text",
 ];
 
 function sampleFont() {

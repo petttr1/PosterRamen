@@ -1,2 +1,2 @@
-export const WIDTH: number = 1000;
-export const HEIGHT: number = 1414;
+export const WIDTH: number = 2000;
+export const HEIGHT: number = 3000;

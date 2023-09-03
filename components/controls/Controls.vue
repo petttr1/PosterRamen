@@ -14,6 +14,10 @@
     <TextAlignOptions />
     <span>Borders</span>
     <BorderControls />
+    <span>Vertical Flow</span>
+    <VerticalFlowControls />
+    <span>Horizontal Flow</span>
+    <HorizontalFlowControls />
     <span>Actions</span>
     <button
       class="downloadButton"
@@ -31,6 +35,8 @@ import TextColorPicker from "~/components/controls/TextColorPicker.vue";
 import ColorPicker from "~/components/controls/ColorPicker.vue";
 import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
 import BorderControls from "~/components/controls/BorderControls.vue";
+import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
+import HorizontalFlowControls from "~/components/controls/HorizontalFlowControls.vue";
 
 const { $bus } = useNuxtApp();
 const refreshScene = () => {

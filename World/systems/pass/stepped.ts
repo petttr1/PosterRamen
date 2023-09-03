@@ -1,6 +1,5 @@
 import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { HEIGHT, WIDTH } from "~/constants";
 import {
   baseShaderUniforms,
   baseUniforms,
