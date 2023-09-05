@@ -231,8 +231,7 @@ const download = async () => {
     // TODO: re-scale to 1 before exporting
     const render = await html2canvas(region!, {
       scale: 10,
-      // TODO: actual BG color
-      backgroundColor: 'white',
+      backgroundColor: `rgb(${storedScene.value.background.x * 255},${storedScene.value.background.y * 255},${storedScene.value.background.z * 255})`,
     });
     const exportString = render.toDataURL("image/jpeg");
     sceneStore.storeScene({id: sceneId.value!, exportString});

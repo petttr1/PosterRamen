@@ -45,6 +45,7 @@ const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 
 const sceneId = computed(() => scene.value.id);
+const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'right' : 'left');
 
 watch(sceneId, () => {
   nextTick(() => {
@@ -101,7 +102,7 @@ onMounted(() => {
   font-weight: 400;
   overflow: hidden;
   white-space: pre;
-  text-align: right;
+  text-align: v-bind(horizontalFlow);
 
   input, div {
     outline: none;

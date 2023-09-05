@@ -10,7 +10,6 @@
       class="subtitle__text"
       :style="{
         color: scene.fontColor,
-
       }"
     >
       {{ title }}
@@ -45,6 +44,7 @@ const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 
 const sceneId = computed(() => scene.value.id);
+const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'left' : 'right');
 
 watch(sceneId, () => {
   nextTick(() => {
@@ -102,7 +102,7 @@ onMounted(() => {
   font-weight: 400;
   overflow: hidden;
   white-space: pre;
-  text-align: left;
+  text-align: v-bind(horizontalFlow);
 
   input, div {
     outline: none;

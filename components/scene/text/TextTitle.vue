@@ -106,6 +106,7 @@ onMounted(() => {
   white-space: pre;
   overflow: hidden;
 
+
   input, div {
     outline: none;
     caret-color: black;
