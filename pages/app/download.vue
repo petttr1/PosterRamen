@@ -2,10 +2,17 @@
   <div class="download">
     <h1>Looking great!</h1>
     <div class="download__preview">
+      <!--      <a-->
+      <!--        v-if="exportString"-->
+      <!--        ref="imgDownload"-->
+      <!--        :href="exportString"-->
+      <!--        :download="`${scene.title}.jpeg`"-->
+      <!--      >-->
       <img
-        v-if="exportString"
+
         :src="`${exportString}`"
       >
+      <!--      </a>-->
     </div>
     <div class="download__text">
       <p>Your work is being downloaded now.</p>
@@ -18,7 +25,6 @@
       >
         Make New Poster
       </nuxt-link>
-
       <!--      <nuxt-link-->
       <!--        :to="`/app?id=${sceneId}`"-->
       <!--        class="download__back__button"-->
@@ -45,7 +51,9 @@ const supabase = useSupabaseClient()
 
 const sceneId = ref<string>('');
 const scene = computed(() => sceneStore.scene(sceneId.value!));
-const exportString = computed(() => sceneStore.scene(sceneId.value!).exportString)
+const exportString = computed(() => sceneStore.scene(sceneId.value!).exportString);
+
+// const imgDownload = ref<HTMLLinkElement | null>(null);
 
 const route = useRoute()
 onMounted(() => {
@@ -71,7 +79,8 @@ const exportAsPdf = async () => {
       WIDTH,
       HEIGHT,
   );
-  pdf.save(`${scene.value.title}-${scene.value.seed}.pdf`);
+  pdf.save(`${scene.value.title}.pdf`);
+  // imgDownload.value!.click();
 }
 </script>
 

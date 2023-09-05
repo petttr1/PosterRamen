@@ -6,12 +6,16 @@
     >
       Randomize
     </button>
-    <span>Text Color</span>
+    <span>Color</span>
     <TextColorPicker />
-    <span>Frame Color</span>
+    <span>Base Color</span>
     <ColorPicker />
-    <span>Text align</span>
+    <span>Place Title</span>
     <TextAlignOptions />
+    <span>Show Frame</span>
+    <BorderControls />
+    <span>Flow</span>
+    <VerticalFlowControls />
     <span>Actions</span>
     <button
       class="downloadButton"
@@ -28,6 +32,9 @@
 import TextColorPicker from "~/components/controls/TextColorPicker.vue";
 import ColorPicker from "~/components/controls/ColorPicker.vue";
 import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
+import BorderControls from "~/components/controls/BorderControls.vue";
+import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
+import HorizontalFlowControls from "~/components/controls/HorizontalFlowControls.vue";
 
 const { $bus } = useNuxtApp();
 const refreshScene = () => {

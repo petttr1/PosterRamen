@@ -1,35 +1,38 @@
 <template>
-  <div class="text-align">
+  <div class="vertical-flow">
     <button
-      v-for="opt of options"
-      :key="opt"
-      :class="{selected: opt === selectedOption}"
-      @click="updateAlign(opt)"
+      @click="switchFlow"
     >
-      {{ opt }}
+      Change Flow
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
-
-const options = ref<string[]>([
-  'left', 'center', 'right'
+let flowIndex = 0;
+const options = ref<any[]>([
+  {id: 0, vertical: 'column-reverse', horizontal: 'row-reverse'},
+  {id: 1, vertical: 'column', horizontal: 'row'},
+  {id: 2, vertical: 'column',  horizontal: 'row-reverse'},
+  {id: 3, vertical: 'column-reverse', horizontal: 'row'},
 ]);
 const sceneStore = useSceneStore();
-
-const selectedOption = computed(() => sceneStore.scene(sceneStore.activeScene!).textAlign);
-const updateAlign = (option: "left" | "center" | "right") => {
+const switchFlow = () => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, textAlign: option});
+  flowIndex = (flowIndex + 1) % options.value.length;
+  sceneStore.storeScene({
+    id: scene.id,
+    verticalFlow: options.value[flowIndex].vertical,
+    horizontalFlow: options.value[flowIndex].horizontal
+  });
 }
 </script>
 
 <style lang="scss" scoped>
-.text-align {
+.vertical-flow {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -6,6 +6,7 @@ const fonts = {
     "Press Start 2P": [400],
     Righteous: [400],
     "Space Grotesk": [300, 400, 500],
+    "Bellota Text": [400, 500, 600],
   },
   subsets: ["latin"],
   display: "swap",
