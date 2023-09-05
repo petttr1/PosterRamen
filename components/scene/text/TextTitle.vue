@@ -48,9 +48,10 @@ const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const sceneId = computed(() => scene.value.id);
 
 watch(sceneId, () => {
-  nextTick(() => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
     recalculateTitle();
-  });
+  }, 150);
 })
 
 const props = defineProps({

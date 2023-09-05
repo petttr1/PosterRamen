@@ -6,18 +6,16 @@
     >
       Randomize
     </button>
-    <span>Text Color</span>
+    <span>Color</span>
     <TextColorPicker />
     <span>Base Color</span>
     <ColorPicker />
-    <span>Text align</span>
+    <span>Place Title</span>
     <TextAlignOptions />
-    <span>Borders</span>
+    <span>Show Frame</span>
     <BorderControls />
-    <span>Vertical Flow</span>
+    <span>Flow</span>
     <VerticalFlowControls />
-    <span>Horizontal Flow</span>
-    <HorizontalFlowControls />
     <span>Actions</span>
     <button
       class="downloadButton"

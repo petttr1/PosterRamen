@@ -48,9 +48,10 @@ const sceneId = computed(() => scene.value.id);
 const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'right' : 'left');
 
 watch(sceneId, () => {
-  nextTick(() => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
     recalculateTitle();
-  });
+  }, 150);
 })
 
 const props = defineProps({

@@ -19,9 +19,11 @@ import {useSceneStore} from "~/store/scene";
 const active = ref<number>(1);
 
 const colors = ref<any[]>([
+  {id: 3, r:252, g:246, b:245},
   {id: 1, r:0, g:0, b:0},
   {id: 2, r:0, g:32, b:64},
-  {id: 3, r:252, g:246, b:245},
+  {id: 6, r:0, g:66, b:37},
+  {id: 0, r:37, g:142, b:166},
   {id: 4, r:223, g:101, b:137},
 ]);
 

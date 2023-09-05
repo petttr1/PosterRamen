@@ -47,10 +47,11 @@ const sceneId = computed(() => scene.value.id);
 const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'left' : 'right');
 
 watch(sceneId, () => {
-  nextTick(() => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
     recalculateTitle();
-  });
-})
+  }, 150);
+});
 
 const props = defineProps({
   exporting: {type: Boolean, default: false},
@@ -76,7 +77,7 @@ const adjustTitleFontSize = () => {
       maxFontSize,
       Math.max(
           minFontSize,
-          fontSize.value * (maxWidth / (currentWidth + 8))
+          fontSize.value * (maxWidth / currentWidth)
       )
   );
 }
@@ -93,7 +94,6 @@ onMounted(() => {
   setTimeout(() => {
     recalculateTitle();
   }, 150);
-
 });
 </script>
 <style lang="scss" scoped>

@@ -21,13 +21,12 @@ const active = ref<number>(0);
 const colors = ref<any[]>([
   {id: 0, r:255, g:255, b:255},
   {id: 1, r:0, g:0, b:0},
-  {id: 2, r:251, g:54, b:23},
+  {id: 2, r:103, g:0, b:26},
   {id: 3, r:4, g:32, b:84},
   {id: 4, r:45, g:142, b:135},
   {id: 5, r:254, g:188, b:56},
   {id: 6, r:173, g:239, b:209},
   {id: 7, r:137, g:171, b:227},
-  {id: 8, r:60, g:16, b:83},
 ]);
 
 const updateColor = (color: any) => {

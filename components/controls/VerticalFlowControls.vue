@@ -1,31 +1,33 @@
 <template>
   <div class="vertical-flow">
     <button
-      v-for="opt of options"
-      :key="opt.id"
-      :class="{selected: opt.value === selectedOption}"
-      @click="updateAlign(opt)"
+      @click="switchFlow"
     >
-      {{ opt.name }}
+      Change Flow
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
-
+let flowIndex = 0;
 const options = ref<any[]>([
-  {id: 0, name: '↑', value: 'column-reverse'},
-  {id: 1, name: '↓', value: 'column'},
+  {id: 0, vertical: 'column-reverse', horizontal: 'row-reverse'},
+  {id: 1, vertical: 'column', horizontal: 'row'},
+  {id: 2, vertical: 'column',  horizontal: 'row-reverse'},
+  {id: 3, vertical: 'column-reverse', horizontal: 'row'},
 ]);
 const sceneStore = useSceneStore();
-
-const selectedOption = computed(() => sceneStore.scene(sceneStore.activeScene!).verticalFlow);
-const updateAlign = (option: any) => {
+const switchFlow = () => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, verticalFlow: option.value});
+  flowIndex = (flowIndex + 1) % options.value.length;
+  sceneStore.storeScene({
+    id: scene.id,
+    verticalFlow: options.value[flowIndex].vertical,
+    horizontalFlow: options.value[flowIndex].horizontal
+  });
 }
 </script>
 
