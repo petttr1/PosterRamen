@@ -45,7 +45,13 @@ const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 
 const sceneId = computed(() => scene.value.id);
 const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'left' : 'right');
-
+const font = computed(() => scene.value.font);
+watch(font, () => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
+    recalculateTitle();
+  }, 150);
+});
 watch(sceneId, () => {
   fontSize.value = maxFontSize;
   setTimeout(() => {

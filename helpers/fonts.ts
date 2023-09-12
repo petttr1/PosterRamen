@@ -12,4 +12,4 @@ function sampleFont() {
   const index = Math.floor($random.$getRandom() * fonts.length);
   return fonts[index];
 }
-export { sampleFont };
+export { sampleFont, fonts };

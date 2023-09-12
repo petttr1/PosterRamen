@@ -46,13 +46,21 @@ const title = ref<string>('Poster Ramen');
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const sceneId = computed(() => scene.value.id);
+const font = computed(() => scene.value.font);
 
 watch(sceneId, () => {
   fontSize.value = maxFontSize;
   setTimeout(() => {
     recalculateTitle();
   }, 150);
-})
+});
+
+watch(font, () => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
+    recalculateTitle();
+  }, 150);
+});
 
 const props = defineProps({
   exporting: {type: Boolean, default: false},

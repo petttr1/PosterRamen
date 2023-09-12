@@ -4,12 +4,14 @@
       class="refreshButton"
       @click="refreshScene"
     >
-      Randomize
+      Randomize Pattern
     </button>
     <span>Color</span>
     <TextColorPicker />
     <span>Base Color</span>
     <ColorPicker />
+    <span>Font</span>
+    <FontOptions />
     <span>Place Title</span>
     <TextAlignOptions />
     <span>Show Frame</span>
@@ -34,7 +36,7 @@ import ColorPicker from "~/components/controls/ColorPicker.vue";
 import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
 import BorderControls from "~/components/controls/BorderControls.vue";
 import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
-import HorizontalFlowControls from "~/components/controls/HorizontalFlowControls.vue";
+import FontOptions from "~/components/controls/FontOptions.vue";
 
 const { $bus } = useNuxtApp();
 const refreshScene = () => {

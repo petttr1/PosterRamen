@@ -77,7 +77,8 @@ onMounted(async () => {
       const {$bus} = useNuxtApp()
 
       $bus.$on('refreshScene', () => {
-        newScene();
+        newPattern();
+        // newScene();
       });
       $bus.$on('download', () => {
         download();
@@ -109,6 +110,18 @@ const loadScene = async (id: string) => {
   sceneId.value = id;
   seed.value = sceneStore.scene(id).seed;
   $random.$setSeed(seed.value);
+  await refreshScene();
+}
+
+const newPattern = async () => {
+  const { $random } = useNuxtApp();
+  const seed = newSeed();
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    seed,
+    cameraX: 0,
+    cameraY: 0,
+  });
   await refreshScene();
 }
 const newScene = async () => {

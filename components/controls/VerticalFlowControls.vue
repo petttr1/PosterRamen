@@ -39,9 +39,8 @@ const switchFlow = () => {
   gap: 2px;
 
   button {
-    @include button(4px, 8px);
+    @include button(4px, 8px, 2px);
     flex-shrink: 0;
-    border-radius: 2px;
     cursor: default;
     text-transform: capitalize;
 
