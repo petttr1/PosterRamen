@@ -33,6 +33,7 @@ import {Pass} from "three/examples/jsm/postprocessing/Pass";
 import {Camera, Group, Scene, Vector3} from "three";
 import {sampleFont} from "~/helpers/fonts";
 import {getPasses} from "~/World/systems/pass";
+import {storeScene} from "~/helpers/db";
 
 const props = defineProps({
   width: {type: Number, default: WIDTH},
@@ -78,14 +79,15 @@ onMounted(async () => {
 
       $bus.$on('refreshScene', () => {
         newPattern();
-        // newScene();
       });
       $bus.$on('download', () => {
         download();
       });
+      $bus.$on('save', () => {
+        save();
+      });
       scene = createScene();
       camera = createCamera();
-
       const route = useRoute()
       if (route.query.id) {
         await loadScene(route.query.id);
@@ -255,6 +257,18 @@ const download = async () => {
       }
     });
   })
+}
+
+const save = async () => {
+  const {x,y} = camera.position;
+  sceneStore.storeScene({id: sceneId.value!, cameraX: x, cameraY: y});
+  const loggedIn = useSupabaseUser();
+  if (!loggedIn.value) {
+    navigateTo('/login');
+  }
+  else {
+    await storeScene(storedScene.value);
+  }
 }
 </script>
 <style lang="scss">

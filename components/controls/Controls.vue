@@ -1,11 +1,7 @@
 <template>
   <div class="controls">
-    <button
-      class="refreshButton"
-      @click="refreshScene"
-    >
-      Randomize Pattern
-    </button>
+    <p>Dragging the pattern will augment it.</p>
+    <p>Click the text to edit.</p>
     <span>Color</span>
     <TextColorPicker />
     <span>Base Color</span>
@@ -20,13 +16,23 @@
     <VerticalFlowControls />
     <span>Actions</span>
     <button
+      class="refreshButton"
+      @click="refreshScene"
+    >
+      Randomize Pattern
+    </button>
+    <button
+      class="saveButton"
+      @click="saveDesign"
+    >
+      Save Design
+    </button>
+    <button
       class="downloadButton"
       @click="downloadSnapshot"
     >
       Export as PDF
     </button>
-    <p>Dragging the image will augment it.</p>
-    <p>Click the text to edit.</p>
   </div>
 </template>
 
@@ -44,6 +50,10 @@ const refreshScene = () => {
 }
 const downloadSnapshot = () => {
   $bus.$emit('download');
+}
+
+const saveDesign = () => {
+  $bus.$emit('save');
 }
 </script>
 

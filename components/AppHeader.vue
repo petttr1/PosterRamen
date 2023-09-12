@@ -21,24 +21,24 @@
       >
         App
       </nuxt-link>
-      <!--      <nuxt-link-->
-      <!--        v-if="isApp"-->
-      <!--        to="/app/profile"-->
-      <!--      >-->
-      <!--        Profile-->
-      <!--      </nuxt-link>-->
-      <!--      <nuxt-link-->
-      <!--        v-if="user && isApp"-->
-      <!--        to="/logout"-->
-      <!--      >-->
-      <!--        Log out-->
-      <!--      </nuxt-link>-->
-      <!--      <nuxt-link-->
-      <!--        v-else-if="isApp"-->
-      <!--        to="/login"-->
-      <!--      >-->
-      <!--        Log in-->
-      <!--      </nuxt-link>-->
+      <nuxt-link
+        v-if="isApp"
+        to="/app/profile"
+      >
+        Profile
+      </nuxt-link>
+      <nuxt-link
+        v-if="user && isApp"
+        to="/logout"
+      >
+        Log out
+      </nuxt-link>
+      <nuxt-link
+        v-else-if="isApp"
+        to="/login"
+      >
+        Log in
+      </nuxt-link>
     </div>
   </div>
 </template>
