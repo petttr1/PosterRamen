@@ -4,7 +4,8 @@
       class="refreshButton"
       @click="refreshScene"
     >
-      Randomize
+      <Icon name="ion:dice-sharp" />
+      Random
     </button>
     <button
       class="refreshButton"

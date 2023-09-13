@@ -3,7 +3,9 @@
     <button
       @click="switchFlow"
     >
-      Change Flow
+      <Icon
+        name="carbon:rotate-clockwise-filled"
+      />
     </button>
   </div>
 </template>
@@ -39,7 +41,7 @@ const switchFlow = () => {
   gap: 2px;
 
   button {
-    @include button(4px, 8px, 2px);
+    @include button(8px, 8px);
     flex-shrink: 0;
     cursor: default;
     text-transform: capitalize;

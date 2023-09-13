@@ -87,6 +87,8 @@ const isApp = computed(() => route.path.split('/').includes('app'));
 
   &__user-controls {
     padding: 8px 16px;
+    display: flex;
+    align-items: center;
 
     button, a {
       line-height: 20px;

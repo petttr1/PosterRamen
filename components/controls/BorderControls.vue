@@ -7,7 +7,7 @@
       :style="{'grid-area': `row${opt.row}`}"
       @click="updateShowBorders(opt.value)"
     >
-      {{ opt.name }}
+      <Icon :name="opt.icon" />
     </button>
   </div>
 </template>
@@ -22,8 +22,8 @@ const showBorders = computed(() => {
 })
 
 const borderOptions = ref<any[]>([
-  {id: 0, name: 'show', value: true},
-  {id: 1, name: 'hide', value: false},
+  {id: 0, name: 'show', value: true, icon: 'ion:md-eye'},
+  {id: 1, name: 'hide', value: false, icon: 'ion:md-eye-off'},
 ]);
 
 const updateShowBorders = (show: boolean) => {

@@ -7,20 +7,24 @@
     >
       Export as JPEG
     </button>
-    <div v-else>
+    <div
+      v-else
+      class="export-options__extended"
+    >
       <button
 
         class="downloadButton"
         @click="downloadSnapshot"
       >
-        Export as PDF
+        <Icon name="ion:download" />
+        Download as PDF
       </button>
       <button
 
         class="downloadButton"
         @click="downloadSnapshot"
       >
-        More
+        <Icon name="ion:caret-down-outline" />
       </button>
     </div>
   </div>
@@ -29,6 +33,7 @@
 <script setup lang="ts">
 const user = useSupabaseUser();
 const downloadSnapshot = () => {
+  const { $bus } = useNuxtApp();
   $bus.$emit('download');
 }
 </script>
@@ -39,6 +44,12 @@ const downloadSnapshot = () => {
   align-items: center;
   justify-content: space-between;
   gap: 2px;
+
+  &__extended {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
   button {
     @include button(9px, 9px, 8px);

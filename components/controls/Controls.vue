@@ -10,19 +10,19 @@
     <ColorPicker />
     <span>Font</span>
     <FontOptions />
-    <span>Place Title</span>
+    <span>Align Title</span>
     <TextAlignOptions />
     <span>Show Frame</span>
     <BorderControls />
     <span>Flow</span>
     <VerticalFlowControls />
     <span>Actions</span>
-
     <button
       v-if="user"
       class="saveButton"
       @click="saveDesign"
     >
+      <Icon name="bi:cloud-check-fill" />
       Save Design
     </button>
     <button
@@ -48,10 +48,10 @@ import FontOptions from "~/components/controls/FontOptions.vue";
 import PatternControls from "~/components/controls/PatternControls.vue";
 import ExportOptions from "~/components/controls/ExportOptions.vue";
 
-const { $bus } = useNuxtApp();
 const user = useSupabaseUser();
 
 const saveDesign = () => {
+  const { $bus } = useNuxtApp();
   $bus.$emit('save');
 }
 </script>

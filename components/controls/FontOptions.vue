@@ -16,7 +16,10 @@
       class="font-options__random"
       @click="selectRandom"
     >
-      Random
+      <Icon
+        name="ion:dice-sharp"
+        size="22"
+      />
     </button>
   </div>
 </template>
@@ -60,7 +63,7 @@ const options = ref(fonts)
   }
 
   &__random {
-    @include button(4px, 8px, 6px);
+    @include button(4px, 4px, 8px);
   }
 }
 </style>

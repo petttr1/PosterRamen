@@ -6,7 +6,7 @@
       :class="{selected: opt === selectedOption}"
       @click="updateAlign(opt)"
     >
-      {{ opt }}
+      <Icon :name="`material-symbols:format-align-${opt}`" />
     </button>
   </div>
 </template>
