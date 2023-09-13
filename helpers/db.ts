@@ -1,4 +1,4 @@
-import { StoredScene } from "~/store/scene";
+import { StoredScene, useSceneStore } from "~/store/scene";
 import { Vector3 } from "three";
 
 function serializeScene(scene: StoredScene) {
@@ -68,9 +68,15 @@ async function getDatabaseScenes() {
   const user = useSupabaseUser();
   const supabase = useSupabaseClient();
   let { data } = await supabase
-    .from("designs")
+    .from("Designs")
     .select()
     .eq("userId", user.value.id);
   return data?.map((scene) => deserializeScene(scene)) ?? [];
 }
-export { storeScene, getDatabaseScenes };
+
+async function loadScenesToStore() {
+  const scenes = await getDatabaseScenes();
+  const sceneStore = useSceneStore();
+  sceneStore.storeScenes(scenes);
+}
+export { storeScene, getDatabaseScenes, loadScenesToStore };

@@ -35,6 +35,12 @@ export const useSceneStore = defineStore({
       const scene = this.scenes[data.id!] ?? {};
       this.scenes[data.id!] = { ...scene, ...data };
     },
+    storeScenes(data: Partial<StoredScene>[]) {
+      for (const scene of data) {
+        const exists = this.scenes[scene.id!] ?? {};
+        this.scenes[scene.id!] = { ...exists, ...scene };
+      }
+    },
     setActiveScene(id: string | null) {
       this.activeSceneId = id;
     },

@@ -57,11 +57,11 @@ let composer: EffectComposer;
 let scene: Scene;
 let camera: Camera;
 
-watchEffect(() => {
-  if (sceneId.value !== sceneStore.activeScene) {
-    sceneStore.setActiveScene(sceneId.value!);
-  }
-});
+// watchEffect(() => {
+//   if (sceneId.value !== sceneStore.activeScene) {
+//     sceneStore.setActiveScene(sceneId.value!);
+//   }
+// });
 
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 
@@ -88,9 +88,8 @@ onMounted(async () => {
       });
       scene = createScene();
       camera = createCamera();
-      const route = useRoute()
-      if (route.query.id) {
-        await loadScene(route.query.id);
+      if (sceneStore.activeScene) {
+        await loadScene(sceneStore.activeScene);
         return;
       }
       await newScene();
@@ -148,6 +147,7 @@ const newScene = async () => {
     verticalFlow: 'column',
     showBorders: true,
   });
+  sceneStore.setActiveScene(sceneId.value!);
   await refreshScene();
 }
 const refreshScene = async () => {

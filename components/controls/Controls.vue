@@ -2,6 +2,8 @@
   <div class="controls">
     <p>Dragging the pattern will augment it.</p>
     <p>Click the text to edit.</p>
+    <span>Pattern</span>
+    <PatternControls />
     <span>Color</span>
     <TextColorPicker />
     <span>Base Color</span>
@@ -15,24 +17,24 @@
     <span>Flow</span>
     <VerticalFlowControls />
     <span>Actions</span>
+
     <button
-      class="refreshButton"
-      @click="refreshScene"
-    >
-      Randomize Pattern
-    </button>
-    <button
+      v-if="user"
       class="saveButton"
       @click="saveDesign"
     >
       Save Design
     </button>
     <button
-      class="downloadButton"
-      @click="downloadSnapshot"
+      v-else
+      class="saveButton"
+      @click="saveDesign"
     >
-      Export as PDF
+      Log in to Save Design
     </button>
+
+    <span>Export</span>
+    <ExportOptions />
   </div>
 </template>
 
@@ -43,14 +45,11 @@ import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
 import BorderControls from "~/components/controls/BorderControls.vue";
 import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
 import FontOptions from "~/components/controls/FontOptions.vue";
+import PatternControls from "~/components/controls/PatternControls.vue";
+import ExportOptions from "~/components/controls/ExportOptions.vue";
 
 const { $bus } = useNuxtApp();
-const refreshScene = () => {
-  $bus.$emit('refreshScene');
-}
-const downloadSnapshot = () => {
-  $bus.$emit('download');
-}
+const user = useSupabaseUser();
 
 const saveDesign = () => {
   $bus.$emit('save');
