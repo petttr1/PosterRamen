@@ -31,7 +31,7 @@ import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
 import {Camera, Group, Scene, Vector3} from "three";
-import {sampleFont} from "~/helpers/fonts";
+import {fonts, sampleFont} from "~/helpers/fonts";
 import {getPasses} from "~/World/systems/pass";
 import {storeScene} from "~/helpers/db";
 
@@ -57,17 +57,12 @@ let composer: EffectComposer;
 let scene: Scene;
 let camera: Camera;
 
-// watchEffect(() => {
-//   if (sceneId.value !== sceneStore.activeScene) {
-//     sceneStore.setActiveScene(sceneId.value!);
-//   }
-// });
-
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 
 const renderWidth = computed(() =>{
   return `${props.width}px`;
 });
+
 const renderHeight = computed(() => {
   return `${props.height}px`;
 });
@@ -76,7 +71,6 @@ onMounted(async () => {
   if (typeof window !== "undefined") {
     nextTick(async () => {
       const {$bus} = useNuxtApp()
-
       $bus.$on('refreshScene', () => {
         newPattern();
       });
@@ -89,19 +83,39 @@ onMounted(async () => {
       scene = createScene();
       camera = createCamera();
       if (sceneStore.activeScene) {
+        console.log('has active scene');
         await loadScene(sceneStore.activeScene);
         return;
       }
       await newScene();
     });
   }
-})
+});
+
 onBeforeUnmount(() => {
-  sceneStore.setActiveScene(null);
+  console.log('dumping scene');
+  destroyRenderer();
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    seed: storedScene.value.seed ?? seed.value,
+    cameraX: camera.position.x,
+    cameraY: camera.position.y,
+    title: title.value,
+    subtitle: subtitle.value,
+    paragraph: paragraph.value,
+    font: storedScene.value.font ?? fonts[0],
+    fontColor:storedScene.value.fontColor ?? 'rgb(0., 0., 0.)',
+    background: storedScene.value.background ?? new Vector3(1, 1, 1),
+    textAlign: storedScene.value.textAlign ?? 'center',
+    horizontalFlow: storedScene.value.horizontalFlow ?? 'row',
+    verticalFlow: storedScene.value.verticalFlow ?? 'column',
+    showBorders: storedScene.value.showBorders ?? true,
+  });
   const {$bus} = useNuxtApp()
   $bus.$off('refreshScene');
   $bus.$off('download');
-})
+  $bus.$off('save');
+});
 
 const newSeed = () => {
   return Math.random()*2**32|0;
@@ -117,6 +131,7 @@ const loadScene = async (id: string) => {
 const newPattern = async () => {
   const { $random } = useNuxtApp();
   const seed = newSeed();
+  $random.$setSeed(seed);
   sceneStore.storeScene({
     id: sceneId.value!,
     seed,
@@ -130,7 +145,7 @@ const newScene = async () => {
   sceneId.value = v4();
   const seed = newSeed();
   $random.$setSeed(seed);
-  const font = sampleFont();
+  const font = storedScene.value.font ?? fonts[0];
   sceneStore.storeScene({
     id: sceneId.value!,
     seed,
@@ -152,7 +167,7 @@ const newScene = async () => {
 }
 const refreshScene = async () => {
   scene.clear();
-  camera.position.set(0,0,0);
+  camera.position.set(storedScene.value.cameraX ?? 0,storedScene.value.cameraY ?? 0,0);
   activateRenderer("lowQ", true);
 }
 const render = (_timestamp: number, _frame: any) => {
@@ -197,13 +212,17 @@ const render = (_timestamp: number, _frame: any) => {
   composer.renderer.setAnimationLoop(render.bind(this));
 }
 
+const destroyRenderer = () => {
+  composer.renderer.setAnimationLoop(null);
+  composer.renderer.clear();
+  container.value!.removeChild(composer.renderer.domElement);
+  composer.renderer.dispose();
+  composer.renderer.forceContextLoss();
+}
+
 const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
   if (composer) {
-    composer.renderer.setAnimationLoop(null);
-    composer.renderer.clear();
-    container.value!.removeChild(composer.renderer.domElement);
-    composer.renderer.dispose();
-    composer.renderer.forceContextLoss();
+    destroyRenderer();
   }
   let passes = composer?.passes;
   if (!passes || refresh) {

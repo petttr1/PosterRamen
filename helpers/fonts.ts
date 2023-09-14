@@ -7,9 +7,10 @@ const fonts = [
   "Bellota Text",
 ];
 
-function sampleFont() {
-  const { $random } = useNuxtApp();
-  const index = Math.floor($random.$getRandom() * fonts.length);
-  return fonts[index];
-}
-export { sampleFont, fonts };
+// function sampleFont() {
+//   const { $random } = useNuxtApp();
+//   const index = Math.floor($random.$getRandom() * fonts.length);
+//   return fonts[index];
+// }
+// sampleFont
+export { fonts };

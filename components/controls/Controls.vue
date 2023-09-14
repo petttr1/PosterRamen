@@ -16,7 +16,7 @@
     <BorderControls />
     <span>Flow</span>
     <VerticalFlowControls />
-    <span>Actions</span>
+    <span>Save For Later</span>
     <button
       v-if="user"
       class="saveButton"
