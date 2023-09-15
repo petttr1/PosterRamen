@@ -1,5 +1,14 @@
 <template>
   <div class="login">
+    <nuxt-link
+      to="/app"
+      class="login__back"
+    >
+      <Icon
+        name="ion:md-arrow-back"
+        size="24"
+      />
+    </nuxt-link>
     <h1>Log in</h1>
     <PasswordLogin />
     <hr>
@@ -19,8 +28,14 @@ import PasswordSignup from "~/components/PasswordSignup.vue";
   left: 50%;
   transform: translate(-50%, -50%);
 
+  &__back {
+    color: $white;
+
+  }
+
   h1 {
     color: $white;
+    padding-top: 16px;
   }
 
   hr {

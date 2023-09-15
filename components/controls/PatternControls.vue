@@ -11,7 +11,7 @@
       class="refreshButton"
       @click="resetCamera"
     >
-      Reset
+      <Icon name="material-symbols:reset-image" /> 
     </button>
   </div>
 </template>
@@ -32,7 +32,7 @@ const resetCamera = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2px;
+  gap: 8px;
 
   button {
     @include button(9px, 9px, 8px);

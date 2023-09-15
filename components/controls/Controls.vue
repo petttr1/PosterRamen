@@ -16,22 +16,32 @@
     <BorderControls />
     <span>Flow</span>
     <VerticalFlowControls />
-    <span>Save For Later</span>
+    <span>Design Options</span>
+    <button
+
+      class="saveButton"
+      @click="newDesign"
+    >
+      <Icon name="material-symbols:add-photo-alternate-outline" />
+      New
+    </button>
     <button
       v-if="user"
       class="saveButton"
       @click="saveDesign"
     >
       <Icon name="bi:cloud-check-fill" />
-      Save Design
+      Save For Later
     </button>
     <button
       v-else
       class="saveButton"
       @click="saveDesign"
     >
-      Log in to Save Design
+      Log in to Save
     </button>
+
+
 
     <span>Export</span>
     <ExportOptions />
@@ -54,6 +64,13 @@ const saveDesign = () => {
   const { $bus } = useNuxtApp();
   $bus.$emit('save');
 }
+
+const newDesign = () => {
+  const { $bus } = useNuxtApp();
+  $bus.$emit('new');
+}
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -76,8 +93,6 @@ span {
     font-weight: 500;
     font-size: 1.2rem;
     margin-bottom: 8px;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
   }
 
   p {

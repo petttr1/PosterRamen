@@ -23,7 +23,6 @@ function serializeScene(scene: StoredScene) {
       "0;0;0",
     color: `${stored.color.x};${stored.color.y};${stored.color.z}` ?? "1;1;1",
     showBorders: stored.showBorders ?? true,
-    exportString: stored.exportString ?? null,
   };
 }
 
@@ -48,7 +47,6 @@ function deserializeScene(scene: any) {
     background: vectorFromString(scene.background),
     color: vectorFromString(scene.color),
     showBorders: scene.showBorders ?? true,
-    exportString: scene.exportString ?? null,
   };
 }
 

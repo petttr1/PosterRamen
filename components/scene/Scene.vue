@@ -74,8 +74,14 @@ onMounted(async () => {
       $bus.$on('refreshScene', () => {
         newPattern();
       });
+      $bus.$on('resetCamera', () => {
+        resetCamera();
+      });
       $bus.$on('download', () => {
         download();
+      });
+      $bus.$on('new', () => {
+        newScene();
       });
       $bus.$on('save', () => {
         save();
@@ -93,7 +99,6 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  console.log('dumping scene');
   destroyRenderer();
   sceneStore.storeScene({
     id: sceneId.value!,
@@ -104,7 +109,7 @@ onBeforeUnmount(() => {
     subtitle: subtitle.value,
     paragraph: paragraph.value,
     font: storedScene.value.font ?? fonts[0],
-    fontColor:storedScene.value.fontColor ?? 'rgb(0., 0., 0.)',
+    fontColor:storedScene.value.fontColor ?? 'rgb(0, 0, 0)',
     background: storedScene.value.background ?? new Vector3(1, 1, 1),
     textAlign: storedScene.value.textAlign ?? 'center',
     horizontalFlow: storedScene.value.horizontalFlow ?? 'row',
@@ -126,6 +131,16 @@ const loadScene = async (id: string) => {
   seed.value = sceneStore.scene(id).seed;
   $random.$setSeed(seed.value);
   await refreshScene();
+}
+
+const resetCamera = () => {
+  camera.position.x = 0;
+  camera.position.y = 0;
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    cameraX: 0,
+    cameraY: 0,
+  });
 }
 
 const newPattern = async () => {
@@ -151,11 +166,11 @@ const newScene = async () => {
     seed,
     cameraX: 0,
     cameraY: 0,
-    title: title.value,
-    subtitle: subtitle.value,
-    paragraph: paragraph.value,
+    title: 'Poster Ramen',
+    subtitle: 'Make Posters Instantly',
+    paragraph: new Date().toLocaleDateString(),
     font,
-    fontColor:'rgb(0., 0., 0.)',
+    fontColor:'rgb(0, 0, 0)',
     background: new Vector3(1, 1, 1),
     textAlign: 'center',
     horizontalFlow: 'row',
@@ -215,7 +230,7 @@ const render = (_timestamp: number, _frame: any) => {
 const destroyRenderer = () => {
   composer.renderer.setAnimationLoop(null);
   composer.renderer.clear();
-  container.value!.removeChild(composer.renderer.domElement);
+  container.value?.removeChild(composer.renderer.domElement);
   composer.renderer.dispose();
   composer.renderer.forceContextLoss();
 }
@@ -245,13 +260,13 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
         RIGHT: THREE.MOUSE.LEFT
       }
     }
-    container.value!.appendChild(composer.renderer.domElement);
+    container.value?.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
   if (type === 'highQ') {
     composer = createExportComposer(scene, camera, passes);
-    container.value!.appendChild(composer.renderer.domElement);
+    container.value?.appendChild(composer.renderer.domElement);
     composer.render();
     return;
   }
