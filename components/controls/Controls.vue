@@ -4,27 +4,16 @@
     <p>Click the text to edit.</p>
     <span>Pattern</span>
     <PatternControls />
-    <span>Color</span>
-    <TextColorPicker />
-    <span>Base Color</span>
-    <ColorPicker />
-    <span>Font</span>
-    <FontOptions />
-    <span>Align Title</span>
-    <TextAlignOptions />
-    <span>Show Frame</span>
-    <BorderControls />
-    <span>Flow</span>
-    <VerticalFlowControls />
-    <span>Design Options</span>
+    <AdvancedControls />
+    <span>Poster Options</span>
     <button
-
       class="saveButton"
       @click="newDesign"
     >
       <Icon name="material-symbols:add-photo-alternate-outline" />
       New
     </button>
+    <span>Save Poster for Later Edit</span>
     <button
       v-if="user"
       class="saveButton"
@@ -40,9 +29,6 @@
     >
       Log in to Save
     </button>
-
-
-
     <span>Export</span>
     <ExportOptions />
   </div>
@@ -57,6 +43,7 @@ import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue
 import FontOptions from "~/components/controls/FontOptions.vue";
 import PatternControls from "~/components/controls/PatternControls.vue";
 import ExportOptions from "~/components/controls/ExportOptions.vue";
+import AdvancedControls from "~/components/controls/AdvancedControls.vue";
 
 const user = useSupabaseUser();
 
@@ -69,15 +56,13 @@ const newDesign = () => {
   const { $bus } = useNuxtApp();
   $bus.$emit('new');
 }
-
-
 </script>
 
 <style lang="scss" scoped>
 span {
   color: $white;
   font-size: 0.8rem;
-  margin: 24px 0 8px;
+  margin: 16px 0 8px;
 }
 .controls {
   display: flex;

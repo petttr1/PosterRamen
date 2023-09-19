@@ -34,11 +34,12 @@
 </template>
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
+import {SUBTITLE_DEFAULT} from "~/constants";
 
 const subtitleRef = ref<HTMLInputElement | null>(null);
 const hiddenSubtitleRef = ref<HTMLSpanElement | null>(null);
 
-const title = ref<string>('Make Posters Instantly');
+const title = ref<string>(SUBTITLE_DEFAULT);
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));

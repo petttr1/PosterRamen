@@ -24,7 +24,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createCamera, createScene} from "~/World/things";
 import {createComposer, createExportComposer} from "~/World/systems/composer";
-import {HEIGHT, WIDTH} from "~/constants";
+import {HEIGHT, SUBTITLE_DEFAULT, TITLE_DEFAULT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
@@ -46,8 +46,8 @@ const sceneId = ref<string | null>(null);
 const container = ref<HTMLElement | null>(null);
 const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
-const title = ref<string>('Poster Ramen');
-const subtitle = ref<string>('Make Posters Instantly');
+const title = ref<string>(TITLE_DEFAULT);
+const subtitle = ref<string>(SUBTITLE_DEFAULT);
 const paragraph = ref<string>(new Date().toLocaleDateString());
 const exporting =ref<boolean>(false);
 
@@ -86,6 +86,9 @@ onMounted(async () => {
       $bus.$on('save', () => {
         save();
       });
+      $bus.$on('download-jpeg', () => {
+        downloadJpeg();
+      });
       scene = createScene();
       camera = createCamera();
       if (sceneStore.activeScene) {
@@ -118,7 +121,10 @@ onBeforeUnmount(() => {
   });
   const {$bus} = useNuxtApp()
   $bus.$off('refreshScene');
+  $bus.$off('resetCamera');
   $bus.$off('download');
+  $bus.$off('download-jpeg');
+  $bus.$off('new');
   $bus.$off('save');
 });
 
@@ -166,8 +172,8 @@ const newScene = async () => {
     seed,
     cameraX: 0,
     cameraY: 0,
-    title: 'Poster Ramen',
-    subtitle: 'Make Posters Instantly',
+    title: TITLE_DEFAULT,
+    subtitle: SUBTITLE_DEFAULT,
     paragraph: new Date().toLocaleDateString(),
     font,
     fontColor:'rgb(0, 0, 0)',
@@ -288,6 +294,29 @@ const download = async () => {
       path: '/app/download',
       query: {
         id: sceneId.value
+      }
+    });
+  })
+}
+
+const downloadJpeg = async () => {
+  exporting.value = true;
+  const region = document.getElementById("render");
+  // region!.style.transform = 'scale(1, 1)';
+  nextTick(async () => {
+    activateRenderer('highQ');
+    // TODO: re-scale to 1 before exporting
+    const render = await html2canvas(region!, {
+      scale: 10,
+      backgroundColor: `rgb(${storedScene.value.background.x * 255},${storedScene.value.background.y * 255},${storedScene.value.background.z * 255})`,
+    });
+    const exportString = render.toDataURL("image/jpeg");
+    sceneStore.storeScene({id: sceneId.value!, exportString});
+    return navigateTo({
+      path: '/app/download',
+      query: {
+        id: sceneId.value,
+        type: 'jpeg'
       }
     });
   })

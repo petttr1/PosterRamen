@@ -2,21 +2,21 @@
   <div class="download">
     <h1>Looking great!</h1>
     <div class="download__preview">
-      <!--      <a-->
-      <!--        v-if="exportString"-->
-      <!--        ref="imgDownload"-->
-      <!--        :href="exportString"-->
-      <!--        :download="`${scene.title}.jpeg`"-->
-      <!--      >-->
-      <img
-
-        :src="`${exportString}`"
+      <a
+        v-if="exportString && type === 'jpeg'"
+        ref="imgDownload"
+        :href="exportString"
+        :download="`${scene.title}.jpeg`"
       >
-      <!--      </a>-->
+        <img
+
+          :src="`${exportString}`"
+        >
+      </a>
     </div>
     <div class="download__text">
       <p>Your work is being downloaded now.</p>
-      <p>Click <a @click="exportAsPdf">here</a> if the download didn't start automatically.</p>
+      <p>Click <a @click="exportPoster">here</a> if the download didn't start automatically.</p>
     </div>
     <div class="download__back">
       <nuxt-link
@@ -50,21 +50,38 @@ const sceneStore = useSceneStore()
 const supabase = useSupabaseClient()
 
 const sceneId = ref<string>('');
+const type = ref<string>('pdf');
 const scene = computed(() => sceneStore.scene(sceneId.value!));
 const exportString = computed(() => sceneStore.scene(sceneId.value!).exportString);
 
-// const imgDownload = ref<HTMLLinkElement | null>(null);
+const imgDownload = ref<HTMLLinkElement | null>(null);
 
 const route = useRoute()
 onMounted(() => {
   sceneId.value = route.query.id;
+  if (route.query.type) {
+    type.value = route.query.type;
+  }
+  nextTick(() => {
+    exportPoster();
+  })
 })
 
-watchEffect(() => {
-  if (exportString.value) {
+const exportPoster = () => {
+  if (!exportString.value) return;
+  if (type.value === 'pdf') {
     exportAsPdf();
+    return;
   }
-})
+  if (type.value === 'jpeg') {
+    exportAsJpeg();
+    return;
+  }
+}
+
+const exportAsJpeg = async () => {
+  imgDownload.value!.click();
+}
 
 const exportAsPdf = async () => {
   let pdf = new jsPDF({
@@ -80,7 +97,6 @@ const exportAsPdf = async () => {
       HEIGHT,
   );
   pdf.save(`${scene.value.title}.pdf`);
-  // imgDownload.value!.click();
 }
 </script>
 
