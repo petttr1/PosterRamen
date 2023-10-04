@@ -24,15 +24,16 @@ import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {createCamera, createScene} from "~/World/things";
 import {createComposer, createExportComposer} from "~/World/systems/composer";
-import {HEIGHT, WIDTH} from "~/constants";
+import {HEIGHT, SUBTITLE_DEFAULT, TITLE_DEFAULT, WIDTH} from "~/constants";
 import html2canvas from "html2canvas";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
 import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
 import {Camera, Group, Scene, Vector3} from "three";
-import {sampleFont} from "~/helpers/fonts";
+import {fonts, sampleFont} from "~/helpers/fonts";
 import {getPasses} from "~/World/systems/pass";
+import {storeScene} from "~/helpers/db";
 
 const props = defineProps({
   width: {type: Number, default: WIDTH},
@@ -45,8 +46,8 @@ const sceneId = ref<string | null>(null);
 const container = ref<HTMLElement | null>(null);
 const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
-const title = ref<string>('Poster Ramen');
-const subtitle = ref<string>('Make Posters Instantly');
+const title = ref<string>(TITLE_DEFAULT);
+const subtitle = ref<string>(SUBTITLE_DEFAULT);
 const paragraph = ref<string>(new Date().toLocaleDateString());
 const exporting =ref<boolean>(false);
 
@@ -56,17 +57,12 @@ let composer: EffectComposer;
 let scene: Scene;
 let camera: Camera;
 
-watchEffect(() => {
-  if (sceneId.value !== sceneStore.activeScene) {
-    sceneStore.setActiveScene(sceneId.value!);
-  }
-});
-
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 
 const renderWidth = computed(() =>{
   return `${props.width}px`;
 });
+
 const renderHeight = computed(() => {
   return `${props.height}px`;
 });
@@ -75,31 +71,62 @@ onMounted(async () => {
   if (typeof window !== "undefined") {
     nextTick(async () => {
       const {$bus} = useNuxtApp()
-
       $bus.$on('refreshScene', () => {
-        newScene();
+        newPattern();
+      });
+      $bus.$on('resetCamera', () => {
+        resetCamera();
       });
       $bus.$on('download', () => {
         download();
       });
+      $bus.$on('new', () => {
+        newScene();
+      });
+      $bus.$on('save', () => {
+        save();
+      });
+      $bus.$on('download-jpeg', () => {
+        downloadJpeg();
+      });
       scene = createScene();
       camera = createCamera();
-
-      const route = useRoute()
-      if (route.query.id) {
-        await loadScene(route.query.id);
+      if (sceneStore.activeScene) {
+        console.log('has active scene');
+        await loadScene(sceneStore.activeScene);
         return;
       }
       await newScene();
     });
   }
-})
+});
+
 onBeforeUnmount(() => {
-  sceneStore.setActiveScene(null);
+  destroyRenderer();
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    seed: storedScene.value.seed ?? seed.value,
+    cameraX: camera.position.x,
+    cameraY: camera.position.y,
+    title: title.value,
+    subtitle: subtitle.value,
+    paragraph: paragraph.value,
+    font: storedScene.value.font ?? fonts[0],
+    fontColor:storedScene.value.fontColor ?? 'rgb(0, 0, 0)',
+    background: storedScene.value.background ?? new Vector3(1, 1, 1),
+    textAlign: storedScene.value.textAlign ?? 'center',
+    horizontalFlow: storedScene.value.horizontalFlow ?? 'row',
+    verticalFlow: storedScene.value.verticalFlow ?? 'column',
+    showBorders: storedScene.value.showBorders ?? true,
+  });
   const {$bus} = useNuxtApp()
   $bus.$off('refreshScene');
+  $bus.$off('resetCamera');
   $bus.$off('download');
-})
+  $bus.$off('download-jpeg');
+  $bus.$off('new');
+  $bus.$off('save');
+});
 
 const newSeed = () => {
   return Math.random()*2**32|0;
@@ -111,33 +138,57 @@ const loadScene = async (id: string) => {
   $random.$setSeed(seed.value);
   await refreshScene();
 }
-const newScene = async () => {
+
+const resetCamera = () => {
+  camera.position.x = 0;
+  camera.position.y = 0;
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    cameraX: 0,
+    cameraY: 0,
+  });
+}
+
+const newPattern = async () => {
   const { $random } = useNuxtApp();
-  sceneId.value = v4();
   const seed = newSeed();
   $random.$setSeed(seed);
-  const font = sampleFont();
   sceneStore.storeScene({
     id: sceneId.value!,
     seed,
     cameraX: 0,
     cameraY: 0,
-    title: title.value,
-    subtitle: subtitle.value,
-    paragraph: paragraph.value,
+  });
+  await refreshScene();
+}
+const newScene = async () => {
+  const { $random } = useNuxtApp();
+  sceneId.value = v4();
+  const seed = newSeed();
+  $random.$setSeed(seed);
+  const font = storedScene.value.font ?? fonts[0];
+  sceneStore.storeScene({
+    id: sceneId.value!,
+    seed,
+    cameraX: 0,
+    cameraY: 0,
+    title: TITLE_DEFAULT,
+    subtitle: SUBTITLE_DEFAULT,
+    paragraph: new Date().toLocaleDateString(),
     font,
-    fontColor:'rgb(0., 0., 0.)',
+    fontColor:'rgb(0, 0, 0)',
     background: new Vector3(1, 1, 1),
     textAlign: 'center',
     horizontalFlow: 'row',
     verticalFlow: 'column',
     showBorders: true,
   });
+  sceneStore.setActiveScene(sceneId.value!);
   await refreshScene();
 }
 const refreshScene = async () => {
   scene.clear();
-  camera.position.set(0,0,0);
+  camera.position.set(storedScene.value.cameraX ?? 0,storedScene.value.cameraY ?? 0,0);
   activateRenderer("lowQ", true);
 }
 const render = (_timestamp: number, _frame: any) => {
@@ -182,13 +233,17 @@ const render = (_timestamp: number, _frame: any) => {
   composer.renderer.setAnimationLoop(render.bind(this));
 }
 
+const destroyRenderer = () => {
+  composer.renderer.setAnimationLoop(null);
+  composer.renderer.clear();
+  container.value?.removeChild(composer.renderer.domElement);
+  composer.renderer.dispose();
+  composer.renderer.forceContextLoss();
+}
+
 const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
   if (composer) {
-    composer.renderer.setAnimationLoop(null);
-    composer.renderer.clear();
-    container.value!.removeChild(composer.renderer.domElement);
-    composer.renderer.dispose();
-    composer.renderer.forceContextLoss();
+    destroyRenderer();
   }
   let passes = composer?.passes;
   if (!passes || refresh) {
@@ -211,13 +266,13 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
         RIGHT: THREE.MOUSE.LEFT
       }
     }
-    container.value!.appendChild(composer.renderer.domElement);
+    container.value?.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
   if (type === 'highQ') {
     composer = createExportComposer(scene, camera, passes);
-    container.value!.appendChild(composer.renderer.domElement);
+    container.value?.appendChild(composer.renderer.domElement);
     composer.render();
     return;
   }
@@ -242,6 +297,41 @@ const download = async () => {
       }
     });
   })
+}
+
+const downloadJpeg = async () => {
+  exporting.value = true;
+  const region = document.getElementById("render");
+  // region!.style.transform = 'scale(1, 1)';
+  nextTick(async () => {
+    activateRenderer('highQ');
+    // TODO: re-scale to 1 before exporting
+    const render = await html2canvas(region!, {
+      scale: 10,
+      backgroundColor: `rgb(${storedScene.value.background.x * 255},${storedScene.value.background.y * 255},${storedScene.value.background.z * 255})`,
+    });
+    const exportString = render.toDataURL("image/jpeg");
+    sceneStore.storeScene({id: sceneId.value!, exportString});
+    return navigateTo({
+      path: '/app/download',
+      query: {
+        id: sceneId.value,
+        type: 'jpeg'
+      }
+    });
+  })
+}
+
+const save = async () => {
+  const {x,y} = camera.position;
+  sceneStore.storeScene({id: sceneId.value!, cameraX: x, cameraY: y});
+  const loggedIn = useSupabaseUser();
+  if (!loggedIn.value) {
+    navigateTo('/login');
+  }
+  else {
+    await storeScene(storedScene.value);
+  }
 }
 </script>
 <style lang="scss">

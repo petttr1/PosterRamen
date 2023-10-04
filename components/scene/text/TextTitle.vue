@@ -35,24 +35,32 @@
   </div>
 </template>
 <script setup lang="ts">
-import {WIDTH} from "~/constants";
+import {TITLE_DEFAULT, WIDTH} from "~/constants";
 import {useSceneStore} from "~/store/scene";
 
 const titleRef = ref<HTMLInputElement | null>(null);
 const hiddenTitleRef = ref<HTMLSpanElement | null>(null);
 
-const title = ref<string>('Poster Ramen');
+const title = ref<string>(TITLE_DEFAULT);
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const sceneId = computed(() => scene.value.id);
+const font = computed(() => scene.value.font);
 
 watch(sceneId, () => {
   fontSize.value = maxFontSize;
   setTimeout(() => {
     recalculateTitle();
   }, 150);
-})
+});
+
+watch(font, () => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
+    recalculateTitle();
+  }, 150);
+});
 
 const props = defineProps({
   exporting: {type: Boolean, default: false},

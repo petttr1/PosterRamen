@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     "@nuxtjs/supabase",
     "@pinia/nuxt",
     "@nuxtjs/plausible",
+    "nuxt-icon",
   ],
   plugins: [],
   runtimeConfig: {

@@ -6,7 +6,7 @@
         Let's Cook
       </nuxt-link>
     </div>
-    <h2>Currently doesn't support mobile devices. Sorry.</h2>
+    <h2>Currently doesn't support mobile devices</h2>
   </div>
 </template>
 <script setup lang="ts">

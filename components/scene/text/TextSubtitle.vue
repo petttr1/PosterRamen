@@ -34,18 +34,25 @@
 </template>
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
+import {SUBTITLE_DEFAULT} from "~/constants";
 
 const subtitleRef = ref<HTMLInputElement | null>(null);
 const hiddenSubtitleRef = ref<HTMLSpanElement | null>(null);
 
-const title = ref<string>('Make Posters Instantly');
+const title = ref<string>(SUBTITLE_DEFAULT);
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 
 const sceneId = computed(() => scene.value.id);
 const horizontalFlow = computed(() => scene.value.horizontalFlow === 'row' ? 'left' : 'right');
-
+const font = computed(() => scene.value.font);
+watch(font, () => {
+  fontSize.value = maxFontSize;
+  setTimeout(() => {
+    recalculateTitle();
+  }, 150);
+});
 watch(sceneId, () => {
   fontSize.value = maxFontSize;
   setTimeout(() => {

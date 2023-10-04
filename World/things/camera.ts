@@ -2,7 +2,7 @@ import { OrthographicCamera } from "three";
 import { HEIGHT, WIDTH } from "~/constants";
 
 function createCamera() {
-  const camera = new OrthographicCamera(
+  return new OrthographicCamera(
     WIDTH / -2,
     WIDTH / 2,
     HEIGHT / 2,
@@ -10,8 +10,6 @@ function createCamera() {
     0,
     Number.MAX_VALUE,
   );
-  camera.position.set(0, 0, 10);
-  return camera;
 }
 
 function createCameraParams(
@@ -20,16 +18,7 @@ function createCameraParams(
   top: number,
   bottom: number,
 ) {
-  const camera = new OrthographicCamera(
-    left,
-    right,
-    top,
-    bottom,
-    0,
-    Number.MAX_VALUE,
-  );
-  camera.position.set(0, 0, 10);
-  return camera;
+  return new OrthographicCamera(left, right, top, bottom, 0, Number.MAX_VALUE);
 }
 
 export { createCamera, createCameraParams };

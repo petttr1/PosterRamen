@@ -1,14 +1,25 @@
 <template>
-  <div class="text-colors">
+  <div class="text-colors-wrapper">
+    <div class="text-colors-wrapper__colors">
+      <button
+        v-for="color of colors"
+        :key="color.id"
+        :style="{
+          background: `rgb(${color.r},${color.g},${color.b})`
+        }"
+        :class="{active: active === color.id}"
+        @click="updateColor(color)"
+      />
+    </div>
     <button
-      v-for="color of colors"
-      :key="color.id"
-      :style="{
-        background: `rgb(${color.r},${color.g},${color.b})`
-      }"
-      :class="{active: active === color.id}"
-      @click="updateColor(color)"
-    />
+      class="text-colors-wrapper__random"
+      @click="selectRandom"
+    >
+      <Icon
+        name="ion:dice-sharp"
+        size="22"
+      />
+    </button>
   </div>
 </template>
 
@@ -27,6 +38,11 @@ const colors = ref<any[]>([
   {id: 4, r:223, g:101, b:137},
 ]);
 
+const selectRandom = () => {
+  updateColor(colors.value[Math.floor(Math.random() * colors.value.length)]);
+}
+
+
 const updateColor = (selectedColor: any) => {
   if (active.value === selectedColor.id) return;
   const sceneStore = useSceneStore();
@@ -40,27 +56,37 @@ const updateColor = (selectedColor: any) => {
 </script>
 
 <style lang="scss" scoped>
-.text-colors {
+.text-colors-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
   gap: 8px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: $white-30;
+
+  &__colors {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: $white-30;
 
 
-  button {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    cursor: default;
+    button {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      cursor: default;
 
-    &.active {
-      border: 2px solid $highlight;
+      &.active {
+        border: 2px solid $highlight;
+      }
     }
+
+  }
+  &__random {
+    @include button(4px, 4px, 8px);
   }
 }
 </style>

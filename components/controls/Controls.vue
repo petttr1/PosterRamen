@@ -1,47 +1,51 @@
 <template>
   <div class="controls">
-    <button
-      class="refreshButton"
-      @click="refreshScene"
-    >
-      Randomize
-    </button>
-    <span>Color</span>
-    <TextColorPicker />
-    <span>Base Color</span>
-    <ColorPicker />
-    <span>Place Title</span>
-    <TextAlignOptions />
-    <span>Show Frame</span>
-    <BorderControls />
-    <span>Flow</span>
-    <VerticalFlowControls />
-    <span>Actions</span>
-    <button
-      class="downloadButton"
-      @click="downloadSnapshot"
-    >
-      Export as PDF
-    </button>
-    <p>Dragging the image will augment it.</p>
+    <p>Dragging the pattern will augment it.</p>
     <p>Click the text to edit.</p>
+    <span>Poster Options</span>
+    <button
+      class="saveButton"
+      @click="newDesign"
+    >
+      <Icon name="material-symbols:add-photo-alternate-outline" />
+      New
+    </button>
+    <span>Save Poster for Later Edit</span>
+    <button
+      v-if="user"
+      class="saveButton"
+      @click="saveDesign"
+    >
+      <Icon name="bi:cloud-check-fill" />
+      Save For Later
+    </button>
+    <button
+      v-else
+      class="saveButton"
+      @click="saveDesign"
+    >
+      Log in to Save
+    </button>
+    <span>Export</span>
+    <ExportOptions />
+    <AdvancedControls />
   </div>
 </template>
 
 <script setup lang="ts">
-import TextColorPicker from "~/components/controls/TextColorPicker.vue";
-import ColorPicker from "~/components/controls/ColorPicker.vue";
-import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
-import BorderControls from "~/components/controls/BorderControls.vue";
-import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
-import HorizontalFlowControls from "~/components/controls/HorizontalFlowControls.vue";
+import ExportOptions from "~/components/controls/ExportOptions.vue";
+import AdvancedControls from "~/components/controls/AdvancedControls.vue";
 
-const { $bus } = useNuxtApp();
-const refreshScene = () => {
-  $bus.$emit('refreshScene');
+const user = useSupabaseUser();
+
+const saveDesign = () => {
+  const { $bus } = useNuxtApp();
+  $bus.$emit('save');
 }
-const downloadSnapshot = () => {
-  $bus.$emit('download');
+
+const newDesign = () => {
+  const { $bus } = useNuxtApp();
+  $bus.$emit('new');
 }
 </script>
 
@@ -49,7 +53,7 @@ const downloadSnapshot = () => {
 span {
   color: $white;
   font-size: 0.8rem;
-  margin: 24px 0 8px;
+  margin: 16px 0 8px;
 }
 .controls {
   display: flex;
@@ -65,8 +69,6 @@ span {
     font-weight: 500;
     font-size: 1.2rem;
     margin-bottom: 8px;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
   }
 
   p {
