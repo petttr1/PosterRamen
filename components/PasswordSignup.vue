@@ -4,11 +4,13 @@
       v-model="email"
       placeholder="email"
       type="email"
+      @keydown.enter="signUp"
     >
     <input
       v-model="password"
       placeholder="password at least 6 characters long"
       type="password"
+      @keydown.enter="signIn"
     >
     <button @click="signUp">
       Sign Up
@@ -49,7 +51,7 @@ watchEffect(() => {
 .sign-up {
   margin-top: 8px;
   button {
-    @include button(4px, 8px);
+    @include button(4px, 8px, 6px);
   }
   input {
     border: 2px solid rgba($white, 0.5);

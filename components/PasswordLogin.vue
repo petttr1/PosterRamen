@@ -4,11 +4,13 @@
       v-model="email"
       placeholder="email"
       type="email"
+      @keydown.enter="signIn"
     >
     <input
       v-model="password"
       placeholder="password"
       type="password"
+      @keydown.enter="signIn"
     >
     <button @click="signIn">
       Sign In
@@ -42,7 +44,7 @@ const signIn = async () => {
 .sign-in {
   margin-top: 8px;
   button {
-    @include button(4px, 8px);
+    @include button(4px, 8px, 6px);
   }
   input {
     border: 2px solid rgba($white, 0.5);

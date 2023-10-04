@@ -2,9 +2,6 @@
   <div class="controls">
     <p>Dragging the pattern will augment it.</p>
     <p>Click the text to edit.</p>
-    <span>Pattern</span>
-    <PatternControls />
-    <AdvancedControls />
     <span>Poster Options</span>
     <button
       class="saveButton"
@@ -31,17 +28,11 @@
     </button>
     <span>Export</span>
     <ExportOptions />
+    <AdvancedControls />
   </div>
 </template>
 
 <script setup lang="ts">
-import TextColorPicker from "~/components/controls/TextColorPicker.vue";
-import ColorPicker from "~/components/controls/ColorPicker.vue";
-import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
-import BorderControls from "~/components/controls/BorderControls.vue";
-import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
-import FontOptions from "~/components/controls/FontOptions.vue";
-import PatternControls from "~/components/controls/PatternControls.vue";
 import ExportOptions from "~/components/controls/ExportOptions.vue";
 import AdvancedControls from "~/components/controls/AdvancedControls.vue";
 

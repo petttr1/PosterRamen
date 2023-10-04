@@ -15,6 +15,8 @@
     v-show="showAdvanced"
     class="advanced-controls"
   >
+    <span>Pattern</span>
+    <PatternControls />
     <span>Color</span>
     <TextColorPicker />
     <span>Base Color</span>
@@ -37,6 +39,7 @@ import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
 import BorderControls from "~/components/controls/BorderControls.vue";
 import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
 import FontOptions from "~/components/controls/FontOptions.vue";
+import PatternControls from "~/components/controls/PatternControls.vue";
 
 const showAdvanced = ref<boolean>(false);
 
