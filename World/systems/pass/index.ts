@@ -10,6 +10,7 @@ import { createSilkPass } from "~/World/systems/pass/silk";
 import { createDotsPass } from "~/World/systems/pass/dotsGrid";
 import { createChessPass } from "~/World/systems/pass/chess";
 import { createVernerPass } from "~/World/systems/pass/verner";
+import { createSteppedWobblePass } from "~/World/systems/pass/steppedWobble";
 
 const basePasses = (scene: Scene, camera: Camera) => {
   return [
@@ -18,6 +19,7 @@ const basePasses = (scene: Scene, camera: Camera) => {
     createLiquidLargePass(camera),
     createGradientPass(camera),
     createSteppedPass(camera),
+    createSteppedWobblePass(camera),
     createSilkPass(camera),
     createDotsPass(camera),
     createChessPass(camera),
