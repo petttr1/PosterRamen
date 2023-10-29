@@ -1,27 +1,32 @@
 <template>
-  <div class="font-options">
-    <select
-      v-model="selected"
-      class="font-options__font-select"
+  <label>
+    Font
+    <div
+      class="font-options"
     >
-      <option
-        v-for="option in options"
-        :key="option"
-        :value="option"
+      <select
+        v-model="selected"
+        class="font-options__font-select"
       >
-        {{ option }}
-      </option>
-    </select>
-    <button
-      class="font-options__random"
-      @click="selectRandom"
-    >
-      <Icon
-        name="ion:dice-sharp"
-        size="22"
-      />
-    </button>
-  </div>
+        <option
+          v-for="option in options"
+          :key="option"
+          :value="option"
+        >
+          {{ option }}
+        </option>
+      </select>
+      <button
+        class="font-options__random"
+        @click="selectRandom"
+      >
+        <Icon
+          name="ion:dice-sharp"
+          size="22"
+        />
+      </button>
+    </div>
+  </label>
 </template>
 <script setup lang="ts">
 import {fonts} from "~/helpers/fonts";
@@ -45,17 +50,20 @@ const updateFont = () => {
 const options = ref(fonts)
 </script>
 <style lang="scss" scoped>
+label {
+  @include label;
+}
 .font-options {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
   &__font-select {
-    color: $white;
     outline: none;
     padding: 4px 8px;
     border: 2px solid $highlight-50;
     border-radius: 8px;
+    color: $white;
 
     &:hover {
       background: $highlight-30;

@@ -1,14 +1,17 @@
 <template>
-  <div class="text-align">
-    <button
-      v-for="opt of options"
-      :key="opt"
-      :class="{selected: opt === selectedOption}"
-      @click="updateAlign(opt)"
-    >
-      <Icon :name="`material-symbols:format-align-${opt}`" />
-    </button>
-  </div>
+  <label>
+    Align
+    <div class="text-align">
+      <button
+        v-for="opt of options"
+        :key="opt"
+        :class="{selected: opt === selectedOption}"
+        @click="updateAlign(opt)"
+      >
+        <Icon :name="`material-symbols:format-align-${opt}`" />
+      </button>
+    </div>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +32,9 @@ const updateAlign = (option: "left" | "center" | "right") => {
 </script>
 
 <style lang="scss" scoped>
+label {
+  @include label;
+}
 .text-align {
   display: flex;
   align-items: center;

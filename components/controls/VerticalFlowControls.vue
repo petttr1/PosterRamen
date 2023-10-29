@@ -1,13 +1,17 @@
 <template>
-  <div class="vertical-flow">
-    <button
-      @click="switchFlow"
-    >
-      <Icon
-        name="carbon:rotate-clockwise-filled"
-      />
-    </button>
-  </div>
+  <label for="changeFlow">
+    Flow
+    <div class="vertical-flow">
+      <button
+        name="changeFlow"
+        @click="switchFlow"
+      >
+        <Icon
+          name="carbon:rotate-clockwise-filled"
+        />
+      </button>
+    </div>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +38,9 @@ const switchFlow = () => {
 </script>
 
 <style lang="scss" scoped>
+label {
+  @include label;
+}
 .vertical-flow {
   display: flex;
   align-items: center;

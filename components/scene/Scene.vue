@@ -15,6 +15,7 @@
       />
     </div>
     <SceneText
+      v-if="showText"
       :exporting="exporting"
     />
   </div>
@@ -31,7 +32,7 @@ import {v4} from 'uuid';
 import {useSceneStore} from '~/store/scene'
 import {Pass} from "three/examples/jsm/postprocessing/Pass";
 import {Camera, Group, Scene, Vector3} from "three";
-import {fonts, sampleFont} from "~/helpers/fonts";
+import {fonts} from "~/helpers/fonts";
 import {getPasses} from "~/World/systems/pass";
 import {storeScene} from "~/helpers/db";
 
@@ -66,6 +67,8 @@ const renderWidth = computed(() =>{
 const renderHeight = computed(() => {
   return `${props.height}px`;
 });
+
+const showText = computed(() => storedScene.value.showText)
 
 onMounted(async () => {
   if (typeof window !== "undefined") {
@@ -182,6 +185,7 @@ const newScene = async () => {
     horizontalFlow: 'row',
     verticalFlow: 'column',
     showBorders: true,
+    showText: true
   });
   sceneStore.setActiveScene(sceneId.value!);
   await refreshScene();
@@ -300,6 +304,7 @@ const download = async () => {
 }
 
 const downloadJpeg = async () => {
+  debugger;
   exporting.value = true;
   const region = document.getElementById("render");
   // region!.style.transform = 'scale(1, 1)';

@@ -40,3 +40,13 @@ $secondary-80: rgba($secondary, 0.8);
     color: $highlight;
   }
 }
+
+@mixin label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: $white;
+  margin-bottom: 8px;
+}

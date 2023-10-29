@@ -25,9 +25,7 @@ function createRenderer() {
 
 function createExportRenderer() {
   const renderer = createBaseRenderer();
-  renderer.setPixelRatio(
-    window.devicePixelRatio ? window.devicePixelRatio * 2 : 2,
-  );
+  renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 2);
   return renderer;
 }
 

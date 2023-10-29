@@ -1,26 +1,29 @@
 <template>
-  <div class="text-colors-wrapper">
-    <div class="text-colors-wrapper__colors">
+  <label>
+    Color
+    <div class="text-colors-wrapper">
+      <div class="text-colors-wrapper__colors">
+        <button
+          v-for="color of colors"
+          :key="color.id"
+          :style="{
+            background: `rgb(${color.r},${color.g},${color.b})`
+          }"
+          :class="{active: active === color.id}"
+          @click="updateColor(color)"
+        />
+      </div>
       <button
-        v-for="color of colors"
-        :key="color.id"
-        :style="{
-          background: `rgb(${color.r},${color.g},${color.b})`
-        }"
-        :class="{active: active === color.id}"
-        @click="updateColor(color)"
-      />
+        class="text-colors-wrapper__random"
+        @click="selectRandom"
+      >
+        <Icon
+          name="ion:dice-sharp"
+          size="22"
+        />
+      </button>
     </div>
-    <button
-      class="text-colors-wrapper__random"
-      @click="selectRandom"
-    >
-      <Icon
-        name="ion:dice-sharp"
-        size="22"
-      />
-    </button>
-  </div>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -56,6 +59,9 @@ const updateColor = (selectedColor: any) => {
 </script>
 
 <style lang="scss" scoped>
+label {
+  @include label;
+}
 .text-colors-wrapper {
   display: flex;
   align-items: center;
@@ -66,7 +72,7 @@ const updateColor = (selectedColor: any) => {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
     padding: 8px 10px;
     border-radius: 12px;
     background: $white-30;

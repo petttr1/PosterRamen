@@ -1,14 +1,13 @@
 <template>
-  <label for="showFrame">
-    Show Frame
-    <div class="borders">
+  <label>
+    Show Text
+    <div class="show-text">
       <button
-        v-for="opt of borderOptions"
+        v-for="opt of textOptions"
         :key="opt.id"
-        name="showFrame"
-        :class="{active: showBorders === opt.id}"
+        :class="{active: showText === opt.id}"
         :style="{'grid-area': `row${opt.row}`}"
-        @click="updateShowBorders(opt.value)"
+        @click="updateShowText(opt.value)"
       >
         <Icon :name="opt.icon" />
       </button>
@@ -19,22 +18,22 @@
 <script setup lang="ts">
 import {useSceneStore} from "~/store/scene";
 
-const showBorders = computed(() => {
+const showText = computed(() => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
-  return scene.showBorders ? 0 : 1;
+  return scene.showText ? 0 : 1;
 })
 
-const borderOptions = ref<any[]>([
+const textOptions = ref<any[]>([
   {id: 0, name: 'show', value: true, icon: 'ion:md-eye'},
   {id: 1, name: 'hide', value: false, icon: 'ion:md-eye-off'},
 ]);
 
-const updateShowBorders = (show: boolean) => {
+const updateShowText = (show: boolean) => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
   if (!scene) return;
-  sceneStore.storeScene({id: scene.id, showBorders: show });
+  sceneStore.storeScene({id: scene.id, showText: show });
 }
 </script>
 
@@ -42,7 +41,7 @@ const updateShowBorders = (show: boolean) => {
 label {
   @include label;
 }
-.borders {
+.show-text {
   display: flex;
   align-items: center;
   justify-content: space-between;

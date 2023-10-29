@@ -17,17 +17,14 @@
   >
     <span>Pattern</span>
     <PatternControls />
-    <span>Color</span>
-    <TextColorPicker />
-    <span>Base Color</span>
-    <ColorPicker />
-    <span>Font</span>
-    <FontOptions />
-    <span>Align Title</span>
-    <TextAlignOptions />
-    <span>Show Frame</span>
+    <span>Frame</span>
     <BorderControls />
-    <span>Flow</span>
+    <ColorPicker />
+    <span>Text</span>
+    <TextVisibilityControls />
+    <FontOptions />
+    <TextColorPicker />
+    <TextAlignOptions />
     <VerticalFlowControls />
   </div>
 </template>
@@ -40,6 +37,7 @@ import BorderControls from "~/components/controls/BorderControls.vue";
 import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
 import FontOptions from "~/components/controls/FontOptions.vue";
 import PatternControls from "~/components/controls/PatternControls.vue";
+import TextVisibilityControls from "~/components/controls/TextVisibilityControls.vue";
 
 const showAdvanced = ref<boolean>(false);
 

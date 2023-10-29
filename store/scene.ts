@@ -17,6 +17,7 @@ export interface StoredScene {
   background: Vector3;
   color: Vector3;
   showBorders: boolean;
+  showText: boolean;
   exportString?: string;
 }
 export const useSceneStore = defineStore({
