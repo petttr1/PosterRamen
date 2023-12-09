@@ -14,9 +14,6 @@ void main() {
 
 const fragmentShader = `
 #define PI 3.14159265358979323846
-
-uniform float x;
-uniform float y;
 uniform float offset;
 varying vec2 vUv;
 ${baseShaderUniforms}
@@ -34,15 +31,14 @@ void main()
     bool isBlack = (cell.x + cell.y) % 2 == 1;
 
     // Add curvature to the lines using noise
-    float noise = simpleNoise(vUv * x); // Adjust the noise intensity here
-    vec2 perturb = vec2(noise * 0.1 - 0.05, noise * y - 0.05); // Adjust the perturbation amount here
+    float noise = simpleNoise(vUv * position.x); // Adjust the noise intensity here
+    vec2 perturb = vec2(noise * 0.1 - 0.05, noise * position.y - 0.05); // Adjust the perturbation amount here
     vec2 distortedTexCoord = vUv + perturb;
 
     // Use the distorted texture coordinates for color assignment
     ivec2 distortedCell = ivec2(floor(distortedTexCoord * 8.0));
     bool isDistortedBlack = (distortedCell.x + distortedCell.y) % 2 == 1;
-
-    vec3 color = isDistortedBlack ? colors.background : colors.color;
+    vec3 color = isDistortedBlack ? colors.background.rgb : colors.color.rgb;
 
     gl_FragColor = vec4(color, 1.0);
 }
@@ -60,6 +56,7 @@ function createChessPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "ChessPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

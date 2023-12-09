@@ -1,55 +1,19 @@
 <template>
   <div class="header">
     <div class="header__navigation">
-      <nuxt-link
-        to="/"
-        class="header__navigation__title"
-      >
+      <nuxt-link to="/" class="header__navigation__title">
         Poster Ramen
       </nuxt-link>
     </div>
     <div class="header__user-controls">
-      <nuxt-link
-        v-if="!isApp"
-        to="/about"
-      >
-        About
-      </nuxt-link>
-      <nuxt-link
-        v-if="!isApp"
-        to="/app"
-      >
-        App
-      </nuxt-link>
-      <nuxt-link
-        v-if="isApp"
-        to="/app/profile"
-      >
-        Profile
-      </nuxt-link>
-      <nuxt-link
-        v-if="user && isApp"
-        to="/logout"
-      >
-        Log out
-      </nuxt-link>
-      <nuxt-link
-        v-else-if="isApp"
-        to="/login"
-      >
-        Log in
-      </nuxt-link>
+      <nuxt-link v-if="!isApp" to="/about"> About </nuxt-link>
+      <nuxt-link v-if="!isApp" to="/app"> App </nuxt-link>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-const user = useSupabaseUser()
-const goHome = () => {
-  return navigateTo('/')
-}
-
 const route = useRoute();
-const isApp = computed(() => route.path.split('/').includes('app'));
+const isApp = computed(() => route.path.split("/").includes("app"));
 </script>
 <style scoped lang="scss">
 .header {
@@ -65,8 +29,9 @@ const isApp = computed(() => route.path.split('/').includes('app'));
   justify-content: space-between;
   align-items: center;
 
-  a, button {
-   @include button(9px, 9px);
+  a,
+  button {
+    @include button(9px, 9px);
   }
 
   &__navigation {
@@ -90,7 +55,8 @@ const isApp = computed(() => route.path.split('/').includes('app'));
     display: flex;
     align-items: center;
 
-    button, a {
+    button,
+    a {
       line-height: 20px;
       font-weight: 500;
       font-size: 1.2rem;

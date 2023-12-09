@@ -1,52 +1,16 @@
 <template>
   <div class="controls">
-    <p>Dragging the pattern will augment it.</p>
-    <p>Click the text to edit.</p>
-    <span>Poster Options</span>
-    <button
-      class="saveButton"
-      @click="newDesign"
-    >
-      <Icon name="material-symbols:add-photo-alternate-outline" />
-      New
-    </button>
-    <span>Save Poster for Later Edit</span>
-    <button
-      v-if="user"
-      class="saveButton"
-      @click="saveDesign"
-    >
-      <Icon name="bi:cloud-check-fill" />
-      Save For Later
-    </button>
-    <button
-      v-else
-      class="saveButton"
-      @click="saveDesign"
-    >
-      Log in to Save
-    </button>
-    <span>Export</span>
+    <p>Randomize the design.</p>
+    <p>Edit the design by dragging.</p>
+    <p>Edit the text.</p>
+    <p>Download exports separate layers as PDFs.</p>
+    <p>Go crazy in post-process.</p>
     <ExportOptions />
-    <AdvancedControls />
   </div>
 </template>
 
 <script setup lang="ts">
 import ExportOptions from "~/components/controls/ExportOptions.vue";
-import AdvancedControls from "~/components/controls/AdvancedControls.vue";
-
-const user = useSupabaseUser();
-
-const saveDesign = () => {
-  const { $bus } = useNuxtApp();
-  $bus.$emit('save');
-}
-
-const newDesign = () => {
-  const { $bus } = useNuxtApp();
-  $bus.$emit('new');
-}
 </script>
 
 <style lang="scss" scoped>
@@ -73,8 +37,11 @@ span {
 
   p {
     color: $white;
+    line-height: 180%;
     text-wrap: nowrap;
-
+    &:last-of-type {
+      margin-bottom: 24px;
+    }
   }
 }
 </style>

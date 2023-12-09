@@ -35,7 +35,6 @@ export default defineNuxtConfig({
   modules: [
     ["@nuxtjs/google-fonts", fonts],
     "@nuxtjs/eslint-module",
-    "@nuxtjs/supabase",
     "@pinia/nuxt",
     "@nuxtjs/plausible",
     "nuxt-icon",
@@ -43,9 +42,6 @@ export default defineNuxtConfig({
   plugins: [],
   runtimeConfig: {
     public: {
-      supabaseKey: process.env.SUPABASE_KEY,
-      supabaseUrl:
-        process.env.SUPABASE_URl || "https://scrjqgrudjmcxryrzgok.supabase.co",
       baseUrl: process.env.BASE_URL || "http://localhost:3000",
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "localhost:3000",
       siteName: "Poster Ramen",
@@ -55,24 +51,6 @@ export default defineNuxtConfig({
   },
   linkChecker: {
     failOn404: true,
-  },
-  supabase: {
-    url: process.env.SUPABASE_URl || "https://scrjqgrudjmcxryrzgok.supabase.co",
-    key: process.env.SUPABASE_KEY || "",
-    redirectOptions: {
-      login: "/login",
-      callback: "/confirm",
-      exclude: [
-        "/",
-        "/about",
-        "/pricing",
-        "/app",
-        "/app/download",
-        "/sitemap.xml",
-        "/robots.txt",
-        "/use-cases",
-      ],
-    },
   },
   plausible: {
     domain: "posterramen.com",

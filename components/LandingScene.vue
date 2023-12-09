@@ -1,26 +1,16 @@
 <template>
-  <div
-    id="render"
-    class="render"
-  >
-    <div
-      ref="canvasHolder"
-      class="canvasHolder"
-    >
-      <div
-        ref="container"
-        class="canvas"
-      />
+  <div id="render" class="render">
+    <div ref="canvasHolder" class="canvasHolder">
+      <div ref="container" class="canvas" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import {createLandingComposer} from "~/World/systems/composer";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
-import {createLandingWorld} from "~/World/worlds/landingWorld";
-import {Group, OrthographicCamera, Scene} from "three";
-import {createCameraParams} from "~/World/things/camera";
-import {createLandingScene} from "~/World/things/scene";
+import { createLandingComposer } from "~/World/systems/composer";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { OrthographicCamera, Scene } from "three";
+import { createCameraParams } from "~/World/things/camera";
+import { createLandingScene } from "~/World/things/scene";
 
 const container = ref<HTMLElement | null>(null);
 
@@ -37,7 +27,7 @@ onMounted(async () => {
       await init();
     });
   }
-})
+});
 
 const init = async () => {
   scene = createLandingScene();
@@ -46,15 +36,20 @@ const init = async () => {
   const top = window.innerHeight / 2;
   const bottom = -window.innerHeight / 2;
   camera = createCameraParams(left, right, top, bottom);
-  seed = Math.random()*2**32|0;
+  seed = (Math.random() * 2 ** 32) | 0;
   $random.$setSeed(seed);
   activateRenderer();
-}
+};
 const activateRenderer = () => {
-  composer = createLandingComposer(scene, camera, window.innerWidth, window.innerHeight);
+  composer = createLandingComposer(
+    scene,
+    camera,
+    window.innerWidth,
+    window.innerHeight,
+  );
   container.value!.appendChild(composer.renderer.domElement);
   composer.render();
-}
+};
 </script>
 <style lang="scss">
 canvas {
@@ -73,10 +68,9 @@ canvas {
   transform-origin: 50% 50%;
 
   &.show-edge {
-    -webkit-box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
-    -moz-box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
-    box-shadow: 0px 0px 0px 4px rgba(70,194,203,1);
+    -webkit-box-shadow: 0px 0px 0px 4px rgba(70, 194, 203, 1);
+    -moz-box-shadow: 0px 0px 0px 4px rgba(70, 194, 203, 1);
+    box-shadow: 0px 0px 0px 4px rgba(70, 194, 203, 1);
   }
 }
 </style>
-

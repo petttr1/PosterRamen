@@ -18,8 +18,6 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform float x;
-uniform float y;
 uniform float offset;
 uniform sampler2D tDiffuse;
 varying vec2 vUv;
@@ -31,7 +29,7 @@ void main() {
     vec2 uv = vUv;
     uv.x *= aspect;
     center.x *= aspect;
-    vec4 gradientColor = vec4(0.5 - distance(center, uv), 0.0 + 0.5 * sin(x), 1.0 + 0.5 * cos(y), 1.0);
+    vec4 gradientColor = vec4(0.5 - distance(center, uv), 0.0 + 0.5 * sin(position.x), 1.0 + 0.5 * cos(position.y), 1.0);
     vec3 hsv = rgb2hsv(gradientColor.rgb);
     hsv.x *= offset;
     gl_FragColor = vec4(hsv2rgb(hsv), 1.0);
@@ -50,6 +48,7 @@ function createGradientPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "GradientPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

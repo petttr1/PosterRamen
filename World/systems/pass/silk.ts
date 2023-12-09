@@ -1,6 +1,9 @@
 import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { translateColorspace } from "~/World/systems/pass/helpers";
+import {
+  baseShaderUniforms,
+  translateColorspace,
+} from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -13,11 +16,10 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform float x;
-uniform float y;
 uniform float offset;
 varying vec2 vUv;
 ${translateColorspace}
+${baseShaderUniforms}
 #define rot(x) mat2(cos(x), -sin(x), sin(x), cos(x))
 
 float heightS(vec2 p){
@@ -30,12 +32,12 @@ float map(vec3 p){
 void main(){
     vec2 uv = vUv;
     vec3 ray = normalize(vec3(uv,1.));
-    ray.yz *= rot((sin(y)/3.+1.5));
-    ray.xz *= rot((sin(x)/2.+1.)/5.);
+    ray.yz *= rot((sin(position.y)/3.+1.5));
+    ray.xz *= rot((sin(position.x)/2.+1.)/5.);
     
     float t = 0.;
     for(int i = 0; i < 29 ; ++i)
-        t += map(vec3(x,0.,x/2.)+ray*t)*.5;
+        t += map(vec3(position.x,0.,position.x/2.)+ray*t)*.5;
     
     float fog = 1./(1.+t*t*.005);
     vec3 fc = vec3(fog*fog, fog/2., fog);
@@ -55,6 +57,7 @@ function createSilkPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "SilkPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

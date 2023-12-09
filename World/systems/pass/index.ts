@@ -35,5 +35,6 @@ export const getPasses = (scene: Scene, camera: Camera) => {
   const { $random } = useNuxtApp();
   const base = basePasses(scene, camera);
   const basePass = base[Math.floor($random.$getRandom() * base.length)];
+  console.log(basePass);
   return [basePass, ...postprocessPasses()];
 };

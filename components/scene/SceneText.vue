@@ -1,45 +1,37 @@
 <template>
-  <div
-    class="text-wrapper"
-    :style="{ width: constantWidth }"
-  >
+  <div id="texts" class="text-wrapper" :style="{ width: constantWidth }">
     <TextTitle :exporting="exporting" />
-    <div
-      class="text-wrapper__title-wrapper"
-    >
+    <div class="text-wrapper__title-wrapper">
       <TextSubtitle :exporting="exporting" />
-      <TextParagraph :exporting="exporting" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import {WIDTH} from "~/constants";
-import {useSceneStore} from "~/store/scene";
+import { WIDTH } from "~/constants";
+import { useSceneStore } from "~/store/scene";
 import TextTitle from "~/components/scene/text/TextTitle.vue";
 import TextSubtitle from "~/components/scene/text/TextSubtitle.vue";
-import TextParagraph from "~/components/scene/text/TextParagraph.vue";
-
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const selectedFont = computed(() => scene.value.font);
-const textAlign = computed(() => scene.value.textAlign === 'left'
-    ? 'flex-start'
-    : scene.value.textAlign === 'right'
-        ? 'flex-end'
-        : 'center'
+const textAlign = computed(() =>
+  scene.value.textAlign === "left"
+    ? "flex-start"
+    : scene.value.textAlign === "right"
+    ? "flex-end"
+    : "center",
 );
 const verticalFlow = computed(() => scene.value.verticalFlow);
 const horizontalFlow = computed(() => scene.value.horizontalFlow);
 
 const props = defineProps({
-  exporting: {type: Boolean, default: false},
+  exporting: { type: Boolean, default: false },
 });
 
-const constantWidth = computed(() =>{
+const constantWidth = computed(() => {
   return `${WIDTH - 128}px`;
 });
-
 </script>
 <style lang="scss" scoped>
 .text-wrapper {
@@ -64,7 +56,7 @@ const constantWidth = computed(() =>{
     display: flex;
     align-items: baseline;
     gap: 32px;
-    flex-direction:v-bind(horizontalFlow);
+    flex-direction: v-bind(horizontalFlow);
     justify-content: space-between;
     width: 100%;
   }

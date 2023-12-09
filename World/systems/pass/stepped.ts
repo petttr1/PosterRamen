@@ -17,8 +17,6 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform float x;
-uniform float y;
 uniform float offset;
 varying vec2 vUv;
 ${baseShaderUniforms}
@@ -34,9 +32,9 @@ void main() {
     float b = o > 0.2 ? o : cos(offset);
     vec4 Color1 = normalize(vec4(r, g, b, 1.0));
     vec3 hsv = rgb2hsv(normalize(vec3(r,g,b)));
-    hsv.x *= sin((x + offset) / 10.);
+    hsv.x *= sin((position.x + offset) / 10.);
     Color1 = vec4(hsv2rgb(hsv),1.);
-    vec4 Color2 = vec4(colors.background, 1.0);
+    vec4 Color2 = vec4(colors.background.rgb, 1.0);
     int NumSteps = int(20. * o);
     float aspect = width / height; 
     
@@ -46,7 +44,7 @@ void main() {
     uv.x *= aspect;
     center.x *= aspect;
     float dist = distance( uv, center);
-    float size = offset / 10. + offset * abs(sin(y / 10.));
+    float size = offset / 10. + offset * abs(sin(position.y / 10.));
     float s = stepped(dist, size, NumSteps );
     
     gl_FragColor = mix(Color1, Color2, clamp(s, 0.0, 1.0));
@@ -64,6 +62,7 @@ function createSteppedPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "SteppedPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Vector4 } from "three";
 import { useSceneStore } from "~/store/scene";
 import { HEIGHT, WIDTH } from "~/constants";
 
@@ -28,10 +28,10 @@ export const baseUniforms = () => {
       value: {
         background:
           sceneStore.scene(sceneStore.activeScene!).background ??
-          new Vector3(1, 1, 1),
+          new Vector4(1, 1, 1, 1),
         color:
           sceneStore.scene(sceneStore.activeScene!).color ??
-          new Vector3(0, 0, 0),
+          new Vector4(0, 0, 0, 1),
       },
     },
     borders: {
@@ -43,6 +43,10 @@ export const baseUniforms = () => {
         show: showBorders ?? true,
       },
     },
+    position: {
+      x: 0,
+      y: 0,
+    },
     width: { value: WIDTH },
     height: { value: HEIGHT },
   };
@@ -50,8 +54,8 @@ export const baseUniforms = () => {
 
 export const baseShaderUniforms = `
 struct ColorData {
-      vec3 background;
-      vec3 color;
+      vec4 background;
+      vec4 color;
 };
 uniform ColorData colors;
 
@@ -63,6 +67,12 @@ struct BorderData {
   bool show;
 };
 uniform BorderData borders;
+
+struct PositionData {
+  float x;
+  float y;
+};
+uniform PositionData position;
 
 uniform float width;
 uniform float height;

@@ -1,5 +1,6 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { Camera } from "three";
+import { baseShaderUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -12,11 +13,10 @@ void main() {
 `;
 
 const fragmentShader = `
-    uniform float x;
-    uniform float y;
     uniform float offset;
     uniform sampler2D tDiffuse;
     varying vec2 vUv;
+    ${baseShaderUniforms}
 
     mat2 rot(float deg)
     {
@@ -35,7 +35,7 @@ const fragmentShader = `
 
   void main() {
     vec4 color = texture2D( tDiffuse, vUv );
-    float t = x + y + offset;
+    float t = position.x + position.y + offset;
     vec2 uv = vUv;
 
     uv-=.5 * offset;
@@ -69,6 +69,7 @@ function createLiquidPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "LiquidPass",
   };
   const liquidPass = new ShaderPass(liquidEffect);
   liquidPass.renderToScreen = true;

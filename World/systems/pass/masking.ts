@@ -1,7 +1,4 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { HEIGHT, WIDTH } from "~/constants";
-import { useSceneStore } from "~/store/scene";
-import { Vector3 } from "three";
 import { baseShaderUniforms, baseUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
@@ -26,8 +23,10 @@ void main() {
     float padding = bl.x * bl.y;
     vec2 tr = step(vec2(borders.right, borders.top),1.0-uv);
     padding *= tr.x * tr.y;
-    color.rgb = borders.show ? step( 0.5, 1. - padding ) <= 0. ? color.rgb : colors.background : color.rgb;
-    gl_FragColor = vec4( color.rgb, 1. );
+    if (borders.show && step( 0.5, 1. - padding ) > 0.) {
+        color *= colors.background;
+    }
+    gl_FragColor = color;
 }
 `;
 
@@ -39,6 +38,7 @@ function createMaskingPass() {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "MaskingPass",
   };
   const maskingPass = new ShaderPass(maskingEffect);
   maskingPass.renderToScreen = true;

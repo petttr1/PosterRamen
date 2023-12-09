@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Group, OrthographicCamera, Scene, Vector3 } from "three";
+import { Vector4 } from "three";
 
 export interface StoredScene {
   id: string;
@@ -8,17 +8,17 @@ export interface StoredScene {
   cameraY: number;
   title: string;
   subtitle: string;
-  paragraph: string;
   font: string;
   fontColor: string;
   textAlign: "left" | "center" | "right";
   verticalFlow: "column" | "column-reverse";
   horizontalFlow: "row" | "row-reverse";
-  background: Vector3;
-  color: Vector3;
+  background: Vector4;
+  color: Vector4;
   showBorders: boolean;
   showText: boolean;
-  exportString?: string;
+  fullExportString?: string;
+  exportLayers?: string[];
 }
 export const useSceneStore = defineStore({
   id: "scene-store",
@@ -35,12 +35,6 @@ export const useSceneStore = defineStore({
     storeScene(data: Partial<StoredScene>) {
       const scene = this.scenes[data.id!] ?? {};
       this.scenes[data.id!] = { ...scene, ...data };
-    },
-    storeScenes(data: Partial<StoredScene>[]) {
-      for (const scene of data) {
-        const exists = this.scenes[scene.id!] ?? {};
-        this.scenes[scene.id!] = { ...exists, ...scene };
-      }
     },
     setActiveScene(id: string | null) {
       this.activeSceneId = id;

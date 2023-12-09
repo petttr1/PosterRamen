@@ -13,8 +13,6 @@ void main() {
 `;
 
 const fragmentShader = `
-uniform float x;
-uniform float y;
 uniform float offset;
 varying vec2 vUv;
 ${baseShaderUniforms}
@@ -25,7 +23,7 @@ void main() {
     vec4 o = gl_FragColor;
     p /= offset;
     p.x *= sign(cos(length(ceil(p))*99.));
-    o =  cos( min( length(p = fract(p)),  length(--p) )  * 31.4*vec4(x, y, .6,0) );
+    o =  cos( min( length(p = fract(p)),  length(--p) )  * 31.4*vec4(position.x, position.y, .6,0) );
     gl_FragColor = o;
 }
 `;
@@ -41,6 +39,7 @@ function createVernerPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "VernerPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

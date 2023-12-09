@@ -1,5 +1,6 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { Camera } from "three";
+import { baseShaderUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -12,10 +13,9 @@ void main() {
 `;
 
 const fragmentShader = `
-    uniform float x;
-    uniform float y;
     uniform float offset;
     varying vec2 vUv;
+    ${baseShaderUniforms}
 
     mat2 rot(float deg)
     {
@@ -33,11 +33,11 @@ const fragmentShader = `
       }
 
   void main() {
-    float t = x + y + offset;
+    float t = position.x + position.y + offset;
     vec2 uv = vUv;
 
-    uv-=x * 0.1;
-    uv*=y * 0.5;
+    uv-=position.x * 0.1;
+    uv*=position.y * 0.5;
 
     uv*=rot(uv.y/5.-t*.15);
     uv-=sin(sqrt(uv.x*uv.x+uv.y*uv.y)-t*2.)*3.;
@@ -64,6 +64,7 @@ function createLiquidLargePass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "liquidLargePass",
   };
   const liquidPass = new ShaderPass(liquidEffect);
   liquidPass.renderToScreen = true;

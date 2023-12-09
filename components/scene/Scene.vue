@@ -2,43 +2,33 @@
   <div
     id="render"
     class="render"
-    :class="{ exporting}"
+    :class="{ exporting }"
     :style="{ width: renderWidth, height: renderHeight }"
   >
-    <div
-      ref="canvasHolder"
-      class="canvasHolder"
-    >
-      <div
-        ref="container"
-        class="canvas"
-      />
+    <div ref="canvasHolder" class="canvasHolder">
+      <div id="canvas" ref="container" class="canvas" />
     </div>
-    <SceneText
-      v-if="showText"
-      :exporting="exporting"
-    />
+    <SceneText v-if="showText" :exporting="exporting" />
   </div>
 </template>
 <script setup lang="ts">
 import * as THREE from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
-import {createCamera, createScene} from "~/World/things";
-import {createComposer, createExportComposer} from "~/World/systems/composer";
-import {HEIGHT, SUBTITLE_DEFAULT, TITLE_DEFAULT, WIDTH} from "~/constants";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { createCamera, createScene } from "~/World/things";
+import { createComposer, createExportComposer } from "~/World/systems/composer";
+import { HEIGHT, SUBTITLE_DEFAULT, TITLE_DEFAULT, WIDTH } from "~/constants";
 import html2canvas from "html2canvas";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer.js";
-import {v4} from 'uuid';
-import {useSceneStore} from '~/store/scene'
-import {Pass} from "three/examples/jsm/postprocessing/Pass";
-import {Camera, Group, Scene, Vector3} from "three";
-import {fonts} from "~/helpers/fonts";
-import {getPasses} from "~/World/systems/pass";
-import {storeScene} from "~/helpers/db";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { v4 } from "uuid";
+import { useSceneStore } from "~/store/scene";
+import { Pass } from "three/examples/jsm/postprocessing/Pass";
+import { Camera, Group, Scene, Vector3, Vector4 } from "three";
+import { fonts } from "~/helpers/fonts";
+import { getPasses } from "~/World/systems/pass";
 
 const props = defineProps({
-  width: {type: Number, default: WIDTH},
-  height: {type: Number, default: HEIGHT}
+  width: { type: Number, default: WIDTH },
+  height: { type: Number, default: HEIGHT },
 });
 
 const sceneStore = useSceneStore();
@@ -49,8 +39,7 @@ const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
 const title = ref<string>(TITLE_DEFAULT);
 const subtitle = ref<string>(SUBTITLE_DEFAULT);
-const paragraph = ref<string>(new Date().toLocaleDateString());
-const exporting =ref<boolean>(false);
+const exporting = ref<boolean>(false);
 
 const seed = ref<number | null>(null);
 
@@ -60,7 +49,7 @@ let camera: Camera;
 
 const storedScene = computed(() => sceneStore.scene(sceneId.value!));
 
-const renderWidth = computed(() =>{
+const renderWidth = computed(() => {
   return `${props.width}px`;
 });
 
@@ -68,37 +57,20 @@ const renderHeight = computed(() => {
   return `${props.height}px`;
 });
 
-const showText = computed(() => storedScene.value.showText)
+const showText = computed(() => storedScene.value.showText);
 
 onMounted(async () => {
   if (typeof window !== "undefined") {
     nextTick(async () => {
-      const {$bus} = useNuxtApp()
-      $bus.$on('refreshScene', () => {
+      const { $bus } = useNuxtApp();
+      $bus.$on("refreshScene", () => {
         newPattern();
       });
-      $bus.$on('resetCamera', () => {
-        resetCamera();
-      });
-      $bus.$on('download', () => {
+      $bus.$on("download", () => {
         download();
-      });
-      $bus.$on('new', () => {
-        newScene();
-      });
-      $bus.$on('save', () => {
-        save();
-      });
-      $bus.$on('download-jpeg', () => {
-        downloadJpeg();
       });
       scene = createScene();
       camera = createCamera();
-      if (sceneStore.activeScene) {
-        console.log('has active scene');
-        await loadScene(sceneStore.activeScene);
-        return;
-      }
       await newScene();
     });
   }
@@ -113,44 +85,30 @@ onBeforeUnmount(() => {
     cameraY: camera.position.y,
     title: title.value,
     subtitle: subtitle.value,
-    paragraph: paragraph.value,
     font: storedScene.value.font ?? fonts[0],
-    fontColor:storedScene.value.fontColor ?? 'rgb(0, 0, 0)',
-    background: storedScene.value.background ?? new Vector3(1, 1, 1),
-    textAlign: storedScene.value.textAlign ?? 'center',
-    horizontalFlow: storedScene.value.horizontalFlow ?? 'row',
-    verticalFlow: storedScene.value.verticalFlow ?? 'column',
+    fontColor: storedScene.value.fontColor ?? "rgb(0, 0, 0)",
+    color: storedScene.value.color ?? new Vector4(0, 0, 0, 1),
+    background: storedScene.value.background ?? new Vector4(1, 1, 1, 1),
+    textAlign: storedScene.value.textAlign ?? "center",
+    horizontalFlow: storedScene.value.horizontalFlow ?? "row",
+    verticalFlow: storedScene.value.verticalFlow ?? "column",
     showBorders: storedScene.value.showBorders ?? true,
   });
-  const {$bus} = useNuxtApp()
-  $bus.$off('refreshScene');
-  $bus.$off('resetCamera');
-  $bus.$off('download');
-  $bus.$off('download-jpeg');
-  $bus.$off('new');
-  $bus.$off('save');
+  const { $bus } = useNuxtApp();
+  $bus.$off("refreshScene");
+  $bus.$off("download");
 });
 
 const newSeed = () => {
-  return Math.random()*2**32|0;
-}
+  return (Math.random() * 2 ** 32) | 0;
+};
 const loadScene = async (id: string) => {
   const { $random } = useNuxtApp();
   sceneId.value = id;
   seed.value = sceneStore.scene(id).seed;
   $random.$setSeed(seed.value);
   await refreshScene();
-}
-
-const resetCamera = () => {
-  camera.position.x = 0;
-  camera.position.y = 0;
-  sceneStore.storeScene({
-    id: sceneId.value!,
-    cameraX: 0,
-    cameraY: 0,
-  });
-}
+};
 
 const newPattern = async () => {
   const { $random } = useNuxtApp();
@@ -163,7 +121,7 @@ const newPattern = async () => {
     cameraY: 0,
   });
   await refreshScene();
-}
+};
 const newScene = async () => {
   const { $random } = useNuxtApp();
   sceneId.value = v4();
@@ -177,24 +135,28 @@ const newScene = async () => {
     cameraY: 0,
     title: TITLE_DEFAULT,
     subtitle: SUBTITLE_DEFAULT,
-    paragraph: new Date().toLocaleDateString(),
     font,
-    fontColor:'rgb(0, 0, 0)',
+    fontColor: "rgb(0, 0, 0)",
+    color: new Vector4(0, 0, 0, 1),
     background: new Vector3(1, 1, 1),
-    textAlign: 'center',
-    horizontalFlow: 'row',
-    verticalFlow: 'column',
+    textAlign: "center",
+    horizontalFlow: "row",
+    verticalFlow: "column",
     showBorders: true,
-    showText: true
+    showText: true,
   });
   sceneStore.setActiveScene(sceneId.value!);
   await refreshScene();
-}
+};
 const refreshScene = async () => {
   scene.clear();
-  camera.position.set(storedScene.value.cameraX ?? 0,storedScene.value.cameraY ?? 0,0);
+  camera.position.set(
+    storedScene.value.cameraX ?? 0,
+    storedScene.value.cameraY ?? 0,
+    0,
+  );
   activateRenderer("lowQ", true);
-}
+};
 const render = (_timestamp: number, _frame: any) => {
   // update orbit controls if enabled
   if (enableOrbitControls.value) {
@@ -202,19 +164,20 @@ const render = (_timestamp: number, _frame: any) => {
   }
   const passes = composer.passes;
   passes.forEach((pass: Pass) => {
-    if (pass.uniforms) {
+    if (pass.uniforms.position) {
       // update camera position uniform
-      if (pass.uniforms.x && pass.uniforms.y) {
-        pass.uniforms.x = {value: camera.position.x * 0.01};
-        pass.uniforms.y = {value: camera.position.y * 0.01};
-      }
+      pass.uniforms.position = {
+        value: { x: camera.position.x * 0.01, y: camera.position.y * 0.01 },
+      };
+      // pass.uniforms.y = { value: camera.position.y * 0.01 };
+
       // update background uniform
       if (pass.uniforms.colors) {
         pass.uniforms.colors = {
           value: {
-            background: storedScene.value.background ?? new Vector3(1, 1, 1),
-            color: storedScene.value.color ?? new Vector3(0, 0, 0)
-          }
+            background: storedScene.value.background ?? new Vector4(1, 1, 1, 1),
+            color: storedScene.value.color ?? new Vector4(0, 0, 0, 1),
+          },
         };
       }
       // update frame uniform
@@ -222,11 +185,15 @@ const render = (_timestamp: number, _frame: any) => {
         pass.uniforms.borders = {
           value: {
             show: storedScene.value.showBorders ?? true,
-            top: (storedScene.value.verticalFlow === 'column' ?  300 : 200) / HEIGHT,
+            top:
+              (storedScene.value.verticalFlow === "column" ? 300 : 200) /
+              HEIGHT,
             right: 64 / WIDTH,
-            bottom: (storedScene.value.verticalFlow === 'column' ?  200 : 300) / HEIGHT,
+            bottom:
+              (storedScene.value.verticalFlow === "column" ? 200 : 300) /
+              HEIGHT,
             left: 64 / WIDTH,
-          }
+          },
         };
       }
     }
@@ -235,7 +202,7 @@ const render = (_timestamp: number, _frame: any) => {
   composer.render();
   // render loop
   composer.renderer.setAnimationLoop(render.bind(this));
-}
+};
 
 const destroyRenderer = () => {
   composer.renderer.setAnimationLoop(null);
@@ -243,9 +210,9 @@ const destroyRenderer = () => {
   container.value?.removeChild(composer.renderer.domElement);
   composer.renderer.dispose();
   composer.renderer.forceContextLoss();
-}
+};
 
-const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
+const activateRenderer = (type: "lowQ" | "highQ", refresh: boolean = false) => {
   if (composer) {
     destroyRenderer();
   }
@@ -253,13 +220,10 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
   if (!passes || refresh) {
     passes = getPasses(scene, camera);
   }
-  if (type === 'lowQ') {
+  if (type === "lowQ") {
     composer = createComposer(scene, camera, passes);
     if (enableOrbitControls.value) {
-      controls.value = new OrbitControls(
-          camera,
-          composer.renderer.domElement,
-      );
+      controls.value = new OrbitControls(camera, composer.renderer.domElement);
       controls.value.enableDamping = true;
       controls.value.dampingFactor = 0.1;
       controls.value.enableRotate = false;
@@ -267,77 +231,78 @@ const activateRenderer = (type: 'lowQ'|'highQ', refresh: boolean = false) => {
       controls.value.mouseButtons = {
         LEFT: THREE.MOUSE.RIGHT,
         MIDDLE: THREE.MOUSE.MIDDLE,
-        RIGHT: THREE.MOUSE.LEFT
-      }
+        RIGHT: THREE.MOUSE.LEFT,
+      };
     }
     container.value?.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));
     return;
   }
-  if (type === 'highQ') {
+  if (type === "highQ") {
     composer = createExportComposer(scene, camera, passes);
     container.value?.appendChild(composer.renderer.domElement);
     composer.render();
     return;
   }
-}
+};
 const download = async () => {
-  exporting.value = true;
-  const region = document.getElementById("render");
-  // region!.style.transform = 'scale(1, 1)';
-  nextTick(async () => {
-    activateRenderer('highQ');
-    // TODO: re-scale to 1 before exporting
-    const render = await html2canvas(region!, {
-      scale: 10,
-      backgroundColor: `rgb(${storedScene.value.background.x * 255},${storedScene.value.background.y * 255},${storedScene.value.background.z * 255})`,
-    });
-    const exportString = render.toDataURL("image/jpeg");
-    sceneStore.storeScene({id: sceneId.value!, exportString});
-    return navigateTo({
-      path: '/app/download',
-      query: {
-        id: sceneId.value
-      }
-    });
-  })
-}
+  const resetPasses = () => {
+    for (let i = 0; i < composer.passes.length; i++) {
+      composer.passes[i].enabled = false;
+      composer.passes[i].renderToScreen = false;
+    }
+  };
 
-const downloadJpeg = async () => {
-  debugger;
   exporting.value = true;
   const region = document.getElementById("render");
-  // region!.style.transform = 'scale(1, 1)';
+  const canvas = document.getElementById("canvas");
+  const text = document.getElementById("texts");
   nextTick(async () => {
-    activateRenderer('highQ');
-    // TODO: re-scale to 1 before exporting
+    activateRenderer("highQ");
     const render = await html2canvas(region!, {
-      scale: 10,
-      backgroundColor: `rgb(${storedScene.value.background.x * 255},${storedScene.value.background.y * 255},${storedScene.value.background.z * 255})`,
+      scale: 5,
+      backgroundColor: `rgb(${storedScene.value.background.x * 255},${
+        storedScene.value.background.y * 255
+      },${storedScene.value.background.z * 255})`,
     });
-    const exportString = render.toDataURL("image/jpeg");
-    sceneStore.storeScene({id: sceneId.value!, exportString});
+    const exportString = render.toDataURL("image/png");
+    const renderText = await html2canvas(text!, {
+      scale: 5,
+      backgroundColor: `rgb(${storedScene.value.background.x * 255},${
+        storedScene.value.background.y * 255
+      },${storedScene.value.background.z * 255})`,
+    });
+    const exportText = renderText.toDataURL("image/png");
+    const layers = [exportText];
+
+    for (let i = 0; i < composer.passes.length; i++) {
+      resetPasses();
+      composer.passes[i].enabled = true;
+      composer.passes[i].renderToScreen = true;
+      composer.render();
+      const render = await html2canvas(canvas!, {
+        scale: 5,
+        backgroundColor: `rgb(${storedScene.value.background.x * 255},${
+          storedScene.value.background.y * 255
+        },${storedScene.value.background.z * 255})`,
+      });
+      const exportString = render.toDataURL("image/png");
+      layers.push(exportString);
+    }
+    sceneStore.storeScene({
+      id: sceneId.value!,
+      fullExportString: exportString,
+      exportLayers: layers,
+    });
+    console.log("layers", layers);
     return navigateTo({
-      path: '/app/download',
+      path: "/app/download",
       query: {
         id: sceneId.value,
-        type: 'jpeg'
-      }
+      },
     });
-  })
-}
-
-const save = async () => {
-  const {x,y} = camera.position;
-  sceneStore.storeScene({id: sceneId.value!, cameraX: x, cameraY: y});
-  const loggedIn = useSupabaseUser();
-  if (!loggedIn.value) {
-    navigateTo('/login');
-  }
-  else {
-    await storeScene(storedScene.value);
-  }
-}
+  });
+};
 </script>
 <style lang="scss">
 canvas {
@@ -357,4 +322,3 @@ img {
   background: white;
 }
 </style>
-

@@ -14,9 +14,6 @@ void main() {
 
 const fragmentShader = `
 #define PI 3.14159265358979323846
-
-uniform float x;
-uniform float y;
 uniform float offset;
 varying vec2 vUv;
 ${baseShaderUniforms}
@@ -28,7 +25,7 @@ float random (in vec2 _st) {
 }
 
 vec2 pattern(in vec2 _st, in float _index){
-    _index = fract(((_index-sin(x+2.))*sin(y-1.)));
+    _index = fract(((_index-sin(position.x+2.))*sin(position.y-1.)));
     if (_index > 0.804) {
         _st = vec2(1.560-_st.x, 1.536-_st.y);
     }
@@ -48,7 +45,7 @@ void main() {
     vec2 tile = pattern(fpos, random( ipos ));
     float color = 0.0;
     color = step(length(tile-vec2(1.,1.)),0.4);
-    vec3 mixed = mix(colors.color, colors.background, clamp(1. - color, 0.0, 1.0));
+    vec3 mixed = mix(colors.color.rgb, colors.background.rgb, clamp(1. - color, 0.0, 1.0));
     gl_FragColor = vec4(mixed, 1.);
 }
 `;
@@ -64,6 +61,7 @@ function createDotsPass(camera: Camera) {
     },
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
+    name: "DotsPass",
   };
   const pass = new ShaderPass(effect);
   pass.renderToScreen = true;

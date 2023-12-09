@@ -10,7 +10,6 @@
   "devDependencies": {
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "@nuxtjs/supabase": "^1.0.2",
     "@typescript-eslint/parser": "^6.3.0",
     "eslint": "^8.47.0",
     "eslint-plugin-vue": "^9.17.0",

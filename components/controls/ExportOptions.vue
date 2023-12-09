@@ -1,81 +1,35 @@
 <template>
-  <div
-    v-if="showOptions"
-    class="backdrop"
-    @click="hideOptions"
-  />
   <div class="export-options">
-    <button
-      v-if="!user"
-      class="download-button"
-      @click="downloadJpeg"
-    >
-      Download as JPEG
+    <button class="download-button" @click="download">
+      Download <Icon name="ion:download" />
     </button>
-    <div
-      v-else
-      class="export-options__extended"
-    >
-      <button
-
-        class="download-button"
-        @click="downloadSnapshot"
-      >
-        <Icon name="ion:download" />
-        Download as PDF
-      </button>
-      <button
-        class="export-options__extended__more-options"
-        @click="showExtendedOptions"
-      >
-        <Icon name="ion:caret-down-outline" />
-      </button>
-    </div>
-    <div
-      v-if="showOptions"
-      class="extended-options"
-    >
-      <button
-        class="download-button"
-        @click="downloadJpeg"
-      >
-        Download as JPEG
-      </button>
-    </div>
+    <button class="refreshButton" @click="refreshScene">
+      <Icon name="ion:dice-sharp" />
+      Random
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-const user = useSupabaseUser();
-const showOptions = ref<boolean>(false);
-const downloadSnapshot = () => {
+const download = () => {
   const { $bus } = useNuxtApp();
-  $bus.$emit('download');
-}
-
-const downloadJpeg = () => {
+  $bus.$emit("download");
+};
+const refreshScene = () => {
   const { $bus } = useNuxtApp();
-  $bus.$emit('download-jpeg');
-}
-
-const showExtendedOptions = () => {
-  showOptions.value = true;
-}
-
-const hideOptions = () => {
-  showOptions.value = false;
-}
+  $bus.$emit("refreshScene");
+};
 </script>
 
 <style lang="scss" scoped>
 .backdrop {
   position: fixed;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   background: $base-50;
-  z-index:1;
+  z-index: 1;
 }
 
 .extended-options {
@@ -95,7 +49,7 @@ const hideOptions = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2px;
+  gap: 8px;
   position: relative;
 
   &__extended {

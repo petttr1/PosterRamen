@@ -8,55 +8,42 @@
         :href="exportString"
         :download="`${scene.title}.jpeg`"
       >
-        <img
-
-          :src="`${exportString}`"
-        >
+        <img :src="`${exportString}`" />
       </a>
     </div>
     <div class="download__text">
       <p>Your work is being downloaded now.</p>
-      <p>Click <a @click="exportPoster">here</a> if the download didn't start automatically.</p>
+      <p>
+        Click <a @click="exportPoster">here</a> if the download didn't start
+        automatically.
+      </p>
     </div>
     <div class="download__back">
-      <nuxt-link
-        to="/app"
-        class="download__back__button"
-      >
-        Make New Poster
-      </nuxt-link>
-      <!--      <nuxt-link-->
-      <!--        :to="`/app?id=${sceneId}`"-->
-      <!--        class="download__back__button"-->
-      <!--      >-->
-      <!--        Edit-->
-      <!--      </nuxt-link>-->
-      <!--      <nuxt-link-->
-      <!--        to="/login"-->
-      <!--        class="download__back__login"-->
-      <!--      >-->
-      <!--        Log in to see and re-export your work. (coming soon)-->
-      <!--      </nuxt-link>-->
+      <nuxt-link to="/app" class="download__back__button"> New </nuxt-link>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import {computed, onMounted} from "vue";
-import { useSceneStore } from '~/store/scene'
-import {jsPDF} from "jspdf";
-import {HEIGHT, WIDTH} from "~/constants";
+import { computed, onMounted } from "vue";
+import { useSceneStore } from "~/store/scene";
+import { jsPDF } from "jspdf";
+import { HEIGHT, WIDTH } from "~/constants";
 
-const sceneStore = useSceneStore()
-const supabase = useSupabaseClient()
+const sceneStore = useSceneStore();
 
-const sceneId = ref<string>('');
-const type = ref<string>('pdf');
+const sceneId = ref<string>("");
+const type = ref<string>("pdf");
 const scene = computed(() => sceneStore.scene(sceneId.value!));
-const exportString = computed(() => sceneStore.scene(sceneId.value!).exportString);
+const exportString = computed(
+  () => sceneStore.scene(sceneId.value!).fullExportString,
+);
+const exportLayers = computed(
+  () => sceneStore.scene(sceneId.value!).exportLayers,
+);
 
 const imgDownload = ref<HTMLLinkElement | null>(null);
+const route = useRoute();
 
-const route = useRoute()
 onMounted(() => {
   sceneId.value = route.query.id;
   if (route.query.type) {
@@ -64,40 +51,46 @@ onMounted(() => {
   }
   nextTick(() => {
     exportPoster();
-  })
-})
+  });
+});
 
 const exportPoster = () => {
   if (!exportString.value) return;
-  if (type.value === 'pdf') {
+  if (type.value === "pdf") {
     exportAsPdf();
     return;
   }
-  if (type.value === 'jpeg') {
+  if (type.value === "jpeg") {
     exportAsJpeg();
     return;
   }
-}
+};
 
 const exportAsJpeg = async () => {
   imgDownload.value!.click();
-}
+};
 
-const exportAsPdf = async () => {
+const exportAsPdf = () => {
   let pdf = new jsPDF({
     unit: "px",
     format: [WIDTH, HEIGHT],
   });
-  pdf = await pdf.addImage(
-      exportString.value!,
-      "jpeg",
-      0,
-      0,
-      WIDTH,
-      HEIGHT,
+  pdf = pdf.addImage(
+    exportString.value!,
+    "png",
+    0,
+    0,
+    WIDTH,
+    HEIGHT,
+    undefined,
+    "FAST",
   );
+  for (const layer of exportLayers.value!) {
+    pdf = pdf.addPage([WIDTH, HEIGHT]);
+    pdf = pdf.addImage(layer, "png", 0, 0, WIDTH, HEIGHT, undefined, "FAST");
+  }
   pdf.save(`${scene.value.title}.pdf`);
-}
+};
 </script>
 
 <style scoped lang="scss">

@@ -8,8 +8,6 @@ import {
 } from "three";
 import { HEIGHT, WIDTH } from "~/constants";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { createRenderPass } from "~/World/systems/pass/render";
-import { createGrainPass } from "~/World/systems/pass/grain";
 import {
   createExportRenderer,
   createLandingRenderer,
@@ -17,12 +15,7 @@ import {
 } from "~/World/systems/renderer";
 import { getPasses } from "~/World/systems/pass";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
-import { createLandingPass } from "~/World/systems/pass/dotsLanding";
-import { createGradientPass } from "~/World/systems/pass/gradient";
-import { createZebraPass } from "~/World/systems/pass/zebra";
-import { createLiquidPass } from "~/World/systems/pass/liquid";
 import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
-import { createSilkPass } from "~/World/systems/pass/silk";
 
 function createBaseComposer(
   renderer: WebGLRenderer,
