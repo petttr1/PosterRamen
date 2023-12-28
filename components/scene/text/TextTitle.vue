@@ -18,7 +18,6 @@
       :min-width="100"
       :min-height="200"
       parent="#render"
-      :prevent-deactivation="true"
       handles-type="borders"
       @resizing="adjustFontSize"
     >
@@ -113,8 +112,6 @@ onMounted(() => {
   font-family: "Helvetica Neue", Inter, Arial, sans-serif;
   font-size: v-bind(fontSizeString);
   font-weight: 400;
-  white-space: pre;
-  overflow: hidden;
 
   &__text {
     position: absolute;
@@ -137,6 +134,10 @@ onMounted(() => {
     resize: none;
     white-space: normal;
     text-align: justify;
+  }
+
+  :deep(.drv) {
+    border: 6px dashed gray;
   }
 }
 </style>

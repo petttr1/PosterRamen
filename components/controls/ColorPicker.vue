@@ -35,7 +35,6 @@ const pureColor = computed(() => {
   }
   const color = scene[props.type];
   if (!color) return "rgb(0, 0, 0)";
-  console.log(color);
   return `rgb(${color.x * 255}, ${color.y * 255}, ${color.z * 255})`;
 });
 

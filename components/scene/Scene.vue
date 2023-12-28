@@ -238,14 +238,7 @@ const download = async () => {
       },${storedScene.value.background.z * 255})`,
     });
     const exportString = render.toDataURL("image/png");
-    const renderText = await html2canvas(text!, {
-      scale: 5,
-      backgroundColor: `rgb(${storedScene.value.background.x * 255},${
-        storedScene.value.background.y * 255
-      },${storedScene.value.background.z * 255})`,
-    });
-    const exportText = renderText.toDataURL("image/png");
-    const layers = [exportText];
+    const layers = [];
 
     for (let i = 0; i < composer.passes.length; i++) {
       resetPasses();
@@ -266,7 +259,6 @@ const download = async () => {
       fullExportString: exportString,
       exportLayers: layers,
     });
-    console.log("layers", layers);
     return navigateTo({
       path: "/app/download",
       query: {
