@@ -1,16 +1,19 @@
 <template>
   <div class="controls">
-    <p>Randomize the design.</p>
     <p>Edit the design by dragging.</p>
-    <p>Edit the text.</p>
+    <p>Edit and move the text.</p>
     <p>Download exports separate layers as PDFs.</p>
     <p>Go crazy in post-process.</p>
     <ExportOptions />
+    <span>Colors</span>
+    <ColorsPicker />
   </div>
 </template>
 
 <script setup lang="ts">
 import ExportOptions from "~/components/controls/ExportOptions.vue";
+import ColorPicker from "~/components/controls/ColorPicker.vue";
+import ColorsPicker from "~/components/controls/ColorsPicker.vue";
 </script>
 
 <style lang="scss" scoped>

@@ -26,13 +26,10 @@ float simpleNoise(vec2 st)
 
 void main()
 {
-    // Create a chessboard pattern
     ivec2 cell = ivec2(floor(vUv * 8.0));
     bool isBlack = (cell.x + cell.y) % 2 == 1;
-
-    // Add curvature to the lines using noise
-    float noise = simpleNoise(vUv * position.x); // Adjust the noise intensity here
-    vec2 perturb = vec2(noise * 0.1 - 0.05, noise * position.y - 0.05); // Adjust the perturbation amount here
+    float noise = simpleNoise(vUv * position.x * 00.1);
+    vec2 perturb = vec2(noise * 0.1 - 0.05, noise * position.y * 00.1 - 0.05);
     vec2 distortedTexCoord = vUv + perturb;
 
     // Use the distorted texture coordinates for color assignment

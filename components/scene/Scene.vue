@@ -16,13 +16,13 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createCamera, createScene } from "~/World/things";
 import { createComposer, createExportComposer } from "~/World/systems/composer";
-import { HEIGHT, SUBTITLE_DEFAULT, TITLE_DEFAULT, WIDTH } from "~/constants";
+import { HEIGHT, TITLE_DEFAULT, WIDTH } from "~/constants";
 import html2canvas from "html2canvas";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { v4 } from "uuid";
 import { useSceneStore } from "~/store/scene";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
-import { Camera, Group, Scene, Vector3, Vector4 } from "three";
+import { Camera, Scene, Vector3, Vector4 } from "three";
 import { fonts } from "~/helpers/fonts";
 import { getPasses } from "~/World/systems/pass";
 
@@ -37,11 +37,7 @@ const sceneId = ref<string | null>(null);
 const container = ref<HTMLElement | null>(null);
 const controls = ref<OrbitControls | null>(null);
 const enableOrbitControls = ref<boolean>(true);
-const title = ref<string>(TITLE_DEFAULT);
-const subtitle = ref<string>(SUBTITLE_DEFAULT);
 const exporting = ref<boolean>(false);
-
-const seed = ref<number | null>(null);
 
 let composer: EffectComposer;
 let scene: Scene;
@@ -78,22 +74,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   destroyRenderer();
-  sceneStore.storeScene({
-    id: sceneId.value!,
-    seed: storedScene.value.seed ?? seed.value,
-    cameraX: camera.position.x,
-    cameraY: camera.position.y,
-    title: title.value,
-    subtitle: subtitle.value,
-    font: storedScene.value.font ?? fonts[0],
-    fontColor: storedScene.value.fontColor ?? "rgb(0, 0, 0)",
-    color: storedScene.value.color ?? new Vector4(0, 0, 0, 1),
-    background: storedScene.value.background ?? new Vector4(1, 1, 1, 1),
-    textAlign: storedScene.value.textAlign ?? "center",
-    horizontalFlow: storedScene.value.horizontalFlow ?? "row",
-    verticalFlow: storedScene.value.verticalFlow ?? "column",
-    showBorders: storedScene.value.showBorders ?? true,
-  });
   const { $bus } = useNuxtApp();
   $bus.$off("refreshScene");
   $bus.$off("download");
@@ -101,13 +81,6 @@ onBeforeUnmount(() => {
 
 const newSeed = () => {
   return (Math.random() * 2 ** 32) | 0;
-};
-const loadScene = async (id: string) => {
-  const { $random } = useNuxtApp();
-  sceneId.value = id;
-  seed.value = sceneStore.scene(id).seed;
-  $random.$setSeed(seed.value);
-  await refreshScene();
 };
 
 const newPattern = async () => {
@@ -134,7 +107,6 @@ const newScene = async () => {
     cameraX: 0,
     cameraY: 0,
     title: TITLE_DEFAULT,
-    subtitle: SUBTITLE_DEFAULT,
     font,
     fontColor: "rgb(0, 0, 0)",
     color: new Vector4(0, 0, 0, 1),

@@ -1,97 +1,83 @@
 <template>
-  <label>
-    Color
-    <div class="colors-wrapper">
-      <div class="colors-wrapper__colors">
-        <button
-          v-for="color of colors"
-          :key="color.id"
-          :style="{
-            background: `rgb(${color.r},${color.g},${color.b})`
-          }"
-          :class="{active: active === color.id}"
-          @click="updateColor(color)"
-        />
-      </div>
-      <button
-        class="colors-wrapper__random"
-        @click="selectRandom"
-      >
-        <Icon
-          name="ion:dice-sharp"
-          size="22"
-        />
-      </button>
-    </div>
-  </label>
+  <div class="color-picker">
+    <button @click="selectRandom">
+      <Icon name="ion:dice-sharp" size="22" />
+    </button>
+    {{ text }}
+    <ColorPicker
+      :pure-color="pureColor"
+      format="rgb"
+      shape="circle"
+      lang="En"
+      picker-type="fk"
+      use-type="pure"
+      :disable-alpha="true"
+      @pureColorChange="onColorChanged"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import {useSceneStore} from "~/store/scene";
-import {Vector3} from "three";
-import {fonts} from "~/helpers/fonts";
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
+import { useSceneStore } from "~/store/scene";
 
-const active = ref<number>(0);
+const props = defineProps({
+  type: { type: String, required: true },
+});
 
-const colors = ref<any[]>([
-  {id: 0, r:255, g:255, b:255},
-  {id: 1, r:0, g:0, b:0},
-  {id: 2, r:103, g:0, b:26},
-  {id: 3, r:4, g:32, b:84},
-  {id: 4, r:45, g:142, b:135},
-  {id: 5, r:254, g:188, b:56},
-  {id: 6, r:173, g:239, b:209},
-  {id: 7, r:137, g:171, b:227},
-]);
-
-const selectRandom = () => {
-  updateColor(colors.value[Math.floor(Math.random() * colors.value.length)]);
-}
-
-const updateColor = (color: any) => {
+const pureColor = computed(() => {
   const sceneStore = useSceneStore();
   const scene = sceneStore.scene(sceneStore.activeScene!);
-  if (!scene) return;
-  active.value = color.id;
-  sceneStore.storeScene({id: scene.id, background: new Vector3(color.r / 255,color.g / 255,color.b / 255)});
-}
+  if (!scene) return "rgb(0, 0, 0)";
+  if (typeof scene[props.type] === "string") {
+    return scene[props.type];
+  }
+  const color = scene[props.type];
+  if (!color) return "rgb(0, 0, 0)";
+  console.log(color);
+  return `rgb(${color.x * 255}, ${color.y * 255}, ${color.z * 255})`;
+});
+
+const emit = defineEmits(["pick", "random"]);
+
+const text = computed(() => {
+  if (props.type === "background") {
+    return "Background";
+  } else if (props.type === "color") {
+    return "Color";
+  } else if (props.type === "fontColor") {
+    return "Text Color";
+  }
+});
+
+const selectRandom = () => {
+  emit("random");
+};
+
+const onColorChanged = (newValue: any) => {
+  const rgb = newValue.replace(/[^\d,]/g, "").split(",");
+  const payload = {
+    r: rgb[0],
+    g: rgb[1],
+    b: rgb[2],
+    a: rgb[3] ?? 1,
+  };
+  emit("pick", payload);
+};
 </script>
 
 <style lang="scss" scoped>
-label {
-  @include label;
-}
-.colors-wrapper {
-  display: flex;
+.color-picker {
+  display: grid;
+  grid-template-columns: 30px 1fr 24px;
+  gap: 12px;
   align-items: center;
-  gap: 8px;
   overflow: hidden;
+  color: $white;
+  margin-bottom: 4px;
 
-  &__colors {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 12px;
-    background: $white-30;
-    max-width: 100%;
-    overflow-x: auto;
-
-    button {
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      cursor: default;
-
-      &.active {
-        border: 2px solid $highlight;
-      }
-    }
-  }
-
-  &__random {
+  button {
     @include button(4px, 4px, 8px);
   }
 }

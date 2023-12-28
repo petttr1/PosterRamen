@@ -24,6 +24,7 @@
     "@pinia/nuxt": "^0.4.11",
     "@types/three": "^0.155.0",
     "canvg": "^4.0.1",
+    "draggable-resizable-vue3": "^1.0.94-beta",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "mitt": "^3.0.1",
@@ -31,6 +32,8 @@
     "randomcolor": "^0.6.2",
     "sass": "^1.64.2",
     "three": "^0.155.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vite": "2.6.4",
+    "vue3-colorpicker": "^2.2.3"
   }
 }

@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="title"
-    :style="{
-      width: maxWidthString,
-      'text-align': scene.textAlign,
-    }"
-  >
+  <div class="title">
     <div
       v-if="exporting"
       class="title__text"
@@ -15,38 +9,63 @@
     >
       {{ title }}
     </div>
-    <span
+    <DraggableResizableVue
       v-if="!exporting"
-      ref="hiddenTitleRef"
-      class="title__hidden"
-    >{{ title }}</span><input
-      v-if="!exporting"
-      ref="titleRef"
-      v-model="title"
-      placeholder="Your Title"
-      class="title__text"
-      :style="{
-        color: scene.fontColor,
-        caretColor: scene.fontColor,
-
-      }"
-      @input="onTitleInput"
+      v-model:w="text.width"
+      v-model:h="text.height"
+      v-model:x="text.x"
+      v-model:y="text.y"
+      :min-width="100"
+      :min-height="200"
+      parent="#render"
+      :prevent-deactivation="true"
+      handles-type="borders"
+      @resizing="adjustFontSize"
     >
+      <textarea
+        ref="titleRef"
+        v-model="title"
+        placeholder="Your Title"
+        :style="{
+          color: scene.fontColor,
+          caretColor: scene.fontColor,
+        }"
+        @input="onTitleInput"
+      />
+    </DraggableResizableVue>
   </div>
 </template>
 <script setup lang="ts">
-import {TITLE_DEFAULT, WIDTH} from "~/constants";
-import {useSceneStore} from "~/store/scene";
+import { useSceneStore } from "~/store/scene";
+import DraggableResizableVue from "draggable-resizable-vue3";
+import { TITLE_DEFAULT } from "~/constants";
+
+const maxFontSize = 192;
+const minFontSize = 32;
+
+const props = defineProps({
+  exporting: { type: Boolean, default: false },
+});
 
 const titleRef = ref<HTMLInputElement | null>(null);
-const hiddenTitleRef = ref<HTMLSpanElement | null>(null);
-
 const title = ref<string>(TITLE_DEFAULT);
+const text = ref({
+  x: 0,
+  y: 0,
+  width: 1600,
+  height: 800,
+});
+const fontSize = ref<number>(maxFontSize);
 
 const sceneStore = useSceneStore();
 const scene = computed(() => sceneStore.scene(sceneStore.activeScene!));
 const sceneId = computed(() => scene.value.id);
 const font = computed(() => scene.value.font);
+const fontSizeString = computed(() => `${fontSize.value}px`);
+const x = computed(() => text.value.x + "px");
+const y = computed(() => text.value.y + "px");
+const width = computed(() => text.value.width + "px");
+const height = computed(() => text.value.height + "px");
 
 watch(sceneId, () => {
   fontSize.value = maxFontSize;
@@ -62,79 +81,62 @@ watch(font, () => {
   }, 150);
 });
 
-const props = defineProps({
-  exporting: {type: Boolean, default: false},
-});
-
-const emit = defineEmits(['titleInput']);
-
-const maxWidth = WIDTH - 64;
-const maxWidthString = computed(() => `${maxWidth}px`);
-const maxFontSize = 192;
-const minFontSize = 32;
-const fontSize = ref<number>(maxFontSize);
-const fontSizeString = computed(() => `${fontSize.value}px`);
-
-const recalculateTitle = () => {
-    titleRef.value!.style.width = hiddenTitleRef.value!.offsetWidth + "px";
-    adjustTitleFontSize();
-}
-
-const adjustTitleFontSize = () => {
-  const currentWidth = hiddenTitleRef.value!.offsetWidth;
+const adjustFontSize = () => {
+  const maxHeight = text.value.height;
+  const scrollHeight = titleRef.value!.scrollHeight;
 
   fontSize.value = Math.min(
-      maxFontSize,
-      Math.max(
-          minFontSize,
-          fontSize.value * (maxWidth / currentWidth)
-      )
+    maxFontSize,
+    Math.max(minFontSize, fontSize.value * (maxHeight / scrollHeight)),
   );
-}
+};
+
+const recalculateTitle = () => {
+  adjustFontSize();
+};
 
 const onTitleInput = (e: any) => {
   const value = e.target.value;
-  sceneStore.storeScene({id: sceneId.value!, title: value});
+  sceneStore.storeScene({ id: sceneId.value!, title: value });
   nextTick(() => {
     recalculateTitle();
   });
-}
+};
 
 onMounted(() => {
   titleRef.value!.focus();
-  setTimeout(() => {
-    recalculateTitle();
-  }, 150);
-
+  recalculateTitle();
 });
 </script>
 <style lang="scss" scoped>
 .title {
+  font-family: "Helvetica Neue", Inter, Arial, sans-serif;
   font-size: v-bind(fontSizeString);
-  font-weight: 600;
+  font-weight: 400;
   white-space: pre;
   overflow: hidden;
 
-
-  input, div {
+  &__text {
+    position: absolute;
     outline: none;
-    caret-color: black;
-    color: black;
+    overflow: hidden;
+    white-space: normal;
+    text-align: justify;
+    top: v-bind(y);
+    left: v-bind(x);
+    width: v-bind(width);
+    height: v-bind(height);
+  }
+
+  textarea {
+    outline: none;
     overflow: hidden;
     pointer-events: all;
     width: 100%;
-  }
-
-  &__text {
-    min-width: 500px;
-  }
-
-  &__hidden {
-      min-width: 500px;
-      position: absolute;
-      margin: 0;
-      padding: 0;
-      visibility: hidden;
+    height: 100%;
+    resize: none;
+    white-space: normal;
+    text-align: justify;
   }
 }
 </style>

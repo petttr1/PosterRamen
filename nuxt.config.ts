@@ -58,10 +58,13 @@ export default defineNuxtConfig({
   sitemap: {
     hostname: "https://posterramen.com",
     gzip: true,
-    exclude: ["/login", "/logout", "/confirm"],
+    exclude: [],
   },
   robots: {
     UserAgent: "*",
-    Disallow: ["/login", "/logout", "/app/download", "/confirm"],
+    Disallow: ["/app/download"],
   },
+  // build: {
+  //   transpile: ["vue3-colorpicker"],
+  // },
 });

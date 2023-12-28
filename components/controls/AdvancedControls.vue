@@ -1,20 +1,9 @@
 <template>
-  <button
-    class="advanced-toggle"
-    @click="toggleAdvanced"
-  >
-    Advanced Options <Icon
-      v-if="showAdvanced"
-      name="mdi:arrow-down"
-    /> <Icon
-      v-else
-      name="mdi:arrow-right"
-    />
+  <button class="advanced-toggle" @click="toggleAdvanced">
+    Advanced Options <Icon v-if="showAdvanced" name="mdi:arrow-down" />
+    <Icon v-else name="mdi:arrow-right" />
   </button>
-  <div
-    v-show="showAdvanced"
-    class="advanced-controls"
-  >
+  <div v-show="showAdvanced" class="advanced-controls">
     <span>Pattern</span>
     <PatternControls />
     <span>Frame</span>
@@ -22,7 +11,6 @@
     <ColorPicker />
     <span>Text</span>
     <TextVisibilityControls />
-    <FontOptions />
     <TextColorPicker />
     <TextAlignOptions />
     <VerticalFlowControls />
@@ -35,7 +23,6 @@ import ColorPicker from "~/components/controls/ColorPicker.vue";
 import TextAlignOptions from "~/components/controls/TextAlignOptions.vue";
 import BorderControls from "~/components/controls/BorderControls.vue";
 import VerticalFlowControls from "~/components/controls/VerticalFlowControls.vue";
-import FontOptions from "~/components/controls/FontOptions.vue";
 import PatternControls from "~/components/controls/PatternControls.vue";
 import TextVisibilityControls from "~/components/controls/TextVisibilityControls.vue";
 
@@ -43,7 +30,7 @@ const showAdvanced = ref<boolean>(false);
 
 const toggleAdvanced = () => {
   showAdvanced.value = !showAdvanced.value;
-}
+};
 </script>
 
 <style lang="scss" scoped>
