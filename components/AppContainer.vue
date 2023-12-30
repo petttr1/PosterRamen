@@ -1,18 +1,9 @@
 <template>
   <div class="app-container">
-    <div
-      ref="wrapperComponent"
-      class="app-container__scene-wrapper"
-    >
-      <Scene
-        ref="sceneComponent"
-        :show-border="true"
-      />
+    <div ref="wrapperComponent" class="app-container__scene-wrapper">
+      <Scene ref="sceneComponent" :show-border="true" />
     </div>
-    <div
-      v-if="showControls"
-      class="app-container__controls"
-    >
+    <div v-if="showControls" class="app-container__controls">
       <Controls />
     </div>
   </div>
@@ -20,7 +11,7 @@
 
 <script setup lang="ts">
 import Scene from "~/components/scene/Scene.vue";
-import {onBeforeUnmount, onMounted, ref, VueElement} from "vue";
+import { onBeforeUnmount, onMounted, ref, VueElement } from "vue";
 import Controls from "~/components/controls/Controls.vue";
 const showControls = ref(true);
 
@@ -34,35 +25,50 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", applyScaling);
-})
+});
 
 const applyScaling = () => {
-  sceneComponent.value!.$el.style.transform = 'scale(1, 1)';
-  let { width: cw, height: ch } = sceneComponent.value!.$el.getBoundingClientRect();
-  let { width: ww, height: wh } = wrapperComponent.value!.getBoundingClientRect();
+  sceneComponent.value!.$el.style.transform = "scale(1, 1)";
+  let { width: cw, height: ch } =
+    sceneComponent.value!.$el.getBoundingClientRect();
+  let { width: ww, height: wh } =
+    wrapperComponent.value!.getBoundingClientRect();
+  cw += 36;
+  ch += 16;
   let scaleAmtX = Math.min(ww / cw, wh / ch);
   sceneComponent.value!.$el.style.transform = `scale(${scaleAmtX}, ${scaleAmtX})`;
 };
-
 </script>
 
 <style lang="scss">
 .app-container {
   width: 100%;
-  height: calc(100% - 16px);
+  min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 16px;
-  padding: 56px 16px 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
 
   &__scene-wrapper {
+    padding: 16px 0 0 16px;
     width: 50%;
     height: 100%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      padding: 16px 16px 0;
+    }
   }
 
   &__controls {
-    max-width: 350px;
+    width: 100%;
   }
 }
 </style>

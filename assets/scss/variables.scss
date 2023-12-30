@@ -1,52 +1,32 @@
-$base: #1A130E;
-$base-10: rgba($base, 0.1);
-$base-50: rgba($base, 0.5);
-$base-80: rgba($base, 0.8);
+$base: #FCF5E5;
+$text: #00034C;
+$active: #06132F;
+$text-active: #fff;
 
-$highlight: #B5446E;
-$highlight-10: rgba($highlight, 0.1);
-$highlight-30: rgba($highlight, 0.3);
-$highlight-50: rgba($highlight, 0.5);
-$highlight-80: rgba($highlight, 0.8);
-
-$white: #F7F7F2;
-$white-10: rgba($white, 0.1);
-$white-30: rgba($white, 0.3);
-$white-50: rgba($white, 0.5);
-$white-80: rgba($white, 0.8);
-
-$secondary: #62A87C;
-$secondary-10: rgba($secondary, 0.1);
-$secondary-50: rgba($secondary, 0.5);
-$secondary-80: rgba($secondary, 0.8);
-
-@mixin button($padding-top-bottom:0, $padding-left-right:0, $border-radius:0) {
-  border: none;
-  background: $highlight;
-  color: $white;
-  padding: $padding-top-bottom $padding-left-right;
-  cursor: default;
-
-  line-height: 20px;
-  text-decoration: none;
-  border-radius: $border-radius;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &:hover {
-    background: $white;
-    color: $highlight;
-  }
+@mixin level1 {
+  font-size: 4.235rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.64px;
 }
 
-@mixin label {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  color: $white;
-  margin-bottom: 8px;
+@mixin level2 {
+  font-size: 2.61765rem;
+  font-style: normal;
+  line-height: 132.5%;
+  font-weight: 700;
+}
+
+@mixin level3 {
+  font-size: 1.618rem;
+  font-style: normal;
+  line-height: 135%;
+  font-weight: 400;
+}
+
+@mixin level4 {
+  font-size: 0.618rem;
+  font-style: normal;
+  line-height: 135%;
+  font-weight: 400;
 }

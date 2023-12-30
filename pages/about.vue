@@ -1,49 +1,36 @@
 <template>
   <div class="about">
     <p>
-      Looking for inspiration? See the <nuxt-link to="/use-cases">
-        Use Cases.
-      </nuxt-link>
+      Made by
+      <a href="https://www.twitter.com/devslovecoffee" target="_blank"
+        >@devslovecoffee</a
+      >.
     </p>
     <p>
-      Made by <a
-        href="https://www.twitter.com/devslovecoffee"
-        target="_blank"
-      >@devslovecoffee</a>.
-    </p><p>
-      Check out my <a
-        href="https://devslovecoffee.com"
-        target="_blank"
-      >blog</a> to learn more about what I do.
+      Check out my
+      <a href="https://devslovecoffee.com" target="_blank">blog</a> to learn
+      more about what I do.
     </p>
-    <p>Feedback is appreciated. You can reach me at: </p>
-    <p>feedback [at] devslovecoffee.com</p>
-    <br>
     <p>
-      <a
-        href="https://www.buymeacoffee.com/devslovecoffee"
-        target="_blank"
-      >Buy me a coffee</a> to keep this project running.
+      Looking for inspiration? See the
+      <nuxt-link to="/use-cases"> Use Cases. </nuxt-link>
     </p>
+    <p>
+      Feedback is appreciated. You can reach me feedback [at] devslovecoffee.com
+    </p>
+
+    <p>See how to contribute here (soon).</p>
   </div>
 </template>
 <style scoped lang="scss">
 .about {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0 auto;
-  max-width: 720px;
+  min-height: 100vh;
+  padding: 16px 16px 0;
+  line-height: 150%;
   p {
-    color: $white;
-    margin-bottom: 16px;
-    font-size: 1.5rem;
-    font-weight: 300;
-
     a {
-      color: $highlight;
-      text-decoration: none;
+      text-decoration: underline;
+      color: $text;
     }
   }
 }

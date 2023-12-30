@@ -1,21 +1,19 @@
 html {
-  font-size: 16px;
+  font-size: 25.5px;
 
   @media(max-width: 768px) {
-    font-size: 14px
+    font-size: 20px
   }
 
   @media(max-width: 480px) {
-    font-size: 12px;
+    font-size: 15.11px;
   }
 }
 
 body {
-  background: black;
-  margin: 0 auto;
-  position: relative;
+  margin: 59px auto 0;
   background: $base;
-  font-family: "Bricolage Grotesque";
-  border-width: 0;
-
+  color: $text;
+  font-family: Arimo, sans-serif;
+  min-height: 100vh;
 }

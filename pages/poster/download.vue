@@ -19,7 +19,7 @@
       </p>
     </div>
     <div class="download__back">
-      <nuxt-link to="/app" class="download__back__button"> New </nuxt-link>
+      <nuxt-link to="/poster" class="download__back__button"> New </nuxt-link>
     </div>
   </div>
 </template>
@@ -28,6 +28,10 @@ import { computed, onMounted } from "vue";
 import { useSceneStore } from "~/store/scene";
 import { jsPDF } from "jspdf";
 import { HEIGHT, WIDTH } from "~/constants";
+
+definePageMeta({
+  layout: "tool",
+});
 
 const sceneStore = useSceneStore();
 
@@ -98,10 +102,9 @@ const exportAsPdf = () => {
   margin-top: 72px;
 
   h1 {
-    color: $white;
+    @include level2;
     margin: 32px auto;
     text-align: center;
-    font-size: 2.5rem;
   }
   &__preview {
     max-width: 500px;
@@ -116,7 +119,6 @@ const exportAsPdf = () => {
   &__text {
     max-width: 500px;
     margin: 32px auto 0;
-    color: $white;
     text-align: center;
 
     p {
@@ -124,7 +126,6 @@ const exportAsPdf = () => {
     }
 
     a {
-      color: $highlight;
       cursor: pointer;
     }
   }
@@ -139,13 +140,6 @@ const exportAsPdf = () => {
     max-width: 500px;
     padding-bottom: 64px;
     &__button {
-      @include button(16px, 32px, 8px);
-      font-size: 2rem;
-    }
-
-    &__login {
-      color: $highlight;
-      text-decoration: none;
     }
   }
 }

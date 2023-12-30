@@ -1,11 +1,12 @@
 <template>
   <div class="export-options">
-    <button class="download-button" @click="download">
-      Download <Icon name="ion:download" />
+    <button @click="download">
+      DOWNLOAD
+      <Icon name="material-symbols:arrow-outward" class="icon download-icon" />
     </button>
-    <button class="refreshButton" @click="refreshScene">
-      <Icon name="ion:dice-sharp" />
-      Random
+    <button @click="refreshScene">
+      RANDOM
+      <Icon name="fad:random-2dice" class="icon random-icon" />
     </button>
   </div>
 </template>
@@ -22,47 +23,48 @@ const refreshScene = () => {
 </script>
 
 <style lang="scss" scoped>
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: $base-50;
-  z-index: 1;
-}
-
-.extended-options {
-  position: absolute;
-  top: 42px;
-  right: 0;
-  padding: 8px;
-  background: $highlight;
-  z-index: 2;
-  border-radius: 12px;
-
-  button {
-    margin: 0 !important;
-  }
-}
 .export-options {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
   position: relative;
+  border-top: 2px solid $text;
+  border-bottom: 2px solid $text;
+  cursor: default;
 
-  &__extended {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .icon {
+    @media (max-width: 420px) {
+      display: none;
+    }
+  }
+
+  .download-icon {
+    transform: rotate(135deg);
+  }
+
+  .random-icon {
+    transform: rotate(50deg);
   }
 
   button {
-    @include button(9px, 9px, 8px);
-    font-weight: 500;
-    font-size: 1.2rem;
-    margin-bottom: 8px;
+    @include level3;
+    padding: 33px 20px 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+
+    &:not(:last-child) {
+      border-right: 2px solid $text;
+    }
+
+    &:hover {
+      background: $active;
+      color: white;
+    }
   }
 }
 </style>

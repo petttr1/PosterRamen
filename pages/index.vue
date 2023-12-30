@@ -1,28 +1,21 @@
 <template>
-  <LandingScene />
-  <div class="landing-overlay">
-    <div class="landing-wrapper">
-      <Hero />
-      <CallToAction />
-    </div>
+  <div class="index">
+    <Hero />
+    <section id="tools">
+      <Tools />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import Hero from "~/components/Hero.vue";
+import Hero from "~/components/landing/Hero.vue";
+import Tools from "~/components/landing/Tools.vue";
+definePageMeta({
+  layout: "landing",
+});
 </script>
-
-<style scoped lang="scss">
-.landing-overlay {
-  width: 100vw;
-  height: 100vh;
-  background: rgba($base, 0.8);
-  overflow: hidden;
-}
-.landing-wrapper {
-  height: 100%;
-  width: 100%;
-  padding: 24px;
-  overflow-y: scroll;
+<style lang="scss" scoped>
+.index {
+  min-height: 100vh;
 }
 </style>

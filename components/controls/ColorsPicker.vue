@@ -52,41 +52,8 @@ const onColorPicked = (
 </script>
 
 <style lang="scss" scoped>
-label {
-  @include label;
-}
-.colors-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow: hidden;
-
-  &__colors {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 12px;
-    background: $white-30;
-    max-width: 100%;
-    overflow-x: auto;
-
-    button {
-      width: 24px;
-      height: 24px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      cursor: default;
-
-      &.active {
-        border: 2px solid $highlight;
-      }
-    }
-  }
-
-  &__random {
-    @include button(4px, 4px, 8px);
-  }
+.colors-picker {
+  width: 100%;
+  padding: 16px 20px;
 }
 </style>

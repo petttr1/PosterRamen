@@ -5,9 +5,10 @@
         Poster Ramen
       </nuxt-link>
     </div>
-    <div class="header__user-controls">
-      <nuxt-link v-if="!isApp" to="/about"> About </nuxt-link>
-      <nuxt-link v-if="!isApp" to="/app"> App </nuxt-link>
+    <div class="header__menu">
+      <nuxt-link v-if="isApp" to="/"> Home </nuxt-link>
+      <nuxt-link :to="{ path: '/', hash: '#tools' }"> Tools </nuxt-link>
+      <nuxt-link to="/about"> About </nuxt-link>
     </div>
   </div>
 </template>
@@ -20,49 +21,42 @@ const isApp = computed(() => route.path.split("/").includes("app"));
   position: fixed;
   top: 0;
   z-index: 1;
-  height: 40px;
+  height: 59px;
   width: 100%;
-  background: rgba($base, 0.8);
-  backdrop-filter: blur(13px);
-  -webkit-backdrop-filter: blur(13px);
+  background: rgba($base, 0.75);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  a,
-  button {
-    @include button(9px, 9px);
-  }
+  border-bottom: 2px solid $text;
+  padding: 0 16px;
 
   &__navigation {
     a {
-      background: none;
-      padding: 0 16px;
-      font-weight: 400;
-      line-height: 40px;
-      font-size: 2rem;
+      color: $text;
       text-decoration: none;
 
       &:hover {
-        color: $white;
+        text-decoration: underline;
         background: none;
       }
     }
   }
 
-  &__user-controls {
-    padding: 8px 16px;
+  &__menu {
     display: flex;
     align-items: center;
+    gap: 20px;
 
-    button,
     a {
-      line-height: 20px;
-      font-weight: 500;
-      font-size: 1.2rem;
-      padding: 9px;
+      color: $text;
       text-decoration: none;
-      cursor: default;
+
+      &:hover {
+        text-decoration: underline;
+        background: none;
+      }
     }
   }
 }

@@ -51,8 +51,8 @@ const title = ref<string>(TITLE_DEFAULT);
 const text = ref({
   x: 0,
   y: 0,
-  width: 1600,
-  height: 800,
+  width: 300,
+  height: 200,
 });
 const fontSize = ref<number>(maxFontSize);
 
@@ -137,7 +137,7 @@ onMounted(() => {
   }
 
   :deep(.drv) {
-    border: 6px dashed gray;
+    border: 3px dashed gray;
   }
 }
 </style>

@@ -260,7 +260,7 @@ const download = async () => {
       exportLayers: layers,
     });
     return navigateTo({
-      path: "/app/download",
+      path: "/poster/download",
       query: {
         id: sceneId.value,
       },
@@ -283,6 +283,5 @@ img {
   margin: 0;
   transform-origin: 0 0;
   position: relative;
-  background: white;
 }
 </style>

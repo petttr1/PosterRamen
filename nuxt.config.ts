@@ -1,12 +1,6 @@
 const fonts = {
   families: {
-    "Bricolage Grotesque": [300, 400, 500, 600],
-    Goldman: [400],
-    Inter: [400, 700],
-    "Press Start 2P": [400],
-    Righteous: [400],
-    "Space Grotesk": [300, 400, 500],
-    "Bellota Text": [400, 500, 600],
+    Arimo: [400, 500, 600, 700],
   },
   subsets: ["latin"],
   display: "swap",
@@ -62,9 +56,6 @@ export default defineNuxtConfig({
   },
   robots: {
     UserAgent: "*",
-    Disallow: ["/app/download"],
+    Disallow: ["/poster/download"],
   },
-  // build: {
-  //   transpile: ["vue3-colorpicker"],
-  // },
 });
