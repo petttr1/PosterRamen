@@ -80,7 +80,7 @@ const onColorChanged = (newValue: any) => {
   margin-bottom: 4px;
   width: 100%;
 
-  @media (max-width: 420px) {
+  @media (max-width: 769px) {
     grid-template-columns: 1fr 50px 42px;
     grid-template-areas: "text random picker";
     border-bottom: 2px solid $text;
@@ -89,7 +89,7 @@ const onColorChanged = (newValue: any) => {
   &__random {
     grid-area: random;
 
-    @media (max-width: 420px) {
+    @media (max-width: 769px) {
       border-left: 2px solid $text;
     }
   }
@@ -100,9 +100,9 @@ const onColorChanged = (newValue: any) => {
 
   &__picker {
     grid-area: picker;
-    padding: 0 4px;
 
-    @media (max-width: 420px) {
+    @media (max-width: 769px) {
+      padding: 0 4px;
       border-left: 2px solid $text;
     }
   }

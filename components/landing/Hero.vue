@@ -28,7 +28,7 @@
   border-bottom: 2px solid $text;
   padding: 0 16px;
 
-  @media (max-width: 420px) {
+  @media (max-width: 769px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -38,10 +38,10 @@
     width: 100%;
     position: relative;
 
-    @media (min-width: 420px) {
+    @media (min-width: 768px) {
       border-right: 2px solid $text;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 769px) {
       border-bottom: 2px solid $text;
     }
 

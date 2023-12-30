@@ -15,7 +15,7 @@ import AppHeader from "~/components/AppHeader.vue";
   background: url("/backdrop.png") no-repeat top center;
   background-size: 100% auto;
 
-  @media (max-width: 420px) {
+  @media (max-width: 769px) {
     background-size: auto 100%;
   }
 }

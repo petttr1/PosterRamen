@@ -205,6 +205,7 @@ const activateRenderer = (type: "lowQ" | "highQ", refresh: boolean = false) => {
         MIDDLE: THREE.MOUSE.MIDDLE,
         RIGHT: THREE.MOUSE.LEFT,
       };
+      controls.value.touches.ONE = THREE.TOUCH.PAN;
     }
     container.value?.appendChild(composer.renderer.domElement);
     composer.renderer.setAnimationLoop(render.bind(this));

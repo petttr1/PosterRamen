@@ -43,7 +43,7 @@ const props = defineProps({
   padding: 27px 16px 26px;
   border-bottom: 2px solid $text;
 
-  @media (max-width: 420px) {
+  @media (max-width: 769px) {
     grid-template-columns: 1fr min-content;
     grid-template-rows: auto auto;
     grid-template-areas:
@@ -67,14 +67,14 @@ const props = defineProps({
     font-weight: 700;
     grid-area: name;
 
-    @media (max-width: 420px) {
+    @media (max-width: 769px) {
       @include level2;
       margin-bottom: 19px;
     }
   }
   &__description {
     grid-area: description;
-    @media (max-width: 420px) {
+    @media (max-width: 769px) {
       grid-column: span 2;
     }
   }
@@ -97,7 +97,7 @@ const props = defineProps({
       padding: 8px 8px 7px 15px;
       border: 3px solid $text;
 
-      @media (max-width: 420px) {
+      @media (max-width: 769px) {
         padding: 6px 12px 5px 15px;
       }
     }

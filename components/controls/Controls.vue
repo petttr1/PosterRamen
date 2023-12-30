@@ -26,7 +26,7 @@ import ColorsPicker from "~/components/controls/ColorsPicker.vue";
   border-left: 2px solid $text;
   border-bottom: 2px solid $text;
 
-  @media (max-width: 420px) {
+  @media (max-width: 769px) {
     flex-direction: column-reverse;
     border-left: none;
     border-bottom: none;
