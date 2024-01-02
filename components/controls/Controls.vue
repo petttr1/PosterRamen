@@ -1,10 +1,12 @@
 <template>
   <div class="controls">
     <ul>
-      <li>Edit the design by dragging.</li>
-      <li>Edit and move the text.</li>
-      <li>Download layers as PDF.</li>
-      <li>Go crazy in post-process.</li>
+      <li>
+        <Icon name="mdi:asterisk" size="24" />Edit the design by dragging.
+      </li>
+      <li><Icon name="mdi:asterisk" size="24" />Edit and move the text.</li>
+      <li><Icon name="mdi:asterisk" size="24" />Download layers as PDF.</li>
+      <li><Icon name="mdi:asterisk" size="24" />Go crazy in post-process.</li>
     </ul>
     <ExportOptions />
     <ColorsPicker />
@@ -19,18 +21,17 @@ import ColorsPicker from "~/components/controls/ColorsPicker.vue";
 <style lang="scss" scoped>
 .controls {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: column-reverse;
   height: 100%;
   width: 100%;
-  border-left: 2px solid $text;
-  border-bottom: 2px solid $text;
+  border-top: 2px solid $text;
 
-  @media (max-width: 769px) {
-    flex-direction: column-reverse;
-    border-left: none;
-    border-bottom: none;
-    border-top: 2px solid $text;
+  @media (min-width: $medium) {
+    border-left: 2px solid $text;
+    border-bottom: 2px solid $text;
+    border-top: none;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   ul {
@@ -40,9 +41,8 @@ import ColorsPicker from "~/components/controls/ColorsPicker.vue";
     li {
       text-align: left;
       white-space: nowrap;
-      &:before {
-        content: "\2733";
-        padding-right: 8px;
+      .icon {
+        margin-right: 8px;
       }
     }
   }

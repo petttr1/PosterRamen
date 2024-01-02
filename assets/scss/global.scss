@@ -1,12 +1,20 @@
 html {
-  font-size: 25.5px;
+  font-size: 15.11px;
 
-  @media(max-width: 768px) {
+  @media(min-width: $small) {
     font-size: 20px
   }
 
-  @media(max-width: 480px) {
-    font-size: 15.11px;
+  @media(min-width: $medium) {
+    font-size: 21.5px
+  }
+
+  @media(min-width: $large) {
+    font-size: 23.5px
+  }
+
+  @media(min-width: $huge) {
+    font-size: 25.5px;
   }
 }
 

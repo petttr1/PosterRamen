@@ -36,19 +36,19 @@ const props = defineProps({
 <style lang="scss" scoped>
 .tool {
   display: grid;
-  grid-template-columns: 13rem 1fr 3.2rem;
-  grid-template-areas: "name description link";
+
   align-items: center;
   width: 100%;
   padding: 27px 16px 26px;
   border-bottom: 2px solid $text;
-
-  @media (max-width: 769px) {
-    grid-template-columns: 1fr min-content;
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "name link"
-      "description description";
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "name link"
+    "description description";
+  @media (min-width: $medium) {
+    grid-template-columns: 13rem 1fr 3.2rem;
+    grid-template-areas: "name description link";
   }
 
   &:hover:not(.disabled) {
@@ -57,7 +57,10 @@ const props = defineProps({
 
     .tool__link {
       .icon {
-        transform: translateX(1.6862rem) rotate(45deg);
+        transform: rotate(45deg);
+        @media (min-width: $medium) {
+          transform: translateX(1.6862rem) rotate(45deg);
+        }
       }
     }
   }
@@ -65,25 +68,23 @@ const props = defineProps({
   &__name {
     @include level3;
     font-weight: 700;
-    grid-area: name;
 
-    @media (max-width: 769px) {
+    grid-area: name;
+    margin-bottom: 19px;
+    @media (min-width: $medium) {
       @include level2;
-      margin-bottom: 19px;
+      margin-bottom: 0;
     }
   }
   &__description {
     grid-area: description;
-    @media (max-width: 769px) {
-      grid-column: span 2;
-    }
   }
 
   &__link {
     grid-area: link;
     .icon {
       transition: transform 0.1s cubic-bezier(0, -0.3, 1, 1.3);
-      @media (min-width: 419px) {
+      @media (min-width: $medium) {
         transform: translateX(1.6862rem);
       }
     }
@@ -94,11 +95,11 @@ const props = defineProps({
     &--soon {
       @include level4;
       border-radius: 24px 0 16px 24px;
-      padding: 8px 8px 7px 15px;
       border: 3px solid $text;
+      padding: 6px 12px 5px 15px;
 
-      @media (max-width: 769px) {
-        padding: 6px 12px 5px 15px;
+      @media (min-width: $medium) {
+        padding: 8px 8px 7px 15px;
       }
     }
   }

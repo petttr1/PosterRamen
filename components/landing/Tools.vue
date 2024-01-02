@@ -8,7 +8,7 @@
       />
     </nuxt-link>
     <Tool
-      name="Typography"
+      name="Text"
       description="Upload your design and explore typography with unique controls."
     />
     <Tool
@@ -16,7 +16,7 @@
       description="Create beautiful gradients with intuitive controls."
     />
     <Tool
-      name="UCS Symbols"
+      name="Symbol"
       description="Quickly generate combinations of unicode symbols."
     />
   </div>

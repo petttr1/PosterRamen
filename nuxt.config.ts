@@ -1,6 +1,8 @@
 const fonts = {
   families: {
     Arimo: [400, 500, 600, 700],
+    "Noto Sans": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    "Libre Baskerville": [400, 700],
   },
   subsets: ["latin"],
   display: "swap",

@@ -34,8 +34,9 @@ const refreshScene = () => {
   cursor: default;
 
   .icon {
-    @media (max-width: 769px) {
-      display: none;
+    display: none;
+    @media (min-width: $large) {
+      display: block;
     }
   }
 

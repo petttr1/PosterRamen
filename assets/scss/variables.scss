@@ -3,7 +3,21 @@ $text: #00034C;
 $active: #06132F;
 $text-active: #fff;
 
+$huge: 1600px;
+$large: 1050px;
+$medium: 769px;
+$small: 420px;
+
+@mixin level-extra {
+  font-family: "Libre Baskerville", serif;
+  font-size: 7.33rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.64px;
+}
+
 @mixin level1 {
+  font-family: "Libre Baskerville", serif;
   font-size: 4.235rem;
   font-style: normal;
   font-weight: 700;

@@ -72,25 +72,28 @@ const onColorChanged = (newValue: any) => {
 .color-picker {
   @include level3;
   display: grid;
-  grid-template-columns: 50px 1fr 32px;
-  grid-template-areas: "random text picker";
+
   gap: 20px;
   align-items: center;
   overflow: hidden;
   margin-bottom: 4px;
   width: 100%;
+  grid-template-columns: 1fr 50px 42px;
+  grid-template-areas: "text random picker";
+  border-bottom: 2px solid $text;
 
-  @media (max-width: 769px) {
-    grid-template-columns: 1fr 50px 42px;
-    grid-template-areas: "text random picker";
-    border-bottom: 2px solid $text;
+  @media (min-width: $medium) {
+    grid-template-columns: 50px 1fr 32px;
+    grid-template-areas: "random text picker";
+    border: none;
   }
 
   &__random {
     grid-area: random;
+    border-left: 2px solid $text;
 
-    @media (max-width: 769px) {
-      border-left: 2px solid $text;
+    @media (min-width: $medium) {
+      border: none;
     }
   }
 
@@ -100,10 +103,12 @@ const onColorChanged = (newValue: any) => {
 
   &__picker {
     grid-area: picker;
+    padding: 0 4px;
+    border-left: 2px solid $text;
 
-    @media (max-width: 769px) {
-      padding: 0 4px;
-      border-left: 2px solid $text;
+    @media (min-width: $medium) {
+      padding: 0;
+      border: none;
     }
   }
 

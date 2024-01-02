@@ -45,25 +45,25 @@ const applyScaling = () => {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
+  @media (min-width: $medium) {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 16px;
   }
 
   &__scene-wrapper {
-    padding: 16px 0 0 16px;
-    width: 50%;
     height: 100%;
+    width: 100%;
+    padding: 16px 16px 0;
 
-    @media (max-width: 768px) {
-      width: 100%;
-      padding: 16px 16px 0;
+    @media (min-width: $medium) {
+      padding: 16px 0 0 16px;
+      width: 50%;
     }
   }
 
