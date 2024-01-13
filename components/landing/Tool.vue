@@ -67,12 +67,10 @@ const props = defineProps({
 
   &__name {
     @include level3;
-    font-weight: 700;
-
     grid-area: name;
+    font-weight: 700;
     margin-bottom: 19px;
     @media (min-width: $medium) {
-      @include level2;
       margin-bottom: 0;
     }
   }
