@@ -23,7 +23,7 @@
 .footer {
   margin-top: auto;
   width: 100%;
-  border-top: 2px solid $text;
+  border-top: 2px solid $active;
   display: flex;
   justify-content: space-between;
   align-items: center;

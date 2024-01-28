@@ -1,12 +1,10 @@
 <template>
   <div class="tools">
-    <nuxt-link to="/poster">
-      <Tool
-        name="Poster"
-        description="Generate a design, add your text, go crazy in post-process."
-        link="poster"
-      />
-    </nuxt-link>
+    <Tool
+      name="Poster"
+      description="Generate a design, add your text, go crazy in post-process."
+      link="poster"
+    />
     <Tool
       name="Text"
       description="Upload your design and explore typography with unique controls."

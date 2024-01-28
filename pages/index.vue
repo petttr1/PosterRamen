@@ -10,9 +10,6 @@
 <script setup lang="ts">
 import Hero from "~/components/landing/Hero.vue";
 import Tools from "~/components/landing/Tools.vue";
-definePageMeta({
-  layout: "landing",
-});
 </script>
 <style lang="scss" scoped>
 .index {

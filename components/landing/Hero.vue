@@ -1,7 +1,6 @@
 <template>
   <div class="hero">
     <div class="hero__title">
-      <div class="hero__title__background" />
       <h1 class="hero__title__text">Design Explore Prototype</h1>
     </div>
     <h2 class="hero__subtitle">
@@ -22,7 +21,7 @@
 <style scoped lang="scss">
 .hero {
   display: grid;
-  border-bottom: 2px solid $text;
+  border-bottom: 2px solid $active;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   grid-template-areas:
@@ -48,29 +47,24 @@
   &__title {
     grid-area: title;
     position: relative;
-    border-bottom: 2px solid $text;
+    border-bottom: 2px solid $active;
+    background: linear-gradient(
+      117deg,
+      rgba(217, 217, 217, 0) 0%,
+      rgba(255, 76, 0, 0.47) 100%
+    );
+    padding: 16px;
 
     @media (min-width: $medium) {
       border-bottom: none;
-      border-right: 2px solid $text;
-    }
-
-    &__background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url("/star.png") repeat-x 100% 50%;
-      background-size: auto 100%;
-      z-index: -2;
+      border-right: 2px solid $active;
+      padding: 32px;
     }
 
     &__text {
       @include level1;
       text-align: left;
-      padding: 16px;
-      max-width: 500px;
+      max-width: 532px;
 
       @media (min-width: $large) {
         max-width: none;
@@ -85,16 +79,33 @@
   &__subtitle {
     grid-area: subtitle;
     @include level3;
+    background: linear-gradient(
+      94deg,
+      rgba(255, 76, 0, 0.47) 0%,
+      rgba(217, 217, 217, 0) 100%
+    );
+
     padding: 16px;
+    @media (min-width: $medium) {
+      padding: 32px;
+    }
     @media (min-width: $large) {
-      border-top: 2px solid $text;
+      border-top: 2px solid $active;
     }
   }
 
   &__features {
     grid-area: features;
+    border-top: 2px solid $active;
+    background: linear-gradient(
+      249deg,
+      rgba(217, 217, 217, 0) 0%,
+      rgba(255, 76, 0, 0.47) 100%
+    );
     padding: 16px;
-    border-top: 2px solid $text;
+    @media (min-width: $medium) {
+      padding: 32px;
+    }
     @media (min-width: $large) {
       border-top: none;
     }

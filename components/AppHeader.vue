@@ -29,7 +29,7 @@ const isApp = computed(() => route.path.split("/").includes("app"));
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid $text;
+  border-bottom: 2px solid $active;
   padding: 0 16px;
 
   &__navigation {
@@ -40,6 +40,7 @@ const isApp = computed(() => route.path.split("/").includes("app"));
       &:hover {
         text-decoration: underline;
         background: none;
+        color: $active;
       }
     }
   }
@@ -56,6 +57,7 @@ const isApp = computed(() => route.path.split("/").includes("app"));
       &:hover {
         text-decoration: underline;
         background: none;
+        color: $active;
       }
     }
   }

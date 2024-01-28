@@ -1,5 +1,5 @@
 <template>
-  <div class="tool" :class="{ disabled: !link }">
+  <nuxt-link v-if="link" class="tool" :to="`/${link}`">
     <div class="tool__name">
       {{ name }}
     </div>
@@ -7,13 +7,18 @@
       {{ description }}
     </div>
     <div class="tool__link">
-      <Icon
-        v-if="link"
-        name="material-symbols:arrow-outward"
-        size="42"
-        class="icon"
-      />
-      <div v-else class="tool__link--soon">SOON</div>
+      <Icon name="material-symbols:arrow-outward" size="42" class="icon" />
+    </div>
+  </nuxt-link>
+  <div v-else class="tool disabled">
+    <div class="tool__name">
+      {{ name }}
+    </div>
+    <div class="tool__description">
+      {{ description }}
+    </div>
+    <div class="tool__link">
+      <div class="tool__link--soon">SOON</div>
     </div>
   </div>
 </template>
@@ -36,16 +41,18 @@ const props = defineProps({
 <style lang="scss" scoped>
 .tool {
   display: grid;
-
   align-items: center;
   width: 100%;
   padding: 27px 16px 26px;
-  border-bottom: 2px solid $text;
   grid-template-columns: 1fr min-content;
   grid-template-rows: auto auto;
   grid-template-areas:
     "name link"
     "description description";
+
+  &:not(:last-child) {
+    border-bottom: 2px solid $active;
+  }
   @media (min-width: $medium) {
     grid-template-columns: 13rem 1fr 3.2rem;
     grid-template-areas: "name description link";
@@ -53,7 +60,7 @@ const props = defineProps({
 
   &:hover:not(.disabled) {
     cursor: pointer;
-    background: rgba($active, 0.2);
+    background: rgba($text, 0.1);
 
     .tool__link {
       .icon {
