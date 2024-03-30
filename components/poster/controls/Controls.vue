@@ -14,8 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import ExportOptions from "~/components/controls/ExportOptions.vue";
-import ColorsPicker from "~/components/controls/ColorsPicker.vue";
+import ExportOptions from "~/components/poster/controls/ExportOptions.vue";
+import ColorsPicker from "~/components/poster/controls/ColorsPicker.vue";
 </script>
 
 <style lang="scss" scoped>

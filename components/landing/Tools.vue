@@ -6,16 +6,9 @@
       link="poster"
     />
     <Tool
-      name="Text"
-      description="Upload your design and explore typography with unique controls."
-    />
-    <Tool
-      name="Gradient"
-      description="Create beautiful gradients with intuitive controls."
-    />
-    <Tool
-      name="Symbol"
-      description="Quickly generate combinations of unicode symbols."
+      name="Blur"
+      description="Generate Progressive Blur effect for your images."
+      link="progressive-blur"
     />
   </div>
 </template>

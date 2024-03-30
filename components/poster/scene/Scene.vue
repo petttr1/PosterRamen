@@ -25,6 +25,7 @@ import { Pass } from "three/examples/jsm/postprocessing/Pass";
 import { Camera, Scene, Vector3, Vector4 } from "three";
 import { fonts } from "~/helpers/fonts";
 import { getPasses } from "~/World/systems/pass";
+import SceneText from "~/components/poster/scene/SceneText.vue";
 
 const props = defineProps({
   width: { type: Number, default: WIDTH },
@@ -281,7 +282,7 @@ img {
   display: block;
 }
 .render {
-  margin: 0;
+  margin: 0 auto;
   transform-origin: 0 0;
   position: relative;
 }

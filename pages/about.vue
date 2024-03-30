@@ -13,10 +13,6 @@
         more about what I do.
       </p>
       <p>
-        Looking for inspiration? See the
-        <nuxt-link to="/use-cases"> Use Cases. </nuxt-link>
-      </p>
-      <p>
         Feedback is appreciated. You can reach me feedback [at]
         devslovecoffee.com
       </p>

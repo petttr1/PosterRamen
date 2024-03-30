@@ -10,9 +10,9 @@
 </template>
 
 <script setup lang="ts">
-import Scene from "~/components/scene/Scene.vue";
+import Scene from "~/components/poster/scene/Scene.vue";
 import { onBeforeUnmount, onMounted, ref, VueElement } from "vue";
-import Controls from "~/components/controls/Controls.vue";
+import Controls from "~/components/poster/controls/Controls.vue";
 const showControls = ref(true);
 
 const sceneComponent = ref<VueElement | null>(null);
@@ -63,12 +63,7 @@ const applyScaling = () => {
 
     @media (min-width: $medium) {
       padding: 16px 0 0 16px;
-      width: 50%;
     }
-  }
-
-  &__controls {
-    width: 100%;
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <AppContainer />
 </template>
 <script setup lang="ts">
-import AppContainer from "~/components/AppContainer.vue";
+import AppContainer from "~/components/poster/AppContainer.vue";
 
 definePageMeta({
   layout: "tool",

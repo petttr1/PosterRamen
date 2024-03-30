@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { useSceneStore } from "~/store/scene";
 import { Vector3, Vector4 } from "three";
-import ColorPicker from "~/components/controls/ColorPicker.vue";
+import ColorPicker from "~/components/poster/controls/ColorPicker.vue";
 
 const onRandomColor = (type: "background" | "fontColor" | "color") => {
   const color = {

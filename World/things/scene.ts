@@ -1,11 +1,7 @@
-import { Color, ColorRepresentation, Scene } from "three";
+import { Scene } from "three";
 
 function createScene() {
   return new Scene();
 }
 
-function createLandingScene() {
-  return new Scene();
-}
-
-export { createScene, createLandingScene };
+export { createScene };

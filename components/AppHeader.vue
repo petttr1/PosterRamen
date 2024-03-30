@@ -20,7 +20,7 @@ const isApp = computed(() => route.path.split("/").includes("app"));
 .header {
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 1000;
   height: 59px;
   width: 100%;
   background: rgba($base, 0.75);

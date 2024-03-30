@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import TextTitle from "~/components/scene/text/TextTitle.vue";
+import TextTitle from "~/components/poster/scene/text/TextTitle.vue";
 
 const props = defineProps({
   exporting: { type: Boolean, default: false },

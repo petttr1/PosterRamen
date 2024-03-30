@@ -9,9 +9,17 @@
     </h2>
     <div class="hero__features">
       <ul>
-        <li><Icon name="mdi:asterisk" size="38" />4 TOOLS</li>
+        <li><Icon name="mdi:asterisk" size="38" />2 TOOLS</li>
         <li><Icon name="mdi:asterisk" size="38" />FREE</li>
-        <li><Icon name="mdi:asterisk" size="38" />OPEN SOURCE</li>
+        <li>
+          <a href="https://github.com/petttr1/PosterRamen" target="_blank"
+            ><Icon name="mdi:asterisk" size="38" />OPEN SOURCE
+            <Icon
+              name="material-symbols:arrow-outward"
+              size="56"
+              class="link-icon"
+          /></a>
+        </li>
       </ul>
     </div>
   </div>
@@ -103,19 +111,33 @@
       rgba(255, 76, 0, 0.47) 100%
     );
     padding: 16px;
+
     @media (min-width: $medium) {
       padding: 32px;
     }
     @media (min-width: $large) {
       border-top: none;
     }
+
     ul {
       list-style-type: none;
+
       li {
         @include level2;
         text-align: left;
-        .icon {
-          margin-right: 8px;
+
+        &:hover {
+          .link-icon {
+            transform: translate(0.5rem, -0.5rem);
+          }
+        }
+
+        .icon:not(.link-icon) {
+          margin-right: 0.5rem;
+        }
+
+        .link-icon {
+          transition: transform 0.1s cubic-bezier(0, -0.3, 1, 1.3);
         }
       }
     }
