@@ -37,5 +37,8 @@
     "vite": "2.6.4",
     "vue-3-slider-component": "^0.1.4",
     "vue3-colorpicker": "^2.2.3"
+  },
+  "resolutions": {
+    "string-width": "4.2.3"
   }
 }
