@@ -10,6 +10,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
+    "@types/file-saver": "^2.0.7",
     "@typescript-eslint/parser": "^6.3.0",
     "eslint": "^8.47.0",
     "eslint-plugin-vue": "^9.17.0",
@@ -24,7 +25,9 @@
     "@pinia/nuxt": "^0.4.11",
     "@types/three": "^0.155.0",
     "canvg": "^4.0.1",
+    "dom-to-image": "^2.6.0",
     "draggable-resizable-vue3": "^1.0.94-beta",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "js-beautify": "^1.15.1",
     "jspdf": "^2.5.1",

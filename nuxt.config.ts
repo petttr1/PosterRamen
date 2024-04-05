@@ -41,7 +41,8 @@ export default defineNuxtConfig({
       baseUrl: process.env.BASE_URL || "http://localhost:3000",
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "localhost:3000",
       siteName: "Poster Ramen",
-      siteDescription: "Make Posters, Cover Art, and More - Instantly",
+      siteDescription:
+        "Poster Ramen is a set of single-purpose tools helping you quickly prototype and explore designs & typography.",
       language: "en",
     },
   },

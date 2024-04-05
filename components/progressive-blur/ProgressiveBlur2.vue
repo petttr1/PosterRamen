@@ -20,6 +20,7 @@ const props = defineProps<{ src: string }>();
 const blurHeight = useState("blur-height", () => 50);
 const blurDetail = useState("blur-detail", () => 5);
 const blurAmount = useState("blur-amount", () => 1);
+const scale = useState("scale", () => 1.2);
 
 const wrapperZIndex = computed(() => {
   return blurDetail.value + 1;
@@ -53,7 +54,7 @@ const styleForStep = (step: number) => {
   height: 100%;
   pointer-events: none;
   inset: auto 0 0 0;
-  transform: scale(1.2);
+  transform: scale(v-bind(scale));
 
   &__blur {
     background: v-bind(bgImage);

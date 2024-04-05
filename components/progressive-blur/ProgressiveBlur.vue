@@ -1,12 +1,17 @@
 <template>
   <div class="progressive-blur">
-    <div v-for="i in filterSteps" class="progressive-blur__blur" :style="styleForStep(i)"></div>
+    <div
+      v-for="i of filterSteps"
+      :key="i"
+      class="progressive-blur__blur"
+      :style="styleForStep(i)"
+    />
   </div>
 </template>
 <script setup lang="ts">
-const blurHeight = useState('blur-height', () => 50);
-const blurDetail = useState('blur-detail', () => 5);
-const blurAmount = useState('blur-amount', () => 1);
+const blurHeight = useState("blur-height", () => 50);
+const blurDetail = useState("blur-detail", () => 5);
+const blurAmount = useState("blur-amount", () => 1);
 
 const props = defineProps<{ imageBorderRadius: string }>();
 
@@ -29,13 +34,13 @@ const generateGradientCheckpoints = (parts: number) => {
     result.push(increment * i);
   }
   return result;
-}
+};
 
 const styleForStep = (step: number) => {
   const steps = generateGradientCheckpoints(blurDetail.value);
   const gradientOffsets = [
     `rgba(0, 0, 0, 0) ${steps[step]}%`,
-    `rgba(0, 0, 0, 1) ${steps[step + 1]}%`
+    `rgba(0, 0, 0, 1) ${steps[step + 1]}%`,
   ];
   if (steps[step + 2]) {
     gradientOffsets.push(`rgba(0, 0, 0, 1) ${steps[step + 2]}%`);
@@ -48,16 +53,15 @@ const styleForStep = (step: number) => {
     WebkitBackdropFilter: `blur(${blurAmount.value * Math.pow(2, step)}px)`,
     mask: `linear-gradient(
       to bottom,
-      ${gradientOffsets.join(', ')}
+      ${gradientOffsets.join(", ")}
     )`,
-    'z-index': `${step + 1}`,
+    "z-index": `${step + 1}`,
   };
 };
 
 const wrapperZIndex = computed(() => {
   return blurDetail.value + 1;
 });
-
 </script>
 <style lang="scss" scoped>
 .progressive-blur {

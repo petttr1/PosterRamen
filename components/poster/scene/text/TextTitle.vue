@@ -134,6 +134,7 @@ onMounted(() => {
     resize: none;
     white-space: normal;
     text-align: justify;
+    background: none;
   }
 
   :deep(.drv) {

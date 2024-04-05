@@ -1,14 +1,14 @@
 <template>
   <div class="tools">
     <Tool
-      name="Poster"
-      description="Generate a design, add your text, go crazy in post-process."
-      link="poster"
-    />
-    <Tool
       name="Blur"
       description="Generate Progressive Blur effect for your images."
       link="progressive-blur"
+    />
+    <Tool
+      name="Poster"
+      description="Generate a design, add your text, go crazy in post-process."
+      link="poster"
     />
   </div>
 </template>

@@ -1,18 +1,27 @@
 <template>
   <div class="blurred-image">
-    <div ref="blur" class="blurred-image__wrapper">
+    <div ref="blur" class="blurred-image__wrapper" @click="download">
       <ProgressiveBlur2 :src="src" />
-      <img ref="image" :src="props.src" :alt="props.alt" />
+      <img ref="image" :src="src" :alt="alt" />
     </div>
-    <div class="blurred-image__credits" v-html="props.credits" />
+    <div v-if="credits" class="blurred-image__credits" v-html="credits" />
   </div>
 </template>
 <script setup lang="ts">
 import ProgressiveBlur2 from "~/components/progressive-blur/ProgressiveBlur2.vue";
-const props = defineProps<{ src: string; alt: string; credits: string }>();
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
+const props = defineProps<{
+  src: string;
+  alt: string;
+  credits: string | null;
+}>();
+
+const image = ref<HTMLImageElement | null>(null);
+const blur = ref<HTMLDivElement | null>(null);
 
 const borderRadius = useState("border-radius", () => 0);
-const image = ref<HTMLImageElement | null>(null);
+const scale = useState("scale", () => 1.2);
 
 const imageBorderRadius = computed(() => {
   const imageHeight = image.value?.offsetHeight || 0;
@@ -20,6 +29,11 @@ const imageBorderRadius = computed(() => {
   const aspect = imageHeight / imageWidth;
   return `${borderRadius.value * aspect}% / ${borderRadius.value}%`;
 });
+
+const download = async () => {
+  const image = await domtoimage.toPng(blur.value!);
+  saveAs(image, "download.png");
+};
 </script>
 <style lang="scss" scoped>
 .blurred-image {
@@ -30,12 +44,13 @@ const imageBorderRadius = computed(() => {
     position: relative;
     border-radius: v-bind(imageBorderRadius);
     overflow: hidden;
+    cursor: pointer;
   }
 
   img {
     height: auto;
     width: 100%;
-    transform: scale(1.2);
+    transform: scale(v-bind(scale));
   }
 
   &__credits {
