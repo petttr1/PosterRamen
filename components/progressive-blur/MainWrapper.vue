@@ -57,12 +57,12 @@ const getCredits = computed(() =>
   position: relative;
 
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 100%;
   grid-template-rows: 1fr auto auto;
   grid-template-areas:
-    "image image"
-    "controls controls"
-    "code code";
+    "image"
+    "controls"
+    "code";
   justify-items: stretch;
 
   @media (min-width: $medium) {
@@ -91,6 +91,9 @@ const getCredits = computed(() =>
   &__controls {
     grid-area: controls;
 
+    h3 {
+      padding-left: 1rem;
+    }
     a {
       color: $text;
       text-decoration: none;

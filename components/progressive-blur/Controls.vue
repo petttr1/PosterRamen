@@ -25,6 +25,11 @@
     <client-only>
       <span>Border Radius ({{ borderRadius }}%)</span>
       <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
         :value="borderRadius"
         :min="0"
         :max="50"
@@ -33,6 +38,11 @@
       />
       <span>Blur Height ({{ blurHeight }}%)</span>
       <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
         :value="blurHeight"
         :min="0"
         :max="100"
@@ -40,6 +50,11 @@
       />
       <span>Blur Detail ({{ blurDetail }})</span>
       <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
         :value="blurDetail"
         :min="1"
         :max="10"
@@ -47,6 +62,11 @@
       />
       <span>Blur Amount ({{ blurAmount }})</span>
       <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
         :value="blurAmount"
         :min="0.5"
         :max="3"
@@ -55,6 +75,11 @@
       />
       <span>Scale ({{ scaleAmount }})</span>
       <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
         :value="scaleAmount"
         :min="1.0"
         :max="2.0"
@@ -76,6 +101,31 @@ const blurAmount = useState("blur-amount", () => 1);
 const scaleAmount = useState("scale", () => 1.2);
 const activeIndex = useState("active-image", () => 0);
 const customImage = useState("custom-image", () => null);
+
+const dotStyle = {
+  width: "26px",
+  height: "26px",
+  borderRadius: 0,
+  "box-shadow": "none",
+  "-webkit-box-shadow": "none",
+  backgroundColor: "#FF6E50",
+};
+
+const tooltipStyle = {
+  borderRadius: 0,
+  color: "#F8F7F4",
+  backgroundColor: "#FF6E50",
+};
+
+const railStyle = {
+  backgroundColor: "#3111B9",
+  borderRadius: 0,
+};
+
+const processStyle = {
+  backgroundColor: "#FF6E50",
+  borderRadius: 0,
+};
 
 const onBorderRadiusUpdated = (value: number) => {
   borderRadius.value = value;
@@ -119,12 +169,12 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
+:deep(.vue-slider-dot-tooltip-inner:after) {
+  display: none;
+}
 .controls {
   position: relative;
   padding: 0.5rem 1rem 1rem;
-  //min-width: 17rem;
-  //max-width: 1000px;
-  //width: 100%;
   border-top: 2px solid $text;
 
   @media (min-width: $medium) {

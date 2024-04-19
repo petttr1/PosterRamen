@@ -38,6 +38,7 @@ const download = async () => {
 <style lang="scss" scoped>
 .blurred-image {
   max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
 
   &__wrapper {
