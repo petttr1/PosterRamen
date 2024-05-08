@@ -9,7 +9,7 @@
     </h2>
     <div class="hero__features">
       <ul>
-        <li><Icon name="mdi:asterisk" size="38" />2 TOOLS</li>
+        <li><Icon name="mdi:asterisk" size="38" />3 TOOLS</li>
         <li><Icon name="mdi:asterisk" size="38" />FREE</li>
         <li>
           <a href="https://github.com/petttr1/PosterRamen" target="_blank"

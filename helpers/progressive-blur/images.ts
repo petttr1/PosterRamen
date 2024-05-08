@@ -31,4 +31,4 @@ const defaultImages = [
   },
 ];
 
-export default defaultImages;
+export { defaultImages };

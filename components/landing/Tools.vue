@@ -1,6 +1,11 @@
 <template>
   <div class="tools">
     <Tool
+      name="Glass"
+      description="Generate Fractal Glass effect for your images."
+      link="glass"
+    />
+    <Tool
       name="Blur"
       description="Generate Progressive Blur effect for your images."
       link="progressive-blur"

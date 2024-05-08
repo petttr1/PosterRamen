@@ -29,7 +29,7 @@
 import Controls from "~/components/progressive-blur/Controls.vue";
 import CSSDisplay from "~/components/progressive-blur/CSSDisplay.vue";
 import BlurredImage from "~/components/progressive-blur/BlurredImage.vue";
-import defaultImages from "~/helpers/progressive-blur/images";
+import { defaultImages } from "~/helpers/progressive-blur/images";
 
 const activeIndex = useState("active-image", () => 0);
 const customImage = useState("custom-image", () => null);

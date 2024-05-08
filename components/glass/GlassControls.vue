@@ -5,7 +5,7 @@
       id="fileInput"
       class="controls__upload"
       type="file"
-      accept=".jpg,.jpeg,.png"
+      accept=".jpg,.jpeg,.png, .webp"
       @input="onImageUploaded"
     />
     <label for="fileInput" class="controls__upload-label">UPLOAD</label>
@@ -36,55 +36,77 @@
         :interval="0.1"
         @change="onBorderRadiusUpdated"
       />
-      <span>Blur Height ({{ blurHeight }}%)</span>
+      <span>Segments ({{ verticalSegments }})</span>
       <VueSlider
         :dot-size="26"
         :dot-style="dotStyle"
         :tooltip-style="tooltipStyle"
         :rail-style="railStyle"
         :process-style="processStyle"
-        :value="blurHeight"
+        :value="verticalSegments"
+        :min="10"
+        :max="100"
+        @change="onVerticalSegmentsUpdated"
+      />
+      <span>Base ({{ verticalBase }})</span>
+      <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
+        :value="verticalBase"
+        :min="1"
+        :max="100"
+        @change="onVerticalBaseUpdated"
+      />
+      <span>Offset ({{ verticalOffset }}%)</span>
+      <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
+        :value="verticalOffset"
+        :min="0"
+        :max="200"
+        @change="onVerticalOffsetUpdated"
+      />
+      <span>Reflection Width ({{ reflectWidth }}%)</span>
+      <VueSlider
+        :dot-size="26"
+        :dot-style="dotStyle"
+        :tooltip-style="tooltipStyle"
+        :rail-style="railStyle"
+        :process-style="processStyle"
+        :value="reflectWidth"
         :min="0"
         :max="100"
-        @change="onBlurHeightUpdated"
+        @change="onReflectWidthUpdated"
       />
-      <span>Blur Detail ({{ blurDetail }})</span>
+      <span>Image Scale ({{ imageScale }}%)</span>
       <VueSlider
         :dot-size="26"
         :dot-style="dotStyle"
         :tooltip-style="tooltipStyle"
         :rail-style="railStyle"
         :process-style="processStyle"
-        :value="blurDetail"
-        :min="1"
-        :max="10"
-        @change="onBlurDetailUpdated"
+        :value="imageScale"
+        :min="500"
+        :max="1000"
+        @change="onImageScaleUpdated"
       />
-      <span>Blur Amount ({{ blurAmount }})</span>
+      <span>Reflection Scale ({{ reflectScale }}%)</span>
       <VueSlider
         :dot-size="26"
         :dot-style="dotStyle"
         :tooltip-style="tooltipStyle"
         :rail-style="railStyle"
         :process-style="processStyle"
-        :value="blurAmount"
-        :min="0.5"
-        :max="3"
-        :interval="0.5"
-        @change="onBlurAmountUpdated"
-      />
-      <span>Scale ({{ scaleAmount }})</span>
-      <VueSlider
-        :dot-size="26"
-        :dot-style="dotStyle"
-        :tooltip-style="tooltipStyle"
-        :rail-style="railStyle"
-        :process-style="processStyle"
-        :value="scaleAmount"
-        :min="1.0"
-        :max="2.0"
-        :interval="0.1"
-        @change="onScaleAmountUpdated"
+        :value="reflectScale"
+        :min="700"
+        :max="2000"
+        @change="onReflectScaleUpdated"
       />
     </client-only>
     <h2>Click Image to Download</h2>
@@ -92,15 +114,17 @@
 </template>
 <script setup lang="ts">
 import VueSlider from "vue-3-slider-component";
-import { defaultImages } from "~/helpers/progressive-blur/images";
+import { glassImages } from "~/helpers/glass/images";
 
 const borderRadius = useState("border-radius", () => 0);
-const blurHeight = useState("blur-height", () => 50);
-const blurDetail = useState("blur-detail", () => 5);
-const blurAmount = useState("blur-amount", () => 1);
-const scaleAmount = useState("scale", () => 1.2);
+const verticalSegments = useState("glass-vertical-segments", () => 33);
+const verticalOffset = useState("glass-vertical-offset", () => 50);
+const verticalBase = useState("glass-vertical-base", () => 70);
 const activeIndex = useState("active-image", () => 0);
 const customImage = useState("custom-image", () => null);
+const reflectWidth = useState("reflect-width", () => 35);
+const imageScale = useState("image-scale", () => 800);
+const reflectScale = useState("reflect-scale", () => 1400);
 
 const dotStyle = {
   width: "26px",
@@ -130,29 +154,38 @@ const processStyle = {
 const onBorderRadiusUpdated = (value: number) => {
   borderRadius.value = value;
 };
-const onBlurHeightUpdated = (value: number) => {
-  blurHeight.value = value;
+
+const onVerticalSegmentsUpdated = (value: number) => {
+  verticalSegments.value = value;
 };
 
-const onBlurDetailUpdated = (value: number) => {
-  blurDetail.value = value;
+const onVerticalOffsetUpdated = (value: number) => {
+  verticalOffset.value = value;
 };
 
-const onBlurAmountUpdated = (value: number) => {
-  blurAmount.value = value;
+const onVerticalBaseUpdated = (value: number) => {
+  verticalBase.value = value;
 };
 
-const onScaleAmountUpdated = (value: number) => {
-  scaleAmount.value = value;
+const onReflectWidthUpdated = (value: number) => {
+  reflectWidth.value = value;
+};
+
+const onImageScaleUpdated = (value: number) => {
+  imageScale.value = value;
+};
+
+const onReflectScaleUpdated = (value: number) => {
+  reflectScale.value = value;
 };
 
 const prevImage = () => {
   activeIndex.value =
-    activeIndex.value === 0 ? defaultImages.length - 1 : activeIndex.value - 1;
+    activeIndex.value === 0 ? glassImages.length - 1 : activeIndex.value - 1;
 };
 const nextImage = () => {
   activeIndex.value =
-    activeIndex.value === defaultImages.length - 1 ? 0 : activeIndex.value + 1;
+    activeIndex.value === glassImages.length - 1 ? 0 : activeIndex.value + 1;
 };
 
 const onImageUploaded = (value: any) => {
@@ -162,10 +195,12 @@ const onImageUploaded = (value: any) => {
 
 onMounted(() => {
   onBorderRadiusUpdated(0);
-  onBlurHeightUpdated(50);
-  onBlurDetailUpdated(5);
-  onBlurAmountUpdated(1);
-  onScaleAmountUpdated(1.2);
+  onVerticalSegmentsUpdated(33);
+  onVerticalOffsetUpdated(50);
+  onVerticalBaseUpdated(70);
+  onReflectWidthUpdated(35);
+  onImageScaleUpdated(800);
+  onReflectScaleUpdated(1400);
 });
 </script>
 <style lang="scss" scoped>
