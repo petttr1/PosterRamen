@@ -55,7 +55,7 @@ export default defineNuxtConfig({
   sitemap: {
     hostname: "https://posterramen.com",
     gzip: true,
-    exclude: [],
+    exclude: ["/poster/download"],
   },
   robots: {
     UserAgent: "*",
