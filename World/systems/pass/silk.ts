@@ -2,6 +2,7 @@ import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import {
   baseShaderUniforms,
+  baseUniforms,
   translateColorspace,
 } from "~/World/systems/pass/helpers";
 
@@ -51,8 +52,7 @@ function createSilkPass(camera: Camera) {
   const { $random } = useNuxtApp();
   const effect = {
     uniforms: {
-      x: { value: camera.position.x },
-      y: { value: camera.position.y },
+      ...baseUniforms(),
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

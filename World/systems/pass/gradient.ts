@@ -19,7 +19,6 @@ void main() {
 
 const fragmentShader = `
 uniform float offset;
-uniform sampler2D tDiffuse;
 varying vec2 vUv;
 ${baseShaderUniforms}
 ${translateColorspace}
@@ -41,9 +40,6 @@ function createGradientPass(camera: Camera) {
   const effect = {
     uniforms: {
       ...baseUniforms(),
-      x: { value: camera.position.x },
-      y: { value: camera.position.y },
-      tDiffuse: { value: null },
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

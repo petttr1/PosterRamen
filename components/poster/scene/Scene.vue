@@ -191,10 +191,10 @@ const activateRenderer = (type: "lowQ" | "highQ", refresh: boolean = false) => {
   }
   let passes = composer?.passes;
   if (!passes || refresh) {
-    passes = getPasses(scene, camera);
+    passes = getPasses(camera);
   }
   if (type === "lowQ") {
-    composer = createComposer(scene, camera, passes);
+    composer = createComposer(camera, passes);
     if (enableOrbitControls.value) {
       controls.value = new OrbitControls(camera, composer.renderer.domElement);
       controls.value.enableDamping = true;
@@ -213,7 +213,7 @@ const activateRenderer = (type: "lowQ" | "highQ", refresh: boolean = false) => {
     return;
   }
   if (type === "highQ") {
-    composer = createExportComposer(scene, camera, passes);
+    composer = createExportComposer(camera, passes);
     container.value?.appendChild(composer.renderer.domElement);
     composer.render();
     return;

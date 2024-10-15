@@ -15,14 +15,8 @@ import {
 } from "~/World/systems/renderer";
 import { getPasses } from "~/World/systems/pass";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
-import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
 
-function createBaseComposer(
-  renderer: WebGLRenderer,
-  scene: Scene,
-  camera: Camera,
-  passes: Pass[],
-) {
+function createBaseComposer(renderer: WebGLRenderer, passes: Pass[]) {
   const parameters = {
     minFilter: LinearFilter,
     magFilter: LinearFilter,
@@ -36,43 +30,15 @@ function createBaseComposer(
   return composer;
 }
 
-function createComposer(
-  scene: Scene,
-  camera: Camera,
-  passes: Pass[] = getPasses(scene, camera),
-) {
-  return createBaseComposer(createRenderer(), scene, camera, passes);
+function createComposer(camera: Camera, passes: Pass[] = getPasses(camera)) {
+  return createBaseComposer(createRenderer(), passes);
 }
 
 function createExportComposer(
-  scene: Scene,
   camera: Camera,
-  passes: Pass[] = getPasses(scene, camera),
+  passes: Pass[] = getPasses(camera),
 ) {
-  return createBaseComposer(createExportRenderer(), scene, camera, passes);
+  return createBaseComposer(createExportRenderer(), passes);
 }
 
-function createLandingComposer(
-  scene: Scene,
-  camera: Camera,
-  width: number,
-  height: number,
-) {
-  const parameters = {
-    minFilter: LinearFilter,
-    magFilter: LinearFilter,
-    format: RGBAFormat,
-    stencilBuffer: false,
-  };
-  const renderer = createLandingRenderer(width, height);
-  const renderTarget = new WebGLRenderTarget(width, height, parameters);
-  const composer = new EffectComposer(renderer, renderTarget);
-  composer.setSize(width, height);
-  const dir = Math.random() - 1 > 0 ? 1 : -1;
-  camera.position.x = dir * 4 + dir * Math.random() * 10;
-  camera.position.y = dir * 4 + dir * Math.random() * 10;
-  composer.addPass(createLiquidLargePass(camera));
-  return composer;
-}
-
-export { createComposer, createExportComposer, createLandingComposer };
+export { createComposer, createExportComposer };

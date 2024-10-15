@@ -32,7 +32,6 @@ void main()
     vec2 perturb = vec2(noise * 0.1 - 0.05, noise * position.y * 00.1 - 0.05);
     vec2 distortedTexCoord = vUv + perturb;
 
-    // Use the distorted texture coordinates for color assignment
     ivec2 distortedCell = ivec2(floor(distortedTexCoord * 8.0));
     bool isDistortedBlack = (distortedCell.x + distortedCell.y) % 2 == 1;
     vec3 color = isDistortedBlack ? colors.background.rgb : colors.color.rgb;
@@ -47,8 +46,6 @@ function createChessPass(camera: Camera) {
   const effect = {
     uniforms: {
       ...baseUniforms(),
-      x: { value: camera.position.x },
-      y: { value: camera.position.y },
       offset: { value: 10 + $random.$getRandom() * 50 },
     },
     vertexShader: vertexShader,

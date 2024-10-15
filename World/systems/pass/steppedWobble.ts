@@ -76,8 +76,6 @@ function createSteppedWobblePass(camera: Camera) {
   const effect = {
     uniforms: {
       ...baseUniforms(),
-      x: { value: camera.position.x },
-      y: { value: camera.position.y },
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

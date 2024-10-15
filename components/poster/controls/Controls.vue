@@ -6,7 +6,6 @@
       </li>
       <li><Icon name="mdi:asterisk" size="24" />Edit and move the text.</li>
       <li><Icon name="mdi:asterisk" size="24" />Download layers as PDF.</li>
-      <li><Icon name="mdi:asterisk" size="24" />Go crazy in post-process.</li>
     </ul>
     <ExportOptions />
     <ColorsPicker />

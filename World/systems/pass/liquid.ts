@@ -1,6 +1,6 @@
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { Camera } from "three";
-import { baseShaderUniforms } from "~/World/systems/pass/helpers";
+import { baseShaderUniforms, baseUniforms } from "~/World/systems/pass/helpers";
 
 const vertexShader = `
 varying vec2 vUv;
@@ -14,7 +14,6 @@ void main() {
 
 const fragmentShader = `
     uniform float offset;
-    uniform sampler2D tDiffuse;
     varying vec2 vUv;
     ${baseShaderUniforms}
 
@@ -34,9 +33,8 @@ const fragmentShader = `
       }
 
   void main() {
-    vec4 color = texture2D( tDiffuse, vUv );
-    float t = position.x + position.y + offset;
     vec2 uv = vUv;
+    float t = position.x + position.y + offset;
 
     uv-=.5 * offset;
     uv*=5. * offset;
@@ -50,11 +48,8 @@ const fragmentShader = `
     uv*=rot(uv.x/5.-t*.8);
     uv.x/=length(.75*uv);
     uv.y/=length(.75*uv);
-
-    float value = cos(uv.x+uv.y-t*.6);
-    color.rgb = vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8));
-    // color.rgb = 1. - (1. - 0.1 * vec3(cos(uv.x+uv.y-t*.7),cos(uv.x+uv.y-t*.6),cos(uv.x+uv.y-t*.8))) * (1. - color.rgb);
-    gl_FragColor = vec4( color );
+   
+    gl_FragColor = vec4( vec3(cos(uv.x+uv.y-t*.7), cos(uv.x+uv.y-t*.6), cos(uv.x+uv.y-t*.8)), 1. );
   }
 `;
 
@@ -62,9 +57,7 @@ function createLiquidPass(camera: Camera) {
   const { $random } = useNuxtApp();
   const liquidEffect = {
     uniforms: {
-      x: { value: camera.position.x },
-      y: { value: camera.position.y },
-      tDiffuse: { value: null },
+      ...baseUniforms(),
       offset: { value: $random.$getRandom() * 10 },
     },
     vertexShader: vertexShader,

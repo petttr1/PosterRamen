@@ -12,7 +12,7 @@ import { createChessPass } from "~/World/systems/pass/chess";
 import { createVernerPass } from "~/World/systems/pass/verner";
 import { createSteppedWobblePass } from "~/World/systems/pass/steppedWobble";
 
-const basePasses = (scene: Scene, camera: Camera) => {
+const basePasses = (camera: Camera) => {
   return [
     createLiquidPass(camera),
     createZebraPass(camera),
@@ -27,8 +27,8 @@ const basePasses = (scene: Scene, camera: Camera) => {
   ];
 };
 
-export const getPasses = (scene: Scene, camera: Camera) => {
+export const getPasses = (camera: Camera) => {
   const { $random } = useNuxtApp();
-  const base = basePasses(scene, camera);
+  const base = basePasses(camera);
   return [base[Math.floor($random.$getRandom() * base.length)]];
 };
