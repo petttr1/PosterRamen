@@ -6,16 +6,12 @@
       </nuxt-link>
     </div>
     <div class="header__menu">
-      <nuxt-link v-if="isApp" to="/"> Home </nuxt-link>
       <nuxt-link :to="{ path: '/', hash: '#tools' }"> Tools </nuxt-link>
-      <nuxt-link to="/about"> About </nuxt-link>
+      <nuxt-link to="/showcase"> Showcase </nuxt-link>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-const route = useRoute();
-const isApp = computed(() => route.path.split("/").includes("app"));
-</script>
+<script setup lang="ts"></script>
 <style scoped lang="scss">
 .header {
   position: fixed;
