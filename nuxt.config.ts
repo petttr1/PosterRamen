@@ -52,6 +52,14 @@ export default defineNuxtConfig({
   plausible: {
     domain: "posterramen.com",
   },
+  routeRules: {
+    "/about": {
+      redirect: {
+        to: `/`,
+        statusCode: 301,
+      },
+    },
+  },
   sitemap: {
     hostname: "https://posterramen.com",
     gzip: true,
