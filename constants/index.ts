@@ -1,4 +1,2 @@
-export const WIDTH: number = 400;
-export const HEIGHT: number = 600;
-
-export const TITLE_DEFAULT: string = "Edit Text";
+export const WIDTH: number = 800;
+export const HEIGHT: number = 800;

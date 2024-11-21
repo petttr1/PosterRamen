@@ -7,18 +7,40 @@
       type="file"
       accept=".jpg,.jpeg,.png, .webp"
       @input="onImageUploaded"
-    />
-    <label for="fileInput" class="controls__upload-label">UPLOAD</label>
+    >
+    <label
+      for="fileInput"
+      class="controls__upload-label"
+    >UPLOAD</label>
     <span class="controls__section-title">Or Browse Default</span>
-    <div v-if="!customImage" class="controls__navigation">
-      <button class="controls__navigation__button" @click="prevImage">
-        <Icon name="material-symbols:arrow-back" size="24" />
+    <div
+      v-if="!customImage"
+      class="controls__navigation"
+    >
+      <button
+        class="controls__navigation__button"
+        @click="prevImage"
+      >
+        <Icon
+          name="material-symbols:arrow-back"
+          size="24"
+        />
       </button>
-      <button class="controls__navigation__button" @click="nextImage">
-        <Icon name="material-symbols:arrow-forward" size="24" />
+      <button
+        class="controls__navigation__button"
+        @click="nextImage"
+      >
+        <Icon
+          name="material-symbols:arrow-forward"
+          size="24"
+        />
       </button>
     </div>
-    <button v-else class="controls__clear" @click="customImage = null">
+    <button
+      v-else
+      class="controls__clear"
+      @click="customImage = null"
+    >
       CLEAR
     </button>
     <h2>Set Parameters</h2>
@@ -207,6 +229,7 @@ onMounted(() => {
 :deep(.vue-slider-dot-tooltip-inner:after) {
   display: none;
 }
+
 .controls {
   position: relative;
   padding: 0.5rem 1rem 1rem;

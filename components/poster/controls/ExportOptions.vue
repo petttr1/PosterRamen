@@ -2,11 +2,17 @@
   <div class="export-options">
     <button @click="download">
       DOWNLOAD
-      <Icon name="material-symbols:arrow-outward" class="icon download-icon" />
+      <Icon
+        name="material-symbols:arrow-outward"
+        class="icon download-icon"
+      />
     </button>
     <button @click="refreshScene">
       RANDOM
-      <Icon name="fad:random-2dice" class="icon random-icon" />
+      <Icon
+        name="fad:random-2dice"
+        class="icon random-icon"
+      />
     </button>
   </div>
 </template>

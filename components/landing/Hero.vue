@@ -1,7 +1,9 @@
 <template>
   <div class="hero">
     <div class="hero__title">
-      <h1 class="hero__title__text">Design Explore Prototype</h1>
+      <h1 class="hero__title__text">
+        Design Explore Prototype
+      </h1>
     </div>
     <h2 class="hero__subtitle">
       <b>Poster Ramen</b> is a set of single-purpose tools helping you quickly
@@ -9,16 +11,36 @@
     </h2>
     <div class="hero__features">
       <ul>
-        <li><Icon name="mdi:asterisk" size="38" />3 TOOLS</li>
-        <li><Icon name="mdi:asterisk" size="38" />FREE</li>
         <li>
-          <a href="https://github.com/petttr1/PosterRamen" target="_blank"
-            ><Icon name="mdi:asterisk" size="38" />OPEN SOURCE
+          <Icon
+            name="mdi:asterisk"
+            size="38"
+          />
+          3 TOOLS
+        </li>
+        <li>
+          <Icon
+            name="mdi:asterisk"
+            size="38"
+          />
+          FREE
+        </li>
+        <li>
+          <a
+            href="https://github.com/petttr1/PosterRamen"
+            target="_blank"
+          >
+            <Icon
+              name="mdi:asterisk"
+              size="38"
+            />
+            OPEN SOURCE
             <Icon
               name="material-symbols:arrow-outward"
               size="56"
               class="link-icon"
-          /></a>
+            />
+          </a>
         </li>
       </ul>
     </div>

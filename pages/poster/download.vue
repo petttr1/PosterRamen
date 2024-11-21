@@ -6,10 +6,9 @@
         v-if="exportString && type === 'jpeg'"
         ref="imgDownload"
         :href="exportString"
-        :download="`${scene.title}.jpeg`"
-      >
-        <img :src="`${exportString}`" />
-      </a>
+        download="poster-ramen-export.jpeg"
+      />
+      <img :src="`${exportString}`">
     </div>
     <div class="download__text">
       <p>Your work is being downloaded now.</p>
@@ -19,12 +18,17 @@
       </p>
     </div>
     <div class="download__back">
-      <nuxt-link to="/poster" class="download__back__button"> New </nuxt-link>
+      <nuxt-link
+        to="/poster"
+        class="download__back__button"
+      >
+        New
+      </nuxt-link>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useSceneStore } from "~/store/scene";
 import { jsPDF } from "jspdf";
 import { HEIGHT, WIDTH } from "~/constants";
@@ -37,7 +41,7 @@ const sceneStore = useSceneStore();
 
 const sceneId = ref<string>("");
 const type = ref<string>("pdf");
-const scene = computed(() => sceneStore.scene(sceneId.value!));
+
 const exportString = computed(
   () => sceneStore.scene(sceneId.value!).fullExportString,
 );
@@ -47,16 +51,6 @@ const exportLayers = computed(
 
 const imgDownload = ref<HTMLLinkElement | null>(null);
 const route = useRoute();
-
-onMounted(() => {
-  sceneId.value = route.query.id;
-  if (route.query.type) {
-    type.value = route.query.type;
-  }
-  nextTick(() => {
-    exportPoster();
-  });
-});
 
 const exportPoster = () => {
   if (!exportString.value) return;
@@ -93,8 +87,18 @@ const exportAsPdf = () => {
     pdf = pdf.addPage([WIDTH, HEIGHT]);
     pdf = pdf.addImage(layer, "png", 0, 0, WIDTH, HEIGHT, undefined, "FAST");
   }
-  pdf.save(`${scene.value.title}.pdf`);
+  pdf.save(`poster-ramen-export.pdf`);
 };
+
+onMounted(() => {
+  sceneId.value = route.query.id;
+  if (route.query.type) {
+    type.value = route.query.type;
+  }
+  nextTick(() => {
+    exportPoster();
+  });
+});
 </script>
 
 <style scoped lang="scss">
@@ -106,6 +110,7 @@ const exportAsPdf = () => {
     margin: 32px auto;
     text-align: center;
   }
+
   &__preview {
     max-width: 500px;
     margin: 0 auto;
@@ -139,6 +144,7 @@ const exportAsPdf = () => {
     gap: 16px;
     max-width: 500px;
     padding-bottom: 64px;
+
     &__button {
     }
   }

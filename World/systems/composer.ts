@@ -2,17 +2,12 @@ import {
   Camera,
   LinearFilter,
   RGBAFormat,
-  Scene,
   WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
 import { HEIGHT, WIDTH } from "~/constants";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import {
-  createExportRenderer,
-  createLandingRenderer,
-  createRenderer,
-} from "~/World/systems/renderer";
+import { createExportRenderer, createRenderer } from "~/World/systems/renderer";
 import { getPasses } from "~/World/systems/pass";
 import { Pass } from "three/examples/jsm/postprocessing/Pass";
 

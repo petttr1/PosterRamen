@@ -1,22 +1,32 @@
 <template>
   <div class="css-display">
-    <div v-if="customImage" class="css-display__warning">
+    <div
+      v-if="customImage"
+      class="css-display__warning"
+    >
       <p>
-        <Icon name="material-symbols-light:warning" size="18" />
+        <Icon
+          name="material-symbols-light:warning"
+          size="18"
+        />
         Custom image is being used. You will need to edit URLs in the source
         code to reflect this.
       </p>
     </div>
     <div class="css-display__section">
       HTML
-      <button @click="copyHTML">COPY</button>
+      <button @click="copyHTML">
+        COPY
+      </button>
     </div>
     <div class="css-display__html">
       <pre><code>{{ htmlSource }}</code></pre>
     </div>
     <div class="css-display__section">
       CSS
-      <button @click="copyCSS">COPY</button>
+      <button @click="copyCSS">
+        COPY
+      </button>
     </div>
     <div class="css-display__css">
       <pre><code>{{ cssSource }}</code></pre>

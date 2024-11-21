@@ -1,7 +1,5 @@
 import { createLiquidPass } from "~/World/systems/pass/liquid";
-import { createMaskingPass } from "~/World/systems/pass/masking";
-import { createGrainPass } from "~/World/systems/pass/grain";
-import { Camera, Scene } from "three";
+import { Camera } from "three";
 import { createZebraPass } from "~/World/systems/pass/zebra";
 import { createLiquidLargePass } from "~/World/systems/pass/liquidLarge";
 import { createGradientPass } from "~/World/systems/pass/gradient";

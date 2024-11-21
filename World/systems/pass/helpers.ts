@@ -21,8 +21,6 @@ vec3 hsv2rgb(vec3 c) {
 
 export const baseUniforms = () => {
   const sceneStore = useSceneStore();
-  const showBorders =
-    sceneStore.scene(sceneStore.activeScene!).showBorders ?? true;
   return {
     colors: {
       value: {
@@ -32,15 +30,6 @@ export const baseUniforms = () => {
         color:
           sceneStore.scene(sceneStore.activeScene!).color ??
           new Vector4(0, 0, 0, 1),
-      },
-    },
-    borders: {
-      value: {
-        top: 228 / HEIGHT,
-        right: 32 / WIDTH,
-        bottom: 228 / HEIGHT,
-        left: 32 / WIDTH,
-        show: showBorders ?? true,
       },
     },
     position: {
@@ -58,15 +47,6 @@ struct ColorData {
       vec4 color;
 };
 uniform ColorData colors;
-
-struct BorderData {
-  float top;
-  float right;
-  float bottom;
-  float left;
-  bool show;
-};
-uniform BorderData borders;
 
 struct PositionData {
   float x;

@@ -1,9 +1,12 @@
 <template>
   <div class="app-container">
-    <div ref="wrapperComponent" class="app-container__scene-wrapper">
-      <Scene ref="sceneComponent" :show-border="true" />
+    <div
+      ref="wrapperComponent"
+      class="app-container__scene-wrapper"
+    >
+      <Scene ref="sceneComponent" />
     </div>
-    <div v-if="showControls" class="app-container__controls">
+    <div class="app-container__controls">
       <Controls />
     </div>
   </div>
@@ -11,33 +14,7 @@
 
 <script setup lang="ts">
 import Scene from "~/components/poster/scene/Scene.vue";
-import { onBeforeUnmount, onMounted, ref, VueElement } from "vue";
 import Controls from "~/components/poster/controls/Controls.vue";
-const showControls = ref(true);
-
-const sceneComponent = ref<VueElement | null>(null);
-const wrapperComponent = ref<HTMLElement | null>(null);
-
-onMounted(() => {
-  window.addEventListener("resize", applyScaling);
-  applyScaling();
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", applyScaling);
-});
-
-const applyScaling = () => {
-  sceneComponent.value!.$el.style.transform = "scale(1, 1)";
-  let { width: cw, height: ch } =
-    sceneComponent.value!.$el.getBoundingClientRect();
-  let { width: ww, height: wh } =
-    wrapperComponent.value!.getBoundingClientRect();
-  cw += 36;
-  ch += 16;
-  let scaleAmtX = Math.min(ww / cw, wh / ch);
-  sceneComponent.value!.$el.style.transform = `scale(${scaleAmtX}, ${scaleAmtX})`;
-};
 </script>
 
 <style lang="scss">

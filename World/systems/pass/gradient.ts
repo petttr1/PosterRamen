@@ -1,6 +1,5 @@
 import { Camera } from "three";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { HEIGHT, WIDTH } from "~/constants";
 import {
   baseShaderUniforms,
   baseUniforms,
@@ -23,7 +22,7 @@ varying vec2 vUv;
 ${baseShaderUniforms}
 ${translateColorspace}
 void main() {
-    vec2 center = vec2(0.5, 0.5 - (borders.top / (borders.bottom * 100.)));
+    vec2 center = vec2(0.5, 0.5);
     float aspect = width / height;
     vec2 uv = vUv;
     uv.x *= aspect;

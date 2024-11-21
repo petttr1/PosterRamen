@@ -14,7 +14,6 @@ const fonts = {
 };
 export default defineNuxtConfig({
   extends: ["nuxt-seo-kit"],
-  ssr: false,
   nitro: {
     preset: "vercel-edge",
   },

@@ -1,14 +1,26 @@
 <template>
   <div class="header">
     <div class="header__navigation">
-      <nuxt-link to="/" class="header__navigation__title">
+      <nuxt-link
+        to="/"
+        class="header__navigation__title"
+      >
         Poster Ramen
       </nuxt-link>
     </div>
     <div class="header__menu">
-      <nuxt-link v-if="isApp" to="/"> Home </nuxt-link>
-      <nuxt-link :to="{ path: '/', hash: '#tools' }"> Tools </nuxt-link>
-      <nuxt-link to="/about"> About </nuxt-link>
+      <nuxt-link
+        v-if="isApp"
+        to="/"
+      >
+        Home
+      </nuxt-link>
+      <nuxt-link :to="{ path: '/', hash: '#tools' }">
+        Tools
+      </nuxt-link>
+      <nuxt-link to="/about">
+        About
+      </nuxt-link>
     </div>
   </div>
 </template>

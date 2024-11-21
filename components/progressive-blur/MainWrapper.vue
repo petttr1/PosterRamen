@@ -1,7 +1,11 @@
 <template>
   <div class="main-wrapper">
     <div class="main-wrapper__image">
-      <BlurredImage :src="imageSource" :credits="getCredits" :alt="imageAlt" />
+      <BlurredImage
+        :src="imageSource"
+        :credits="getCredits"
+        :alt="imageAlt"
+      />
     </div>
     <div class="main-wrapper__code">
       <CSSDisplay />
@@ -12,15 +16,13 @@
         <a
           href="https://devslovecoffee.com/blog/making-apple-progressive-blur-on-web"
           target="_blank"
-          >Learn More</a
-        >
+        >Learn More</a>
       </h3>
       <h3>
         <a
           href="https://github.com/petttr1/PosterRamen/tree/main/components/progressive-blur"
           target="_blank"
-          >See Source</a
-        >
+        >See Source</a>
       </h3>
     </div>
   </div>
@@ -94,6 +96,7 @@ const getCredits = computed(() =>
     h3 {
       padding-left: 1rem;
     }
+
     a {
       color: $text;
       text-decoration: none;
